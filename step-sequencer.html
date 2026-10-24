@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>PulseGrid v8 — SaaS · Access · Generators · Settings · Pipelines · Suno · Shoom · Faves · Composio</title>
+<title>PulseGrid v13 — Seeds · SaaS · Access · Generators · Settings · Pipelines · Suno · Shoom · Faves · Composio</title>
 <style>
   :root {
     --bg: #05080f; --navy: #0a0e1a; --surface: #0c1018; --surface-2: #121820;
@@ -449,7 +449,18 @@
       <button type="button" class="conn-chip" id="btnMidiClock" title="Send MIDI clock while playing">MIDI Clock</button>
       <span class="hint" style="display:inline;margin-left:0.25rem">Paste Suno/Shoom · share Faves · agents via Composio</span>
     </div>
-    <div class="export-panel" id="exportPanel">
+    
+    <div class="conn-row" id="seedBar" style="margin-top:.35rem">
+      <span class="conn-label">Seeds</span>
+      <button type="button" class="conn-chip" data-seed="techno" title="Load techno seed">Techno</button>
+      <button type="button" class="conn-chip" data-seed="house" title="Load house seed">House</button>
+      <button type="button" class="conn-chip" data-seed="trap" title="Load trap seed">Trap</button>
+      <button type="button" class="conn-chip" data-seed="dnb" title="Load DnB seed">DnB</button>
+      <button type="button" class="conn-chip" data-seed="lofi" title="Load lo-fi seed">Lo-fi</button>
+      <button type="button" class="conn-chip io" id="btnSeedFromStudio" title="Load pulsegrid_studio_plan + matching seed">From Studio plan</button>
+      <span class="hint" id="seedHint" style="display:inline;margin-left:.35rem">genre → grid</span>
+    </div>
+<div class="export-panel" id="exportPanel">
       <h3 id="exportTitle">Export</h3>
       <pre id="exportBody"></pre>
       <div class="export-actions">
@@ -679,7 +690,7 @@
       </section>
     </div>
   </main>
-  <footer>PulseGrid v8 · <a href="index.html" style="color:var(--rose-gold)">Portal</a> · SaaS access · Generators · Admin</footer>
+  <footer>PulseGrid v13 · <a href="index.html" style="color:var(--rose-gold)">Portal</a> · SaaS access · Generators · Admin</footer>
   <div class="toast" id="toast"></div>
 
 <script src="saas/access-config.js"></script>
@@ -2410,16 +2421,99 @@ CTA: "Duet with your melody 🎹"
 
     console.info("PulseGrid v6 modules loaded: FX · Matrix · Binary · WAV · MIDI · Udio · Copilot · TikTok");
 
-  window.PulseGrid = {
-    exportAll: () => (window.__pgExport ? window.__pgExport() : null),
+  
+  // ═══════════════ v13 — Genre seeds → sequencer ═══════════════
+  const SEED_URL = "saas/styles/seeds/patterns.json";
+  let seedCache = null;
+  async function fetchSeeds() {
+    if (seedCache) return seedCache;
+    const r = await fetch(SEED_URL);
+    if (!r.ok) throw new Error("seeds " + r.status);
+    seedCache = await r.json();
+    return seedCache;
+  }
+  function applySeedObject(seed, name) {
+    if (!seed) return false;
+    const pat = {
+      kick: seed.kick, snare: seed.snare, hat: seed.hat, perc: seed.perc
+    };
+    banks.A = normalizePattern(pat);
+    banks.B = banks.B || emptyPattern();
+    if (seed.bpm) { tempoIn.value = seed.bpm; tempoVal.textContent = seed.bpm; }
+    if (seed.swing != null) { swingIn.value = seed.swing; swingVal.textContent = seed.swing + "%"; }
+    selectBank("A", true);
+    syncGrid();
+    if (typeof pushHistory === "function") pushHistory("seed:" + (name || "custom"));
+    showToast("Seed: " + (name || "loaded") + (seed.bpm ? " @ " + seed.bpm + " BPM" : ""));
+    const h = $("seedHint"); if (h) h.textContent = (name || "seed") + " loaded";
+    return true;
+  }
+  async function loadGenreSeed(id) {
+    try {
+      const data = await fetchSeeds();
+      const seed = data.seeds && data.seeds[id];
+      if (!seed) { showToast("Unknown seed: " + id); return false; }
+      return applySeedObject(seed, id);
+    } catch (e) {
+      console.error(e);
+      showToast("Seed load failed (serve via http)");
+      return false;
+    }
+  }
+  async function loadSeedFromStudioPlan() {
+    try {
+      const plan = JSON.parse(localStorage.getItem("pulsegrid_studio_plan") || "{}");
+      const gid = plan.genre || plan.seed || null;
+      if (!gid) { showToast("No Studio plan — open Studio EPB first"); return; }
+      if (plan.bpm) { tempoIn.value = plan.bpm; tempoVal.textContent = plan.bpm; }
+      const ok = await loadGenreSeed(gid);
+      if (!ok) showToast("No seed for genre " + gid + " — plan BPM applied if present");
+    } catch (e) { showToast("Studio plan read failed"); }
+  }
+  // Wire chips
+  document.querySelectorAll("[data-seed]").forEach(btn => {
+    btn.addEventListener("click", () => loadGenreSeed(btn.getAttribute("data-seed")));
+  });
+  const bfs = $("btnSeedFromStudio");
+  if (bfs) bfs.onclick = () => loadSeedFromStudioPlan();
+  // ?seed=techno or ?seed=house
+  try {
+    const sp = new URLSearchParams(location.search);
+    const s = sp.get("seed");
+    if (s) setTimeout(() => loadGenreSeed(s), 200);
+    if (sp.get("fromStudio") === "1") setTimeout(() => loadSeedFromStudioPlan(), 250);
+  } catch (_) {}
+
+  // Expand public API
+  window.PulseGrid = Object.assign(window.PulseGrid || {}, {
+    exportAll: () => (window.__pgExport ? window.__pgExport() : (typeof exportPayload === "function" ? exportPayload() : null)),
+    loadGenreSeed,
+    loadSeedFromStudioPlan,
+    applySeedObject,
+    getBanks: () => JSON.parse(JSON.stringify(banks)),
+    importProject: (data) => {
+      if (!data) return;
+      if (data.banks) {
+        banks.A = normalizePattern(data.banks.A);
+        banks.B = normalizePattern(data.banks.B || emptyPattern());
+      } else if (data.kick || data.snare) {
+        banks.A = normalizePattern(data);
+      }
+      if (data.bpm) { tempoIn.value = data.bpm; tempoVal.textContent = data.bpm; }
+      if (data.swing != null) { swingIn.value = data.swing; swingVal.textContent = data.swing + "%"; }
+      selectBank(data.activeBank || "A", true);
+      if (typeof pushHistory === "function") pushHistory("import");
+      showToast("Project applied");
+    },
     undo, redo, saveLocal, loadLocal, shiftPattern, settings,
-    
     bounceWav, downloadMidi, encodePgbin, buildFxChain,
-    
-    getPattern: exportPayload,
-    setPattern: d => { if (d.banks) { banks.A = normalizePattern(d.banks.A); banks.B = normalizePattern(d.banks.B); } syncGrid(); },
+    getPattern: () => (window.__pgExport ? window.__pgExport() : exportPayload()),
+    setPattern: d => { window.PulseGrid.importProject(d); },
     play: start, stop, isPlaying: () => isPlaying, loadSample: loadSampleFile,
-  };
+  });
+  console.info("PulseGrid v13: genre seeds → sequencer · Studio plan · API");
+
+  // legacy PulseGrid fields merged above via Object.assign
 })();
 </script>
 </body>

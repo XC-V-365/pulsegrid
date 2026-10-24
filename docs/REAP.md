@@ -31,3 +31,8 @@
 ## Ethics
 
 Authorized targets only. No third-party cracking or online cheat assistance.
+
+
+## Progress
+- **P2 seed → sequencer:** DONE (v13.1) — see `docs/CONTINUE_SEED_SEQUENCER.md`
+- **Export evidence log:** DONE — `integrations/rea/logs/export-json.evidence.md`

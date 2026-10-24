@@ -33,3 +33,8 @@
 
 Open `integrations/rea/index.html` → copy prompts from `REAP_PROMPTS.md` → paste into agent.
 Prefer §17 against this repository.
+
+
+## Progress
+- **P2 seed → sequencer:** DONE (v13.1) — see `docs/CONTINUE_SEED_SEQUENCER.md`
+- **Export evidence log:** DONE — `integrations/rea/logs/export-json.evidence.md`
