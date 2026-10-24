@@ -103,3 +103,10 @@ REAP MIDI + access evidence · Tone optional lab · generators Claude links
 - Netlify site: `pulsegrid-xc-v365` · functions for `/api/access/*`
 - Native Rust: engine + cpal/midir features (default build OK; full needs ALSA)
 - Docs: `docs/SERVER_ACCESS.md`, `integrations/rea/SETUP_REPORT.md`
+
+## v17 (2026-10-24)
+
+- **REA:** plan-only until you reply `APPROVE REA SETUP` (see `integrations/rea/SETUP_PLAN.md`)
+- **Server access:** `/api/access/session|verify|consume|status` with HMAC quotas
+- **Native:** cpal/midir filled (`--list-audio`, `--beep`, `--play`, MIDI clock helpers); Linux needs `pkg-config libasound2-dev` for `--features full`
+- **Live:** https://pulsegrid-xc-v365.netlify.app

@@ -14,7 +14,17 @@ export function getPolicy() {
   const trialExports = parseInt(Netlify.env.get("PULSEGRID_TRIAL_EXPORTS") || "5", 10);
   const donorGenDays = parseInt(Netlify.env.get("PULSEGRID_DONOR_GEN_DAYS") || "7", 10);
   const sessionSecret = Netlify.env.get("PULSEGRID_SESSION_SECRET") || "";
-  return { admin, donor, sponsor, trialEdits, trialExports, donorGenDays, sessionSecret };
+  const requireSecret = Netlify.env.get("PULSEGRID_REQUIRE_SECRET") === "1";
+  return {
+    admin,
+    donor,
+    sponsor,
+    trialEdits,
+    trialExports,
+    donorGenDays,
+    sessionSecret,
+    requireSecret,
+  };
 }
 
 export function roleFor(email, policy) {
@@ -26,10 +36,9 @@ export function roleFor(email, policy) {
   return "trial";
 }
 
-/** HMAC-ish token without crypto deps heavy — use Web Crypto if available */
+/** HMAC session token via Web Crypto */
 export async function signSession(payload, secret) {
   if (!secret) {
-    // unsigned demo token (still server-issued)
     return "pg." + btoa(JSON.stringify({ ...payload, u: true }));
   }
   const data = JSON.stringify(payload);
@@ -51,7 +60,7 @@ export async function verifySession(token, secret) {
   if (parts.length === 1) {
     try {
       const p = JSON.parse(atob(parts[0]));
-      if (p.u && !secret) return p; // unsigned only if no secret configured
+      if (p.u && !secret) return p;
       return null;
     } catch {
       return null;
@@ -82,11 +91,64 @@ export async function verifySession(token, secret) {
   }
 }
 
-export function limitsFor(role, policy) {
-  if (role === "admin") return { edits: Infinity, exports: Infinity, genDays: 3650 };
+export function baseLimits(role, policy) {
+  if (role === "admin") return { edits: null, exports: null, genDays: 3650, genQuota: null };
   if (role === "sponsor" || role === "donor")
-    return { edits: 500, exports: 100, genDays: policy.donorGenDays };
+    return {
+      edits: 500,
+      exports: 100,
+      genDays: policy.donorGenDays,
+      genQuota: 50,
+    };
   if (role === "trial")
-    return { edits: policy.trialEdits, exports: policy.trialExports, genDays: 0 };
-  return { edits: 0, exports: 0, genDays: 0 };
+    return {
+      edits: policy.trialEdits,
+      exports: policy.trialExports,
+      genDays: 0,
+      genQuota: 0,
+    };
+  return { edits: 0, exports: 0, genDays: 0, genQuota: 0 };
 }
+
+/** Alias used by older handlers */
+export function limitsFor(role, policy) {
+  const b = baseLimits(role, policy);
+  return {
+    edits: b.edits === null ? Infinity : b.edits,
+    exports: b.exports === null ? Infinity : b.exports,
+    genDays: b.genDays,
+  };
+}
+
+export function remainingFromPayload(payload, policy) {
+  const role = payload.role || "anonymous";
+  const base = baseLimits(role, policy);
+  const used = payload.used || { edits: 0, exports: 0, gens: 0 };
+  const rem = (max, usedN) => (max === null ? null : Math.max(0, max - (usedN || 0)));
+  return {
+    edits: rem(base.edits, used.edits),
+    exports: rem(base.exports, used.exports),
+    genDays: base.genDays,
+    genQuota: rem(base.genQuota, used.gens),
+    used,
+    role,
+  };
+}
+
+export function publicLimits(limits) {
+  return {
+    edits: limits.edits === Infinity || limits.edits === null ? null : limits.edits,
+    exports: limits.exports === Infinity || limits.exports === null ? null : limits.exports,
+    genDays: limits.genDays,
+    genQuota: limits.genQuota === undefined ? undefined : limits.genQuota,
+  };
+}
+
+export const ACTIONS = {
+  edit: "edits",
+  export: "exports",
+  bounce: "exports",
+  midi: "exports",
+  generate: "gens",
+  generation: "gens",
+};

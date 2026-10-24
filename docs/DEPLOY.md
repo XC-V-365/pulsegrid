@@ -1,6 +1,12 @@
-# Deploy PulseGrid (static)
+# Deploy PulseGrid (static + functions)
 
-PulseGrid is static HTML/JS/JSON. No server required for the sequencer demo.
+PulseGrid is static HTML/JS/JSON plus optional Netlify Functions for access.
+
+## Live site
+
+- **Netlify:** https://pulsegrid-xc-v365.netlify.app  
+- Site ID: `ef7289ab-e206-4eeb-a2eb-6d654960484e`  
+- Repo: https://github.com/XC-V-365/pulsegrid
 
 ## Options
 
@@ -10,27 +16,27 @@ cd pulsegrid
 python3 -m http.server 8765
 ```
 
-### B · Netlify drop / CLI
+### B · Netlify CLI / connected deploy
 - Publish directory: repo root
-- No build command
-- Connected tool: Netlify (Grok) when user asks to deploy
+- Functions: `netlify/functions`
+- Env (Functions scope): see `docs/SERVER_ACCESS.md`
 
 ### C · Vercel
 - Framework: Other
 - Output: `.` (static)
-- Connected tool: Vercel when user asks
+- Serverless: map `api/` if you port functions later
 
 ### D · GitHub Pages
-- Settings → Pages → branch `main` / root
-- Or `/docs` if you move site later
+- Static only (no `/api/access/*` functions)
 
 ## Post-deploy checks
 
-1. `/step-sequencer.html?seed=phonk` loads seeds (same origin)  
-2. `/saas/studio/index.html` Explore works  
-3. `/integrations/claude/README.md` readable  
-4. Export still client-side only  
+1. `/` portal loads  
+2. `/step-sequencer.html?seed=phonk` loads seeds  
+3. `/saas/studio/index.html` Explore works  
+4. `GET /api/access/status` → `{ ok: true, version: 17, ... }`  
+5. `POST /api/access/session` with humanOk + email returns token  
 
 ## Secrets
 
-OAuth / Composio API keys stay **out** of static files. Use dashboard + agent session.
+OAuth / Composio / `PULSEGRID_SESSION_SECRET` stay **out** of static files.

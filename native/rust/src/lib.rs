@@ -8,7 +8,10 @@ pub mod midi;
 pub mod audio_cpal;
 pub mod midi_midir;
 
-pub use pattern::{Banks, Pattern, StepCell, TrackId, Transport, STEPS, TRACKS};
+pub use pattern::{
+    active_pattern, active_pattern_mut, Banks, Pattern, StepCell, TrackId, Transport, STEPS,
+    TRACKS,
+};
 pub use clock::SequencerClock;
 pub use engine::VoiceEngine;
 pub use midi::{MidiOut, NullMidiOut};

@@ -1,10 +1,13 @@
 //! midir MIDI out — enable: cargo run --features midi
+//! Linux: midir links ALSA → needs pkg-config + libasound2-dev
 
 use crate::midi::MidiOut;
 
 pub struct MidirOut {
     #[cfg(feature = "midi")]
     conn: Option<midir::MidiOutputConnection>,
+    #[cfg(feature = "midi")]
+    last_port: String,
 }
 
 impl Default for MidirOut {
@@ -18,8 +21,11 @@ impl MidirOut {
         Self {
             #[cfg(feature = "midi")]
             conn: None,
+            #[cfg(feature = "midi")]
+            last_port: String::new(),
         }
     }
+
     pub fn is_open(&self) -> bool {
         #[cfg(feature = "midi")]
         {
@@ -30,12 +36,64 @@ impl MidirOut {
             false
         }
     }
+
+    #[cfg(feature = "midi")]
+    pub fn port_name(&self) -> &str {
+        &self.last_port
+    }
+
+    #[cfg(not(feature = "midi"))]
+    pub fn port_name(&self) -> &str {
+        ""
+    }
+
+    /// GM drum note-on then optional note-off after duration (best-effort immediate pair)
+    pub fn drum_hit(&mut self, note: u8, velocity: u8, channel: u8) {
+        self.note_on(channel, note, velocity, 0.0);
+        self.note_off(channel, note, 0.0);
+    }
+
+    /// MIDI clock tick (0xF8)
+    pub fn clock_tick(&mut self) {
+        #[cfg(feature = "midi")]
+        if let Some(c) = self.conn.as_mut() {
+            let _ = c.send(&[0xF8]);
+        }
+    }
+
+    pub fn start_transport(&mut self) {
+        #[cfg(feature = "midi")]
+        if let Some(c) = self.conn.as_mut() {
+            let _ = c.send(&[0xFA]);
+        }
+    }
+
+    pub fn stop_transport(&mut self) {
+        #[cfg(feature = "midi")]
+        if let Some(c) = self.conn.as_mut() {
+            let _ = c.send(&[0xFC]);
+        }
+    }
+
+    pub fn all_notes_off(&mut self, channel: u8) {
+        #[cfg(feature = "midi")]
+        if let Some(c) = self.conn.as_mut() {
+            let ch = channel.saturating_sub(1) & 0x0f;
+            let _ = c.send(&[0xB0 | ch, 123, 0]);
+        }
+        #[cfg(not(feature = "midi"))]
+        {
+            let _ = channel;
+        }
+    }
 }
 
 impl MidiOut for MidirOut {
     fn open(&mut self, port_name: &str) -> bool {
         #[cfg(feature = "midi")]
         {
+            // Drop previous connection first
+            self.conn = None;
             let out = match midir::MidiOutput::new("PulseGrid") {
                 Ok(o) => o,
                 Err(e) => {
@@ -45,6 +103,7 @@ impl MidiOut for MidirOut {
             };
             let ports = out.ports();
             if ports.is_empty() {
+                eprintln!("midir: no output ports");
                 return false;
             }
             let port = ports
@@ -61,9 +120,11 @@ impl MidiOut for MidirOut {
             let Some(port) = port else {
                 return false;
             };
+            let name = out.port_name(port).unwrap_or_else(|_| "unknown".into());
             match out.connect(port, "pulsegrid-out") {
                 Ok(c) => {
                     self.conn = Some(c);
+                    self.last_port = name;
                     true
                 }
                 Err(e) => {
@@ -83,6 +144,7 @@ impl MidiOut for MidirOut {
         #[cfg(feature = "midi")]
         {
             self.conn = None;
+            self.last_port.clear();
         }
     }
 
@@ -116,11 +178,33 @@ pub fn list_ports() -> Vec<String> {
     {
         let out = match midir::MidiOutput::new("PulseGrid-list") {
             Ok(o) => o,
-            Err(_) => return vec![],
+            Err(e) => return vec![format!("(midir error: {e})")],
         };
-        out.ports()
+        let ports = out.ports();
+        if ports.is_empty() {
+            return vec!["(no MIDI output ports)".into()];
+        }
+        ports
             .iter()
             .filter_map(|p| out.port_name(p).ok())
+            .collect()
+    }
+    #[cfg(not(feature = "midi"))]
+    {
+        vec!["(enable --features midi)".into()]
+    }
+}
+
+pub fn list_input_ports() -> Vec<String> {
+    #[cfg(feature = "midi")]
+    {
+        let inp = match midir::MidiInput::new("PulseGrid-in-list") {
+            Ok(i) => i,
+            Err(_) => return vec![],
+        };
+        inp.ports()
+            .iter()
+            .filter_map(|p| inp.port_name(p).ok())
             .collect()
     }
     #[cfg(not(feature = "midi"))]

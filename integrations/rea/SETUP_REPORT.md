@@ -1,33 +1,46 @@
-# REA setup report (approved)
+# REA setup report (v17 — plan only)
 
-**Approval:** user requested item 1 — APPROVE REA SETUP  
+**User request:** item 1 — APPROVE REA SETUP — **npx install plan only until you approve**  
 **Date:** 2026-10-24  
-**Package:** `rea-agents@6.7.0` via `npx`
+**Action this turn:** **No `npx` install.** Plan remains on disk; wait for explicit approve phrase.
 
-## What ran
+## Gate
 
-| Step | Result |
-|------|--------|
-| `npm view rea-agents version` | 6.7.0 |
-| `npx rea-agents@latest setup --help` | OK — options include `--yes`, `--dry-run`, `--all-detected` |
-| `npx rea-agents@latest setup --dry-run --yes` | `status: needs_human` (Node engine) |
-| `npx rea-agents@latest doctor` | `healthy: false` |
+| Phrase | Meaning |
+|--------|---------|
+| `APPROVE REA SETUP` | Agent may run `npx rea-agents@latest setup` where Node 22+ works |
+| `APPROVE REA SETUP LOCAL ONLY` | Agent only prints commands for you |
+| `REJECT` | Leave plan; never install |
 
-## Blocker
+## Preconditions (from SETUP_PLAN.md)
 
-REA 6.7 requires **Node.js ^22.19 / ^24.11 / >=26**. This agent host has **Node 20.20.2**.
+1. Node.js **^22.19 / ^24.11 / ≥26** (REA 6.7+)
+2. npm registry network
+3. Authorized targets only (see `README.md` ethics)
+4. You accept REA vendor license/telemetry
 
-## Your machine (to finish)
+## Agent host status
+
+| Check | Result |
+|-------|--------|
+| Node | **20.20.2** — below REA engine requirement |
+| `npm view rea-agents` | Available when network works (was 6.7.0) |
+| Full agent integration | Needs local Node 22+ |
+
+## Commands (copy after approve)
 
 ```bash
-# install Node 22+
-nvm install 22 && nvm use 22
+node -v   # must be 22.19+
+npm -v
+npm view rea-agents version
 npx rea-agents@latest setup --yes --all-detected
 npx rea-agents@latest doctor
 ```
 
-Optional analysis engines (only if you own them): Ghidra, IDA MCP, JADX, Hopper, Kuna — see doctor remediations.
+## PulseGrid without REA engines
 
-## PulseGrid first-party without REA engines
+Static REAP pack + evidence logs still work:
 
-Use `integrations/rea/REAP_PROMPTS.md` §17 + evidence logs under `integrations/rea/logs/` — static RE still works.
+- `integrations/rea/REAP_PROMPTS.md`
+- `integrations/rea/logs/*.evidence.md`
+- Hub: `integrations/rea/index.html`
