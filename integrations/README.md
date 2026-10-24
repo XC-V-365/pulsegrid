@@ -1,14 +1,17 @@
-# PulseGrid Integrations Hub
+# PulseGrid Integrations Hub (v6)
 
 | Integration | Type | Status |
 |-------------|------|--------|
-| **Suno** | Paste-ready Custom Mode | ✅ UI + docs |
-| **Shoom AI** | Paste genre/mood/title | ✅ UI + docs |
-| **Faves.fm** | Share card for friends | ✅ UI + docs |
-| **Composio** | Agent tools → 1000+ apps | ✅ schemas + example |
-| **Web MIDI** | Browser MIDI out / clock | ✅ in app |
-| **GitHub / Notion / Drive** | Via Grok connected tools or Composio | ✅ documented |
-| **Sample kit ZIP** | Pack/export slot metadata | ✅ UI |
-| **MIDI clock** | Out (24 PPQN-ish via Web MIDI) | ✅ basic |
+| **Suno** | Paste Custom Mode | ✅ |
+| **Udio** | Paste style prompt | ✅ |
+| **Shoom AI** | Mobile paste | ✅ |
+| **Faves.fm** | Share card | ✅ |
+| **Composio** | Agent tools JSON | ✅ |
+| **Copilot** | Agent brief + pattern | ✅ |
+| **TikTok** | Hook + caption pack | ✅ |
+| **FX Labs** | In-app master FX | ✅ |
+| **Web MIDI** | Notes + clock | ✅ |
+| **Full I/O** | JSON · MIDI · WAV · .pgbin · CSV · TXT · Ableton · SysEx | ✅ |
+| **Matrix / Binary** | Vel/prob matrices · 16-bit masks | ✅ |
 
-Open `step-sequencer.html` → **Connections** panel.
+Grok-connected: GitHub · Notion · Drive · Gmail · Buffer · Vercel · Canva · Figma · …

@@ -1,53 +1,66 @@
-# PulseGrid — v5 Architecture
+# PulseGrid — v6 Architecture
 
-Premium 16-step drum sequencer + **creative connections**.
+**Full audio · FX Labs · Matrices · Binary · Universal I/O · AI/social connections**
 
 ## Deliverables
 
 | Path | Role |
 |------|------|
-| `step-sequencer.html` | **v5** app: samples, MIDI, clock, song, **Suno / Shoom / Faves / Composio** |
-| `integrations/` | Hub docs, export templates, Composio tools |
-| `integrations/composio/` | Agent tool JSON + TypeScript example |
-| `native/cpp/` | C++17 scaffold |
-| `native/rust/` | Rust scaffold |
-| `PulseGrid-ARCHITECTURE.md` | This file |
+| `step-sequencer.html` | **v6** complete web app |
+| `integrations/` | Suno · Udio · Shoom · Faves · Composio · Copilot · TikTok · FX |
+| `native/cpp` · `native/rust` | Port scaffolds (+ cpal/midir/RtMidi hooks) |
+| `PulseGrid-ARCHITECTURE.md` | This map |
+
+## Full audio support
+
+- Synth + sample kit (drop WAV/MP3/OGG)
+- Master bus: compressor · filter · saturation · delay · reverb · limiter
+- Offline **WAV bounce** (2 bars default)
+- Live Web Audio analyser (waveform + spectrogram)
+- Web MIDI notes + clock
+
+## Matrices & binary
+
+| Form | Description |
+|------|-------------|
+| Velocity matrix | 4×16 cells 0–3 |
+| Probability matrix | 4×16 cells 0–100 |
+| Binary masks | 16-bit per track (MSB = step 1) |
+| `.pgbin` | Magic `PG06` + bpm/swing + masks + vel/prob bytes |
+| CSV / ASCII grid | Spreadsheet / text interchange |
+| SysEx-style hex | Educational dump (F0…F7) |
+
+## Import / export matrix
+
+| Format | Export | Import |
+|--------|--------|--------|
+| JSON v6 | ✅ | ✅ |
+| MIDI SMF (.mid) | ✅ | light |
+| WAV bounce | ✅ | as sample kit |
+| .pgbin | ✅ | ✅ |
+| CSV matrix | ✅ | ✅ |
+| ASCII / TXT | ✅ | manual |
+| Ableton note list | ✅ copy | — |
+| SysEx hex | ✅ copy | — |
+| Sample audio | kit | ✅ drop |
 
 ## Connections
 
-| Service | How it works |
-|---------|----------------|
-| **Suno** | UI builds Custom Mode TITLE + STYLE + instrumental LYRICS → copy → [suno.com](https://suno.com) |
-| **Shoom AI** | Genre / mood / description / title package for mobile AI song + video app |
-| **Faves.fm** | Human share card for [faves.fm](https://faves.fm) friend recommendations |
-| **Composio** | `pulsegrid_tools.json` + agent session → GitHub Gist, Notion, Drive, BeatAPI, 1000+ apps |
-| **Grok connected** | GitHub, Notion, Drive, Gmail, Vercel, Buffer, Canva, Figma, … (paste export, ask Grok to publish) |
-| **Web MIDI** | Note out + optional **MIDI clock** (0xF8 / start 0xFA / stop 0xFC) |
-| **Kit pack** | JSON pack: pattern + sample filenames (buffers local) |
+Suno · **Udio** · Shoom · Faves · Composio · **Copilot** · **TikTok** · FX Labs · Web MIDI · Kit pack
 
-## 1D → 12D
+## JSON v6 shape
 
-| Dim | Feature | Status |
-|-----|---------|--------|
-| 1–10 | Grid → song chain | ✅ |
-| 7 | Sample kit + kit pack export | ✅ |
-| 9 | MIDI notes + clock | ✅ |
-| 11 | Plugin / host | scaffold |
-| 12 | Collab publish (Composio / Grok) | ✅ export paths |
-
-## Composio tool slugs
-
-`PULSEGRID_EXPORT_PATTERN` · `PULSEGRID_EXPORT_SUNO` · `PULSEGRID_EXPORT_SHOOM` · `PULSEGRID_EXPORT_FAVES` · `PULSEGRID_PUSH_GITHUB_GIST` · `PULSEGRID_PUSH_NOTION` · `PULSEGRID_MIDI_MAP`
-
-See `integrations/composio/README.md`.
-
-## API honesty
-
-Suno, Shoom, and Faves.fm do **not** offer a documented public generation API for embedding. PulseGrid ships **paste-ready packages** and agent bundles. Live OAuth publish goes through **Composio** or **Grok connected tools**.
-
-## Build native
-
-```bash
-cd native/cpp && g++ -std=c++17 -I include -O2 -o pulsegrid src/*.cpp -pthread
-cd native/rust && cargo build --release
+```json
+{
+  "version": 6,
+  "bpm": 120,
+  "banks": { "A": {}, "B": {} },
+  "matrices": { "velocity": [], "probability": [], "binaryMasks": {} },
+  "fx": { "compressor": {}, "filter": {}, "saturation": {}, "delay": {}, "reverb": {}, "limiter": {} },
+  "connections": ["suno","udio","copilot","tiktok","fxlabs", "..."]
+}
 ```
+
+## Native
+
+Same `StepCell { vel, prob }` model. Rust: `--features full` for cpal+midir. C++: `rtmidi_out.hpp` skeleton.

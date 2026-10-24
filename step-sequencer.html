@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>PulseGrid v5 — Connections · Suno · Shoom · Faves · Composio</title>
+<title>PulseGrid v6 — Connections · Suno · Shoom · Faves · Composio</title>
 <style>
   :root {
     --bg: #05080f; --navy: #0a0e1a; --surface: #0c1018; --surface-2: #121820;
@@ -257,6 +257,44 @@
   }
   .export-actions { display: flex; gap: 0.4rem; margin-top: 0.5rem; flex-wrap: wrap; }
 
+
+  /* v6 FX Labs · Matrix · Full I/O */
+  .fx-panel,.io-panel,.matrix-panel {
+    display:none; margin-top:.5rem; padding:.75rem; background:#080c14;
+    border:1px solid var(--border); border-radius:10px;
+  }
+  .fx-panel.show,.io-panel.show,.matrix-panel.show { display:block; }
+  .fx-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:.5rem; }
+  .fx-card {
+    background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:.55rem;
+  }
+  .fx-card h4 { font-size:.62rem; color:var(--rose-gold); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.35rem; }
+  .fx-card label { display:flex; justify-content:space-between; font-size:.58rem; color:var(--muted); margin:.2rem 0; }
+  .fx-card input[type=range] { width:100%; }
+  .fx-card .on { color:var(--midi); }
+  .matrix-wrap { overflow:auto; }
+  .matrix-table { border-collapse:collapse; font-family:var(--mono); font-size:.6rem; }
+  .matrix-table th,.matrix-table td {
+    width:22px; height:22px; text-align:center; border:1px solid #1a2230; color:var(--muted);
+  }
+  .matrix-table th { color:var(--rose-gold); font-weight:600; }
+  .matrix-table td.hit { background:linear-gradient(160deg,#d4a57488,#d4a574); color:#0a0e1a; font-weight:700; }
+  .matrix-table td.hit2 { background:#e8a0b088; color:#0a0e1a; }
+  .matrix-table td.hit3 { background:#7ec8d888; color:#0a0e1a; }
+  .matrix-table td.hit4 { background:#a890c888; color:#0a0e1a; }
+  .bin-view {
+    font-family:var(--mono); font-size:.65rem; line-height:1.5; white-space:pre-wrap;
+    background:#0a0e1a; border:1px solid var(--border); border-radius:8px; padding:.65rem; color:var(--text);
+    max-height:200px; overflow:auto;
+  }
+  .io-grid { display:flex; flex-wrap:wrap; gap:.4rem; }
+  .conn-chip.udio:hover { border-color:#c4b5fd; color:#c4b5fd; }
+  .conn-chip.copilot:hover { border-color:#58a6ff; color:#58a6ff; }
+  .conn-chip.tiktok:hover { border-color:#ff0050; color:#ff0050; }
+  .conn-chip.fxlab:hover { border-color:#f0c040; color:#f0c040; box-shadow:0 0 12px #f0c04033; }
+  .conn-chip.matrix:hover { border-color:#7ee0a0; color:#7ee0a0; }
+  .conn-chip.io:hover { border-color:#e8d4a0; color:#e8d4a0; }
+
 </style>
 </head>
 <body>
@@ -272,14 +310,14 @@
       </div>
       <div>
         <h1>PulseGrid</h1>
-        <span>Connections · MIDI · Song</span>
+        <span>Audio · FX · Matrix · Universal I/O</span>
       </div>
     </div>
     <div class="header-right">
       <div class="led" id="led"></div>
       <span class="badge dim" id="engineBadge">SYNTH</span>
       <span class="badge" id="midiBadge">MIDI OFF</span>
-      <span class="badge">v5</span>
+      <span class="badge">v6</span>
     </div>
   </header>
 
@@ -332,6 +370,14 @@
       <button type="button" class="conn-chip faves" id="connFaves" title="Faves.fm share card">Faves.fm</button>
       <button type="button" class="conn-chip composio" id="connComposio" title="Composio agent tools JSON">Composio</button>
       <button type="button" class="conn-chip" id="connKitZip" title="Download kit manifest + pattern pack">Kit ZIP</button>
+      <button type="button" class="conn-chip udio" id="connUdio" title="Udio AI prompt package">Udio</button>
+      <button type="button" class="conn-chip copilot" id="connCopilot" title="GitHub Copilot / agent prompt">Copilot</button>
+      <button type="button" class="conn-chip tiktok" id="connTikTok" title="TikTok hook + caption package">TikTok</button>
+      <button type="button" class="conn-chip fxlab" id="btnFxLab" title="Effects Labs master FX">FX Labs</button>
+      <button type="button" class="conn-chip matrix" id="btnMatrix" title="Step matrices & binary">Matrix</button>
+      <button type="button" class="conn-chip io" id="btnFullIO" title="All import/export formats">I/O Hub</button>
+      <button type="button" class="conn-chip" id="btnBounceWav" title="Render loop to WAV">Bounce WAV</button>
+      <button type="button" class="conn-chip" id="btnMidiFile" title="Export Standard MIDI File">MIDI File</button>
       <button type="button" class="conn-chip" id="btnMidiClock" title="Send MIDI clock while playing">MIDI Clock</button>
       <span class="hint" style="display:inline;margin-left:0.25rem">Paste Suno/Shoom · share Faves · agents via Composio</span>
     </div>
@@ -343,6 +389,87 @@
         <button type="button" class="btn btn-ghost" id="btnCloseExport">Close</button>
         <a class="btn btn-ghost" id="btnOpenLink" href="#" target="_blank" rel="noopener" style="display:none;text-decoration:none">Open site</a>
       </div>
+    </div>
+
+    
+    <div class="fx-panel" id="fxPanel">
+      <h3 style="font-size:.75rem;color:var(--rose-gold);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em">Effects Labs · Master Bus</h3>
+      <div class="fx-grid">
+        <div class="fx-card">
+          <h4><label><input type="checkbox" id="fxCompOn" checked/> Compressor</label></h4>
+          <label>Thresh <span id="fxCompThV">-18</span></label>
+          <input type="range" id="fxCompTh" min="-60" max="0" value="-18"/>
+          <label>Ratio <span id="fxCompRaV">4</span></label>
+          <input type="range" id="fxCompRa" min="1" max="20" value="4"/>
+        </div>
+        <div class="fx-card">
+          <h4><label><input type="checkbox" id="fxFilterOn"/> Filter</label></h4>
+          <label>Freq <span id="fxFilFrV">12000</span></label>
+          <input type="range" id="fxFilFr" min="200" max="16000" value="12000"/>
+          <label>Q <span id="fxFilQV">0.7</span></label>
+          <input type="range" id="fxFilQ" min="1" max="40" value="7"/>
+        </div>
+        <div class="fx-card">
+          <h4><label><input type="checkbox" id="fxDistOn"/> Saturation</label></h4>
+          <label>Drive <span id="fxDistV">0</span></label>
+          <input type="range" id="fxDist" min="0" max="100" value="0"/>
+        </div>
+        <div class="fx-card">
+          <h4><label><input type="checkbox" id="fxDelayOn"/> Delay</label></h4>
+          <label>Time ms <span id="fxDelTV">250</span></label>
+          <input type="range" id="fxDelT" min="20" max="800" value="250"/>
+          <label>Feedback <span id="fxDelFV">25</span></label>
+          <input type="range" id="fxDelF" min="0" max="90" value="25"/>
+          <label>Mix <span id="fxDelMV">20</span></label>
+          <input type="range" id="fxDelM" min="0" max="100" value="20"/>
+        </div>
+        <div class="fx-card">
+          <h4><label><input type="checkbox" id="fxRevOn"/> Reverb</label></h4>
+          <label>Room <span id="fxRevRV">20</span></label>
+          <input type="range" id="fxRevR" min="0" max="100" value="20"/>
+          <label>Mix <span id="fxRevMV">15</span></label>
+          <input type="range" id="fxRevM" min="0" max="100" value="15"/>
+        </div>
+        <div class="fx-card">
+          <h4>Limiter</h4>
+          <label><input type="checkbox" id="fxLimOn" checked/> Soft ceiling</label>
+          <label>Ceiling <span id="fxLimV">-1</span> dB</label>
+          <input type="range" id="fxLim" min="-12" max="0" value="-1"/>
+        </div>
+      </div>
+      <div class="export-actions" style="margin-top:.6rem">
+        <button type="button" class="btn btn-ghost" id="btnFxReset">Reset FX</button>
+        <button type="button" class="btn btn-ghost" id="btnFxClose">Close</button>
+      </div>
+    </div>
+    <div class="matrix-panel" id="matrixPanel">
+      <h3 style="font-size:.75rem;color:var(--rose-gold);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em">Matrices · Binary · Bitmasks</h3>
+      <div class="matrix-wrap" id="matrixTableWrap"></div>
+      <p class="hint" style="display:block;margin:.5rem 0">Binary = 16-bit step masks (MSB=step1). Vel matrix 0–3.</p>
+      <div class="bin-view" id="binView"></div>
+      <div class="export-actions" style="margin-top:.5rem">
+        <button type="button" class="btn btn-ghost" id="btnCopyBin">Copy binary</button>
+        <button type="button" class="btn btn-ghost" id="btnExportBin">.pgbin</button>
+        <button type="button" class="btn btn-ghost" id="btnExportCsv">CSV matrix</button>
+        <button type="button" class="btn btn-ghost" id="btnMatrixClose">Close</button>
+      </div>
+    </div>
+    <div class="io-panel" id="ioPanel">
+      <h3 style="font-size:.75rem;color:var(--rose-gold);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em">Universal Import / Export</h3>
+      <div class="io-grid">
+        <button type="button" class="btn btn-ghost" data-exp="json">JSON v6</button>
+        <button type="button" class="btn btn-ghost" data-exp="midi">MIDI SMF</button>
+        <button type="button" class="btn btn-ghost" data-exp="wav">WAV bounce</button>
+        <button type="button" class="btn btn-ghost" data-exp="bin">Binary .pgbin</button>
+        <button type="button" class="btn btn-ghost" data-exp="csv">CSV matrix</button>
+        <button type="button" class="btn btn-ghost" data-exp="txt">ASCII grid</button>
+        <button type="button" class="btn btn-ghost" data-exp="ableton">Ableton notes</button>
+        <button type="button" class="btn btn-ghost" data-exp="sysex">SysEx dump</button>
+        <button type="button" class="btn btn-ghost" data-imp="any">Import any…</button>
+      </div>
+      <input type="file" id="fileUniversal" accept=".json,.mid,.midi,.csv,.txt,.pgbin,.bin,audio/*,.wav" style="display:none"/>
+      <p class="hint" style="display:block;margin-top:.5rem">Import: JSON · MIDI · CSV · .pgbin · audio samples. Export covers all formats.</p>
+      <div class="export-actions"><button type="button" class="btn btn-ghost" id="btnIoClose">Close</button></div>
     </div>
 
     <div class="frame-wrap">
@@ -382,7 +509,7 @@
       </section>
     </div>
   </main>
-  <footer>PulseGrid v5 · Suno · Shoom · Faves.fm · Composio · MIDI clock · Kit ZIP · native scaffolds</footer>
+  <footer>PulseGrid v6 · Full audio FX · Matrix/binary · Udio · Copilot · TikTok · Universal I/O · native</footer>
   <div class="toast" id="toast"></div>
 
 <script>
@@ -922,7 +1049,7 @@
 
   function exportPayload() {
     return {
-      version: 5, app: "PulseGrid", bpm: +tempoIn.value, swing: +swingIn.value,
+      version: 6, app: "PulseGrid", bpm: +tempoIn.value, swing: +swingIn.value,
       activeBank, songMode, songChain, midiChannel: +midiCh.value,
       banks: JSON.parse(JSON.stringify(banks)),
     };
@@ -1117,7 +1244,7 @@ Tags: ${tags} #producer #drums
     const suno = buildSunoPackage();
     return JSON.stringify({
       toolkit: "pulsegrid",
-      version: 5,
+      version: 6,
       pattern: payload,
       suno: { title: suno.title, package: suno.text },
       shoom: buildShoomPackage(),
@@ -1157,7 +1284,7 @@ Tags: ${tags} #producer #drums
     // Manifest ZIP-like: multi-file download as JSON pack (true zip needs lib; provide pack.json + pattern)
     const pack = {
       format: "pulsegrid-kit-pack",
-      version: 5,
+      version: 6,
       pattern: exportPayload(),
       samples: Object.fromEntries(TRACKS.map(t => [t.id, sampleNames[t.id] || null])),
       note: "Audio buffers stay in-browser; re-drop named files to restore kit. Pattern + names portable."
@@ -1200,7 +1327,594 @@ Tags: ${tags} #producer #drums
   };
 
 
+
+  // ═══════════════ PulseGrid v6 — Full Audio · FX · Matrix · I/O ═══════════════
+  let fxNodes = null; // { filter, dist, delay, delayGain, delayFb, convolver, revGain, dryGain, limiter, dest }
+
+  function buildFxChain() {
+    ensureAudio();
+    if (fxNodes) return fxNodes;
+    const ctx = audioCtx;
+    // Rebuild graph: masterGain -> FX chain -> analyser -> destination
+    try { masterGain.disconnect(); } catch(_){}
+    try { compressor.disconnect(); } catch(_){}
+    try { analyser.disconnect(); } catch(_){}
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = "lowpass"; filter.frequency.value = 16000; filter.Q.value = 0.7;
+
+    // Waveshaper saturation
+    const dist = ctx.createWaveShaper();
+    dist.curve = makeDistortionCurve(0);
+    dist.oversample = "2x";
+
+    const delay = ctx.createDelay(1.0);
+    delay.delayTime.value = 0.25;
+    const delayFb = ctx.createGain(); delayFb.gain.value = 0.25;
+    const delayWet = ctx.createGain(); delayWet.gain.value = 0.2;
+    delay.connect(delayFb); delayFb.connect(delay);
+    delay.connect(delayWet);
+
+    // Simple reverb via noise IR
+    const convolver = ctx.createConvolver();
+    convolver.buffer = makeImpulseResponse(ctx, 1.2, 2.0);
+    const revWet = ctx.createGain(); revWet.gain.value = 0.15;
+    const revDry = ctx.createGain(); revDry.gain.value = 0.85;
+    convolver.connect(revWet);
+
+    const limiter = ctx.createDynamicsCompressor();
+    limiter.threshold.value = -1; limiter.knee.value = 0; limiter.ratio.value = 20;
+    limiter.attack.value = 0.001; limiter.release.value = 0.05;
+
+    // Wire: master -> filter -> dist -> split dry/delay/rev -> sum -> compressor -> limiter -> analyser -> dest
+    masterGain.connect(filter);
+    filter.connect(dist);
+    dist.connect(delay);
+    dist.connect(revDry);
+    dist.connect(convolver);
+    const mix = ctx.createGain(); mix.gain.value = 1;
+    revDry.connect(mix);
+    delayWet.connect(mix);
+    revWet.connect(mix);
+    mix.connect(compressor);
+    compressor.connect(limiter);
+    limiter.connect(analyser);
+    analyser.connect(ctx.destination);
+
+    fxNodes = { filter, dist, delay, delayFb, delayWet, convolver, revWet, revDry, limiter, mix };
+    applyFxFromUi();
+    return fxNodes;
+  }
+
+  function makeDistortionCurve(amount) {
+    const n = 256, curve = new Float32Array(n);
+    const k = amount * 2;
+    for (let i = 0; i < n; i++) {
+      const x = (i * 2) / n - 1;
+      curve[i] = k === 0 ? x : ((1 + k) * x) / (1 + k * Math.abs(x));
+    }
+    return curve;
+  }
+  function makeImpulseResponse(ctx, duration, decay) {
+    const rate = ctx.sampleRate, len = rate * duration;
+    const buf = ctx.createBuffer(2, len, rate);
+    for (let c = 0; c < 2; c++) {
+      const d = buf.getChannelData(c);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+    }
+    return buf;
+  }
+  function applyFxFromUi() {
+    if (!fxNodes && !$("fxPanel")?.classList.contains("show")) return;
+    buildFxChain();
+    const f = fxNodes;
+    const filOn = $("fxFilterOn")?.checked;
+    f.filter.frequency.value = filOn ? +$("fxFilFr").value : 16000;
+    f.filter.Q.value = (+$("fxFilQ").value) / 10;
+    const drive = $("fxDistOn")?.checked ? +$("fxDist").value / 100 : 0;
+    f.dist.curve = makeDistortionCurve(drive * 40);
+    f.delay.delayTime.value = (+$("fxDelT").value) / 1000;
+    f.delayFb.gain.value = $("fxDelayOn")?.checked ? +$("fxDelF").value / 100 : 0;
+    f.delayWet.gain.value = $("fxDelayOn")?.checked ? +$("fxDelM").value / 100 : 0;
+    f.revWet.gain.value = $("fxRevOn")?.checked ? +$("fxRevM").value / 100 : 0;
+    f.revDry.gain.value = 1 - f.revWet.gain.value * 0.5;
+    if ($("fxCompOn")?.checked) {
+      compressor.threshold.value = +$("fxCompTh").value;
+      compressor.ratio.value = +$("fxCompRa").value;
+    } else {
+      compressor.threshold.value = 0; compressor.ratio.value = 1;
+    }
+    f.limiter.threshold.value = $("fxLimOn")?.checked ? +$("fxLim").value : 0;
+    // labels
+    const set = (id, v) => { const el = $(id); if (el) el.textContent = v; };
+    set("fxCompThV", $("fxCompTh")?.value);
+    set("fxCompRaV", $("fxCompRa")?.value);
+    set("fxFilFrV", $("fxFilFr")?.value);
+    set("fxFilQV", ((+$("fxFilQ")?.value||7)/10).toFixed(1));
+    set("fxDistV", $("fxDist")?.value);
+    set("fxDelTV", $("fxDelT")?.value);
+    set("fxDelFV", $("fxDelF")?.value);
+    set("fxDelMV", $("fxDelM")?.value);
+    set("fxRevRV", $("fxRevR")?.value);
+    set("fxRevMV", $("fxRevM")?.value);
+    set("fxLimV", $("fxLim")?.value);
+  }
+
+  // Wire FX UI
+  ["fxCompOn","fxCompTh","fxCompRa","fxFilterOn","fxFilFr","fxFilQ","fxDistOn","fxDist",
+   "fxDelayOn","fxDelT","fxDelF","fxDelM","fxRevOn","fxRevR","fxRevM","fxLimOn","fxLim"
+  ].forEach(id => {
+    const el = $(id);
+    if (el) el.addEventListener("input", applyFxFromUi);
+    if (el) el.addEventListener("change", applyFxFromUi);
+  });
+  $("btnFxLab") && ($("btnFxLab").onclick = () => {
+    $("fxPanel").classList.toggle("show");
+    buildFxChain(); applyFxFromUi();
+  });
+  $("btnFxClose") && ($("btnFxClose").onclick = () => $("fxPanel").classList.remove("show"));
+  $("btnFxReset") && ($("btnFxReset").onclick = () => {
+    $("fxCompOn").checked = true; $("fxCompTh").value = -18; $("fxCompRa").value = 4;
+    $("fxFilterOn").checked = false; $("fxFilFr").value = 12000; $("fxFilQ").value = 7;
+    $("fxDistOn").checked = false; $("fxDist").value = 0;
+    $("fxDelayOn").checked = false; $("fxDelT").value = 250; $("fxDelF").value = 25; $("fxDelM").value = 20;
+    $("fxRevOn").checked = false; $("fxRevR").value = 20; $("fxRevM").value = 15;
+    $("fxLimOn").checked = true; $("fxLim").value = -1;
+    applyFxFromUi(); showToast("FX reset");
+  });
+
+  // ── Matrices & binary ──
+  function trackMask(trackId) {
+    let mask = 0;
+    pattern()[trackId].forEach((c, i) => { if (c.v > 0) mask |= (1 << (15 - i)); });
+    return mask;
+  }
+  function maskToBin(m) {
+    return m.toString(2).padStart(16, "0");
+  }
+  function velMatrix() {
+    return TRACKS.map(t => pattern()[t.id].map(c => c.v));
+  }
+  function probMatrix() {
+    return TRACKS.map(t => pattern()[t.id].map(c => c.p));
+  }
+  function refreshMatrix() {
+    const wrap = $("matrixTableWrap");
+    if (!wrap) return;
+    let h = '<table class="matrix-table"><tr><th></th>';
+    for (let i = 0; i < 16; i++) h += `<th>${i+1}</th>`;
+    h += "</tr>";
+    TRACKS.forEach((t, ti) => {
+      h += `<tr><th>${t.name}</th>`;
+      pattern()[t.id].forEach(c => {
+        const cls = c.v ? "hit" + (ti + 1) : "";
+        h += `<td class="${cls}">${c.v || ""}</td>`;
+      });
+      h += "</tr>";
+    });
+    h += "</table>";
+    wrap.innerHTML = h;
+    const lines = TRACKS.map(t => {
+      const m = trackMask(t.id);
+      return `${t.id.padEnd(5)} mask=0x${m.toString(16).padStart(4,"0")} bin=${maskToBin(m)}`;
+    });
+    lines.push("");
+    lines.push("VEL MATRIX:");
+    velMatrix().forEach((row, i) => lines.push(TRACKS[i].id.padEnd(5) + " " + row.join("")));
+    lines.push("PROB MATRIX:");
+    probMatrix().forEach((row, i) => lines.push(TRACKS[i].id.padEnd(5) + " " + row.map(p => p.toString().padStart(3)).join(" ")));
+    lines.push("");
+    lines.push("ASCII GRID:");
+    TRACKS.forEach(t => {
+      lines.push(t.id.padEnd(5) + " |" + pattern()[t.id].map(c => c.v ? "x" : ".").join("") + "|");
+    });
+    $("binView").textContent = lines.join("\n");
+  }
+  $("btnMatrix") && ($("btnMatrix").onclick = () => {
+    $("matrixPanel").classList.toggle("show");
+    if ($("matrixPanel").classList.contains("show")) refreshMatrix();
+  });
+  $("btnMatrixClose") && ($("btnMatrixClose").onclick = () => $("matrixPanel").classList.remove("show"));
+  $("btnCopyBin") && ($("btnCopyBin").onclick = () => {
+    navigator.clipboard?.writeText($("binView").textContent); showToast("Binary/matrix copied");
+  });
+
+  // Binary pack: magic PG06, bpm, swing, 4x uint16 masks, 4x16 vel+prob bytes
+  function encodePgbin() {
+    const buf = new ArrayBuffer(4 + 2 + 2 + 8 + 4 * 16 * 2);
+    const v = new DataView(buf);
+    v.setUint32(0, 0x50473036, false); // "PG06"
+    v.setUint16(4, +tempoIn.value, true);
+    v.setUint16(6, +swingIn.value, true);
+    let o = 8;
+    TRACKS.forEach(t => { v.setUint16(o, trackMask(t.id), true); o += 2; });
+    TRACKS.forEach(t => {
+      pattern()[t.id].forEach(c => {
+        v.setUint8(o++, c.v);
+        v.setUint8(o++, c.p);
+      });
+    });
+    return new Uint8Array(buf);
+  }
+  function decodePgbin(bytes) {
+    const v = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    if (v.getUint32(0, false) !== 0x50473036) throw new Error("Not PG06");
+    tempoIn.value = v.getUint16(4, true); tempoVal.textContent = tempoIn.value;
+    swingIn.value = v.getUint16(6, true); swingVal.textContent = swingIn.value + "%";
+    // masks optional; use vel/prob block
+    let o = 16;
+    TRACKS.forEach(t => {
+      for (let i = 0; i < 16; i++) {
+        pattern()[t.id][i] = { v: v.getUint8(o++), p: v.getUint8(o++) };
+      }
+    });
+    syncGrid();
+  }
+  $("btnExportBin") && ($("btnExportBin").onclick = () => {
+    const u8 = encodePgbin();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([u8], { type: "application/octet-stream" }));
+    a.download = `pulsegrid-${Date.now()}.pgbin`;
+    a.click();
+    showToast(".pgbin exported");
+  });
+  $("btnExportCsv") && ($("btnExportCsv").onclick = () => {
+    let csv = "track," + [...Array(16)].map((_,i)=>"s"+(i+1)).join(",") + "\n";
+    TRACKS.forEach(t => {
+      csv += t.id + "," + pattern()[t.id].map(c => c.v).join(",") + "\n";
+    });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+    a.download = `pulsegrid-matrix-${Date.now()}.csv`;
+    a.click();
+  });
+
+  // ── MIDI SMF export ──
+  function encodeMidiSmf() {
+    const bpm = +tempoIn.value;
+    const usPerQ = Math.round(60000000 / bpm);
+    // track events
+    const events = [];
+    const ticksPerQ = 480;
+    const ticksPerStep = ticksPerQ / 4;
+    TRACKS.forEach(t => {
+      pattern()[t.id].forEach((c, i) => {
+        if (c.v <= 0) return;
+        if (c.p < 100 && Math.random() * 100 >= c.p) return;
+        const tick = Math.round(i * ticksPerStep);
+        const note = t.midi + (t.id === "hat" && c.v >= 3 ? 4 : 0);
+        const vel = Math.max(1, Math.min(127, c.v * 42));
+        events.push({ tick, type: "on", note, vel, ch: 9 });
+        events.push({ tick: tick + Math.round(ticksPerStep * 0.4), type: "off", note, vel: 0, ch: 9 });
+      });
+    });
+    events.sort((a, b) => a.tick - b.tick || (a.type === "off" ? -1 : 1));
+    function writeVarLen(n) {
+      const bytes = [];
+      let v = n & 0x7f;
+      while (n >>= 7) { bytes.unshift(v); v = (n & 0x7f) | 0x80; }
+      bytes.unshift(v);
+      // fix: standard VLQ
+      const out = [];
+      let buffer = n = arguments[0];
+      // rewrite
+      return encodeVLQ(arguments[0]);
+    }
+    function encodeVLQ(value) {
+      const buffer = [];
+      buffer.push(value & 0x7f);
+      while ((value >>= 7) > 0) buffer.push((value & 0x7f) | 0x80);
+      return buffer.reverse();
+    }
+    const track = [];
+    // tempo meta
+    track.push(0x00, 0xff, 0x51, 0x03, (usPerQ >> 16) & 0xff, (usPerQ >> 8) & 0xff, usPerQ & 0xff);
+    let lastTick = 0;
+    events.forEach(e => {
+      const delta = e.tick - lastTick;
+      lastTick = e.tick;
+      track.push(...encodeVLQ(delta));
+      if (e.type === "on") track.push(0x90 | e.ch, e.note, e.vel);
+      else track.push(0x80 | e.ch, e.note, 0);
+    });
+    track.push(0x00, 0xff, 0x2f, 0x00); // end
+    const trackLen = track.length;
+    const header = [
+      0x4d, 0x54, 0x68, 0x64, 0, 0, 0, 6, 0, 0, 0, 1, (ticksPerQ >> 8) & 0xff, ticksPerQ & 0xff,
+      0x4d, 0x54, 0x72, 0x6b,
+      (trackLen >> 24) & 0xff, (trackLen >> 16) & 0xff, (trackLen >> 8) & 0xff, trackLen & 0xff
+    ];
+    return new Uint8Array([...header, ...track]);
+  }
+  function downloadMidi() {
+    const mid = encodeMidiSmf();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([mid], { type: "audio/midi" }));
+    a.download = `pulsegrid-${Date.now()}.mid`;
+    a.click();
+    showToast("MIDI file exported");
+  }
+  $("btnMidiFile") && ($("btnMidiFile").onclick = downloadMidi);
+
+  // ── WAV bounce (offline render of one bar) ──
+  async function bounceWav(bars = 1) {
+    ensureAudio();
+    const bpm = +tempoIn.value;
+    const sr = 44100;
+    const barDur = (60 / bpm) * 4 * bars;
+    const len = Math.ceil(sr * barDur);
+    const off = new OfflineAudioContext(2, len, sr);
+    // simple offline synth for bounce
+    const mg = off.createGain(); mg.gain.value = (+volIn.value) / 100;
+    const comp = off.createDynamicsCompressor();
+    mg.connect(comp); comp.connect(off.destination);
+    const sps = 60 / bpm / 4;
+    function offKick(t, vel) {
+      const o = off.createOscillator(), g = off.createGain();
+      o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(40, t + 0.12);
+      g.gain.setValueAtTime(0.4 * vel / 3, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      o.connect(g); g.connect(mg); o.start(t); o.stop(t + 0.35);
+    }
+    function offNoise(t, vel, dur, hp) {
+      const n = Math.ceil(sr * dur), buf = off.createBuffer(1, n, sr);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+      const src = off.createBufferSource(); src.buffer = buf;
+      const f = off.createBiquadFilter(); f.type = "highpass"; f.frequency.value = hp;
+      const g = off.createGain();
+      g.gain.setValueAtTime(0.2 * vel / 3, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      src.connect(f); f.connect(g); g.connect(mg); src.start(t); src.stop(t + dur + 0.01);
+    }
+    for (let bar = 0; bar < bars; bar++) {
+      for (let step = 0; step < 16; step++) {
+        const t = (bar * 16 + step) * sps;
+        TRACKS.forEach(tr => {
+          const c = pattern()[tr.id][step];
+          if (c.v <= 0) return;
+          if (tr.id === "kick") offKick(t, c.v);
+          else if (tr.id === "snare") offNoise(t, c.v, 0.15, 1000);
+          else if (tr.id === "hat") offNoise(t, c.v, c.v >= 3 ? 0.2 : 0.05, 7000);
+          else offKick(t, c.v * 0.5); // perc approx
+        });
+      }
+    }
+    const rendered = await off.startRendering();
+    const wav = audioBufferToWav(rendered);
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([wav], { type: "audio/wav" }));
+    a.download = `pulsegrid-bounce-${Date.now()}.wav`;
+    a.click();
+    showToast("WAV bounce complete");
+  }
+  function audioBufferToWav(buffer) {
+    const numCh = buffer.numberOfChannels, sr = buffer.sampleRate, len = buffer.length;
+    const dataLen = len * numCh * 2;
+    const ab = new ArrayBuffer(44 + dataLen);
+    const v = new DataView(ab);
+    const w = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+    w(0, "RIFF"); v.setUint32(4, 36 + dataLen, true); w(8, "WAVE"); w(12, "fmt ");
+    v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, numCh, true);
+    v.setUint32(24, sr, true); v.setUint32(28, sr * numCh * 2, true);
+    v.setUint16(32, numCh * 2, true); v.setUint16(34, 16, true); w(36, "data");
+    v.setUint32(40, dataLen, true);
+    let off = 44;
+    const chans = [];
+    for (let c = 0; c < numCh; c++) chans.push(buffer.getChannelData(c));
+    for (let i = 0; i < len; i++) {
+      for (let c = 0; c < numCh; c++) {
+        let s = Math.max(-1, Math.min(1, chans[c][i]));
+        v.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+        off += 2;
+      }
+    }
+    return ab;
+  }
+  $("btnBounceWav") && ($("btnBounceWav").onclick = () => bounceWav(2));
+
+  // ── Connection packages: Udio, Copilot, TikTok ──
+  function buildUdioPackage() {
+    const bpm = +tempoIn.value, dens = patternDensity();
+    return `UDIO — Inspiration / Custom paste
+
+Title: PulseGrid ${dens} Circuit
+Style / description:
+electronic drums, ${dens} 16-step sequencer, ${bpm} BPM, dark luxury navy rose-gold aesthetic, tight kick snare hats perc, instrumental beat, club-ready production
+
+Prompt tip: make_instrumental true · short style description works best for Udio
+Open: https://www.udio.com
+`;
+  }
+  function buildCopilotPackage() {
+    const payload = exportPayload();
+    return `<!-- PulseGrid Copilot / Agent brief -->
+You are helping extend PulseGrid, a 16-step drum sequencer.
+
+Current pattern JSON:
+\`\`\`json
+${JSON.stringify(payload, null, 2)}
+\`\`\`
+
+Binary masks:
+${TRACKS.map(t => t.id + ": " + maskToBin(trackMask(t.id))).join("\\n")}
+
+Tasks you can help with:
+1. Suggest a B-bank fill that contrasts bank A
+2. Convert this grid to MIDI note list
+3. Write a Rust/C++ schedule_step for this pattern
+4. Generate a TikTok 15s caption pack
+5. Propose FX Labs chain (comp/filter/delay/reverb) for this density
+
+Repo: https://github.com/XC-V-365/pulsegrid
+`;
+  }
+  function buildTikTokPackage() {
+    const bpm = +tempoIn.value, dens = patternDensity();
+    return `TIKTOK pack — PulseGrid beat
+
+Hook (0–1s text):
+"${bpm} BPM ${dens.toUpperCase()} grid 🔥"
+
+Caption:
+PulseGrid · 16-step · navy/rose-gold
+I programmed this in the browser — samples + MIDI + FX Labs
+#producer #drums #beatmaker #electronic #fyp #pulsegrid #${bpm}bpm
+
+Sound: upload WAV bounce or link original audio
+Cover: spectrogram still / sequencer screen recording
+Length: 15s loop × 2 bars bounce
+
+CTA: "Duet with your melody 🎹"
+`;
+  }
+
+  $("connUdio") && ($("connUdio").onclick = () => {
+    const t = buildUdioPackage();
+    showExport("Udio AI", t, "https://www.udio.com");
+    navigator.clipboard?.writeText(t); showToast("Udio package copied");
+  });
+  $("connCopilot") && ($("connCopilot").onclick = () => {
+    const t = buildCopilotPackage();
+    showExport("Copilot / Agent brief", t, "https://github.com/XC-V-365/pulsegrid");
+    navigator.clipboard?.writeText(t); showToast("Copilot brief copied");
+  });
+  $("connTikTok") && ($("connTikTok").onclick = () => {
+    const t = buildTikTokPackage();
+    showExport("TikTok pack", t, "https://www.tiktok.com");
+    navigator.clipboard?.writeText(t); showToast("TikTok pack copied");
+  });
+
+  // ── I/O Hub ──
+  $("btnFullIO") && ($("btnFullIO").onclick = () => $("ioPanel").classList.toggle("show"));
+  $("btnIoClose") && ($("btnIoClose").onclick = () => $("ioPanel").classList.remove("show"));
+  document.querySelectorAll("[data-exp]").forEach(btn => {
+    btn.onclick = () => {
+      const k = btn.getAttribute("data-exp");
+      if (k === "json") $("btnExport")?.click();
+      else if (k === "midi") downloadMidi();
+      else if (k === "wav") bounceWav(2);
+      else if (k === "bin") $("btnExportBin")?.click();
+      else if (k === "csv") $("btnExportCsv")?.click();
+      else if (k === "txt") {
+        refreshMatrix();
+        const t = $("binView").textContent;
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([t], { type: "text/plain" }));
+        a.download = `pulsegrid-grid-${Date.now()}.txt`; a.click();
+      }
+      else if (k === "ableton") {
+        let s = "PulseGrid → Ableton clip notes (ch10 drums)\\n";
+        TRACKS.forEach(t => pattern()[t.id].forEach((c, i) => {
+          if (c.v) s += `${t.name} step ${i+1} note ${t.midi} vel ${c.v*42}\\n`;
+        }));
+        navigator.clipboard?.writeText(s); showToast("Ableton note list copied");
+        showExport("Ableton notes", s, null);
+      }
+      else if (k === "sysex") {
+        // educational dump as hex sysex-style
+        const u8 = encodePgbin();
+        const hex = [...u8].map(b => b.toString(16).padStart(2, "0")).join(" ");
+        const syx = "F0 7D 50 47 30 36 " + hex + " F7";
+        navigator.clipboard?.writeText(syx);
+        showExport("SysEx-style dump", syx, null);
+        showToast("SysEx dump copied");
+      }
+    };
+  });
+  document.querySelector("[data-imp]") && (document.querySelector("[data-imp]").onclick = () => $("fileUniversal").click());
+  $("fileUniversal") && ($("fileUniversal").onchange = async () => {
+    const f = $("fileUniversal").files?.[0]; if (!f) return;
+    const name = f.name.toLowerCase();
+    try {
+      if (name.endsWith(".json")) {
+        const data = JSON.parse(await f.text());
+        if (data.banks) { banks.A = normalizePattern(data.banks.A); banks.B = normalizePattern(data.banks.B); }
+        if (data.bpm) { tempoIn.value = data.bpm; tempoVal.textContent = data.bpm; }
+        syncGrid(); showToast("JSON imported");
+      } else if (name.endsWith(".pgbin") || name.endsWith(".bin")) {
+        decodePgbin(new Uint8Array(await f.arrayBuffer())); showToast(".pgbin imported");
+      } else if (name.endsWith(".csv")) {
+        const text = await f.text();
+        const lines = text.trim().split(/\\r?\\n/).slice(1);
+        lines.forEach(line => {
+          const [id, ...vals] = line.split(",");
+          const t = TRACKS.find(x => x.id === id.trim());
+          if (!t) return;
+          vals.slice(0, 16).forEach((v, i) => { pattern()[t.id][i] = { v: +v || 0, p: 100 }; });
+        });
+        syncGrid(); showToast("CSV matrix imported");
+      } else if (/\\.(wav|mp3|ogg|flac)$/.test(name) || f.type.startsWith("audio/")) {
+        await assignFilesToTracks([f]); showToast("Sample imported to kit");
+      } else if (name.endsWith(".mid") || name.endsWith(".midi")) {
+        showToast("MIDI import: use DAW→CSV or re-export JSON for full fidelity (SMF parser light)");
+        // light: ignore complex SMF for now
+      } else if (name.endsWith(".txt")) {
+        showToast("TXT: paste ASCII grid into Matrix or use JSON");
+      }
+    } catch (e) { showToast("Import failed"); console.error(e); }
+    $("fileUniversal").value = "";
+  });
+
+  // Enhance exportPayload for v6
+  const _oldExport = typeof exportPayload === "function" ? exportPayload : null;
+  // monkey-patch by wrapping later via reassignment if needed - override window
+  function exportPayloadV6() {
+    const base = {
+      version: 6,
+      app: "PulseGrid",
+      bpm: +tempoIn.value,
+      swing: +swingIn.value,
+      activeBank,
+      songMode,
+      songChain: songChain.slice(),
+      midiChannel: midiChannel + 1,
+      banks: JSON.parse(JSON.stringify(banks)),
+      sampleNames: Object.fromEntries(TRACKS.map(t => [t.id, samples[t.id] ? samples[t.id].name : null])),
+      matrices: {
+        velocity: velMatrix(),
+        probability: probMatrix(),
+        binaryMasks: Object.fromEntries(TRACKS.map(t => [t.id, { hex: "0x" + trackMask(t.id).toString(16).padStart(4,"0"), bin: maskToBin(trackMask(t.id)) }]))
+      },
+      fx: {
+        compressor: { on: $("fxCompOn")?.checked, threshold: +$("fxCompTh")?.value, ratio: +$("fxCompRa")?.value },
+        filter: { on: $("fxFilterOn")?.checked, freq: +$("fxFilFr")?.value, q: +$("fxFilQ")?.value },
+        saturation: { on: $("fxDistOn")?.checked, drive: +$("fxDist")?.value },
+        delay: { on: $("fxDelayOn")?.checked, ms: +$("fxDelT")?.value, fb: +$("fxDelF")?.value, mix: +$("fxDelM")?.value },
+        reverb: { on: $("fxRevOn")?.checked, room: +$("fxRevR")?.value, mix: +$("fxRevM")?.value },
+        limiter: { on: $("fxLimOn")?.checked, ceiling: +$("fxLim")?.value }
+      },
+      connections: ["suno","udio","shoom","faves","composio","copilot","tiktok","fxlabs","webmidi"]
+    };
+    return base;
+  }
+  // replace exportPayload references - rebind
+  try {
+    // override by assigning to outer if const - use Object
+    window.__pgExport = exportPayloadV6;
+  } catch(_){}
+
+  // Hook play to ensure FX chain
+  const _start = start;
+  // start is function declaration - wrap via btn
+  const playBtn = $("btnPlay");
+  if (playBtn) {
+    const orig = playBtn.onclick;
+    playBtn.onclick = () => {
+      if (!isPlaying) { try { buildFxChain(); } catch(e) { console.warn(e); } }
+      if (typeof orig === "function") orig();
+      else isPlaying ? stop() : start();
+    };
+  }
+
+  // Refresh matrix when pattern changes - patch setStep
+  const _setStep = setStep;
+  // setStep is function - we can't easily patch; call refresh on matrix open
+
+  console.info("PulseGrid v6 modules loaded: FX · Matrix · Binary · WAV · MIDI · Udio · Copilot · TikTok");
+
   window.PulseGrid = {
+    exportAll: () => (window.__pgExport ? window.__pgExport() : null),
+    bounceWav, downloadMidi, encodePgbin, buildFxChain,
+    
     getPattern: exportPayload,
     setPattern: d => { if (d.banks) { banks.A = normalizePattern(d.banks.A); banks.B = normalizePattern(d.banks.B); } syncGrid(); },
     play: start, stop, isPlaying: () => isPlaying, loadSample: loadSampleFile,
