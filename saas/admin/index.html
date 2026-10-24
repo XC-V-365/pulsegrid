@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PulseGrid Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root { --navy:#0a0e1a; --surface:#121820; --border:#1e2a3a; --text:#e8ecf4; --muted:#8b95a8; --rose:#d4a574; --midi:#7ee0a0; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:"DM Sans",system-ui,sans-serif; background:var(--navy); color:var(--text); padding:1.5rem; }
+.wrap { max-width:900px; margin:0 auto; }
+h1 { font-size:1.2rem; margin-bottom:1rem; }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1rem; margin-bottom:1rem; }
+h2 { font-size:.75rem; color:var(--rose); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.6rem; }
+textarea, input { width:100%; background:#0a0e1a; border:1px solid var(--border); color:var(--text); border-radius:8px; padding:.5rem; font-family:"JetBrains Mono",monospace; font-size:.75rem; }
+textarea { min-height:160px; }
+.btn { border:1px solid var(--border); background:#1a2230; color:var(--text); border-radius:8px; padding:.5rem .8rem; cursor:pointer; font-weight:600; margin:.25rem .25rem 0 0; }
+.btn-primary { background:linear-gradient(135deg,#c0c8d4,#d4a574); color:#0a0e1a; border:none; }
+.notice { font-size:.75rem; color:var(--muted); line-height:1.45; margin:.5rem 0; }
+.err { color:#e8a0b0; }
+a { color:var(--rose); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>PulseGrid Admin · access control</h1>
+  <p class="notice"><a href="../../index.html">← Portal</a> · Only <strong>admin emails</strong> can save changes.</p>
+  <div class="card">
+    <h2>Signed in as</h2>
+    <div id="who" class="notice">…</div>
+  </div>
+  <div class="card">
+    <h2>Admin emails (owner + 12) — edit freely</h2>
+    <p class="notice">One email per line. Max 13 lines (owner + 12). Everyone else remains free-trial limited.</p>
+    <textarea id="adminList"></textarea>
+    <button class="btn btn-primary" id="saveAdmins">Save admin list</button>
+  </div>
+  <div class="card">
+    <h2>Licence clause (ALL licences — editable)</h2>
+    <p class="notice">Change terms in-product. Stored as override in local state for now; production should persist server-side.</p>
+    <textarea id="licenseText"></textarea>
+    <button class="btn btn-primary" id="saveLic">Save licence text</button>
+  </div>
+  <div class="card">
+    <h2>Trial limits (from config — document only here)</h2>
+    <pre id="trialJson" class="notice" style="white-space:pre-wrap"></pre>
+  </div>
+  <div class="card">
+    <h2>Generation policy</h2>
+    <p class="notice" id="genNote"></p>
+  </div>
+  <p id="msg" class="notice"></p>
+</div>
+<script src="../access-config.js"></script>
+<script src="../auth/access-engine.js"></script>
+<script>
+const A = PulseGridAuth, C = PulseGridAccess;
+function refresh() {
+  const u = A.currentUser();
+  document.getElementById("who").textContent = u ? (u.email + " · " + u.role) : "Not signed in — open portal first";
+  document.getElementById("adminList").value = A.effectiveAdminEmails().join("\n");
+  document.getElementById("licenseText").value = A.getLicenseText();
+  document.getElementById("trialJson").textContent = JSON.stringify(C.freeTrial, null, 2);
+  document.getElementById("genNote").textContent = C.generationGrant?.note + " Duration: " + C.generationGrant?.durationDays + " days.";
+}
+document.getElementById("saveAdmins").onclick = () => {
+  try {
+    const emails = document.getElementById("adminList").value.split(/\n/).map(s => s.trim()).filter(Boolean);
+    A.setAdminList(emails, A.currentUser()?.email);
+    document.getElementById("msg").textContent = "Admin list saved (" + emails.length + ")";
+    document.getElementById("msg").className = "notice";
+  } catch (e) {
+    document.getElementById("msg").textContent = e.message;
+    document.getElementById("msg").className = "notice err";
+  }
+};
+document.getElementById("saveLic").onclick = () => {
+  try {
+    A.setLicenseText(document.getElementById("licenseText").value, A.currentUser()?.email);
+    document.getElementById("msg").textContent = "Licence updated";
+  } catch (e) {
+    document.getElementById("msg").textContent = e.message;
+    document.getElementById("msg").className = "notice err";
+  }
+};
+refresh();
+</script>
+</body>
+</html>

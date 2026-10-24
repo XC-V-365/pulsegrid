@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PulseGrid — Sign in · Access · Generators</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:#0a0e1a; --surface:#121820; --border:#1e2a3a; --text:#e8ecf4;
+  --muted:#8b95a8; --silver:#c0c8d4; --rose:#d4a574; --midi:#7ee0a0; --warn:#e8a0b0;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family:"DM Sans",system-ui,sans-serif; background:var(--navy); color:var(--text);
+  min-height:100vh; background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, #1a2840 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 90% 80%, #2a1a28 0%, transparent 50%);
+}
+.wrap { max-width:920px; margin:0 auto; padding:2rem 1.25rem 4rem; }
+header { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem; }
+.logo { font-weight:700; letter-spacing:.04em; font-size:1.35rem; }
+.logo span { background:linear-gradient(135deg,var(--silver),var(--rose)); -webkit-background-clip:text; color:transparent; }
+.badge { font-size:.65rem; padding:.2rem .5rem; border:1px solid var(--border); border-radius:999px; color:var(--muted); }
+.card {
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  padding:1.25rem 1.35rem; margin-bottom:1rem;
+  box-shadow:0 0 0 1px #ffffff06, 0 20px 50px #0006;
+}
+.card h2 { font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; color:var(--rose); margin-bottom:.85rem; }
+label { display:block; font-size:.75rem; color:var(--muted); margin:.45rem 0 .2rem; }
+input[type=email], input[type=text], select, textarea {
+  width:100%; background:#0a0e1a; border:1px solid var(--border); color:var(--text);
+  border-radius:8px; padding:.55rem .7rem; font-size:.9rem; font-family:inherit;
+}
+textarea { min-height:120px; font-family:"JetBrains Mono",monospace; font-size:.72rem; line-height:1.45; }
+.row { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.75rem; }
+.btn {
+  border:1px solid var(--border); background:#1a2230; color:var(--text);
+  border-radius:8px; padding:.55rem .9rem; font-size:.8rem; font-weight:600; cursor:pointer;
+  font-family:inherit;
+}
+.btn:hover { border-color:var(--silver); }
+.btn-primary { background:linear-gradient(135deg,#c0c8d4,#d4a574); color:#0a0e1a; border:none; }
+.btn-oauth { flex:1; min-width:140px; text-align:center; font-size:.72rem; }
+.btn-danger { border-color:#603040; color:var(--warn); }
+.human {
+  display:flex; align-items:center; gap:.6rem; padding:.65rem .8rem;
+  background:#0a0e1a; border:1px solid var(--border); border-radius:8px; margin-top:.6rem; font-size:.85rem;
+}
+.human input { width:auto; accent-color:var(--rose); }
+.notice { font-size:.75rem; color:var(--muted); line-height:1.5; margin-top:.75rem; }
+.notice strong { color:var(--text); }
+.tier {
+  display:inline-block; font-size:.65rem; padding:.15rem .45rem; border-radius:6px;
+  background:#1a2840; color:var(--midi); margin-left:.35rem;
+}
+.tier.trial { color:var(--warn); }
+.tier.admin { color:var(--rose); }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+@media (max-width:720px) { .grid2 { grid-template-columns:1fr; } }
+.session-item {
+  font-size:.72rem; font-family:"JetBrains Mono",monospace; padding:.45rem .55rem;
+  border-bottom:1px solid var(--border); display:flex; justify-content:space-between; gap:.5rem; align-items:center;
+}
+.footer-legal {
+  margin-top:2rem; padding:1rem; border:1px dashed var(--border); border-radius:10px;
+  font-size:.7rem; color:var(--muted); white-space:pre-wrap; line-height:1.5; max-height:200px; overflow:auto;
+}
+a { color:var(--rose); }
+.hidden { display:none !important; }
+.status { font-size:.8rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">Pulse<span>Grid</span> <span class="badge">SaaS v8</span></div>
+    <div class="status" id="statusLine">Not signed in</div>
+  </header>
+
+  <div class="card" id="gateCard">
+    <h2>Sign in · OAuth · Human check</h2>
+    <p class="notice" style="margin-top:0">
+      <strong>Access policy:</strong> Full admin is limited to the <strong>owner + 12 configured emails</strong>.
+      Everyone else gets a <strong>free trial with very limited access</strong>.
+      <strong>7-day generation</strong> is available <em>only to donators and sponsors</em> (and admins).
+    </p>
+
+    <div class="row" id="oauthRow"></div>
+
+    <label>Email (magic link / demo login)</label>
+    <input type="email" id="emailIn" placeholder="you@domain.com" autocomplete="email"/>
+
+    <div class="human" id="humanBox">
+      <input type="checkbox" id="humanCheck"/>
+      <label for="humanCheck" style="margin:0;color:var(--text)">I'm not a robot (human check)</label>
+    </div>
+    <div id="mathBox" class="human" style="display:none;flex-wrap:wrap">
+      <span id="mathPrompt"></span>
+      <input type="text" id="mathAnswer" placeholder="Answer" style="width:80px"/>
+    </div>
+
+    <div class="row">
+      <button class="btn btn-primary" id="btnLogin">Sign in</button>
+      <button class="btn" id="btnMath">Math challenge instead</button>
+      <button class="btn" id="btnLogout" class="hidden">Sign out</button>
+    </div>
+    <p class="notice" id="loginMsg"></p>
+  </div>
+
+  <div class="grid2">
+    <div class="card" id="accessCard">
+      <h2>Your access</h2>
+      <div id="accessBody" class="notice">Sign in to see role & quotas.</div>
+      <div class="row">
+        <a class="btn btn-primary" href="step-sequencer.html" id="btnOpenApp">Open sequencer</a>
+        <a class="btn" href="saas/admin/index.html" id="btnAdmin">Admin</a>
+        <a class="btn" href="saas/generators/index.html">Music generators</a>
+        <a class="btn" href="saas/sessions/index.html">Session vault</a>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Donate / Sponsor → 7-day generation</h2>
+      <p class="notice" style="margin-top:0">
+        Generation quota is <strong>not</strong> on free trial. Donors & sponsors receive a
+        <strong>7-day generation window</strong> (renewable by donation). Admins always full access.
+      </p>
+      <div class="row">
+        <button class="btn" id="btnDonor">I donated (demo grant)</button>
+        <button class="btn" id="btnSponsor">I'm a sponsor (demo grant)</button>
+        <a class="btn" id="donateLink" href="#" target="_blank" rel="noopener">Donation page</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Pull old sessions from everywhere</h2>
+    <p class="notice" style="margin-top:0">Scans localStorage for PulseGrid keys (v4–v7, autosave, etc.) and lets you restore or export.</p>
+    <div class="row">
+      <button class="btn" id="btnScan">Scan local sessions</button>
+      <label class="btn" style="cursor:pointer;margin:0">Import file<input type="file" id="importFile" accept=".json,.pgbin,.txt" hidden/></label>
+    </div>
+    <div id="sessionList" style="margin-top:.75rem;max-height:220px;overflow:auto"></div>
+  </div>
+
+  <div class="footer-legal" id="licenseBox"></div>
+  <p class="notice" style="text-align:center;margin-top:1rem">
+    Licence text is editable by admins in-product · <a href="saas/legal/LICENSE.md">legal/</a> ·
+    <a href="docs/SAAS_ACCESS.md">Access docs</a>
+  </p>
+</div>
+
+<script src="saas/access-config.js"></script>
+<script src="saas/auth/access-engine.js"></script>
+<script>
+(function(){
+  const A = window.PulseGridAuth;
+  const C = window.PulseGridAccess;
+  let mathToken = null;
+  let humanMode = "checkbox";
+
+  // OAuth buttons (demo: fill email from provider name)
+  const row = document.getElementById("oauthRow");
+  Object.entries(C.oauth || {}).forEach(([id, conf]) => {
+    if (!conf.enabled || id === "email") return;
+    const b = document.createElement("button");
+    b.className = "btn btn-oauth";
+    b.textContent = conf.label || id;
+    b.onclick = () => {
+      const email = prompt("Demo OAuth · enter the email for " + id + " account:", "user@" + id + ".oauth");
+      if (!email) return;
+      document.getElementById("emailIn").value = email;
+      document.getElementById("loginMsg").textContent = "Demo " + id + " selected — complete human check & Sign in. Wire " + conf.clientIdEnv + " in production.";
+    };
+    row.appendChild(b);
+  });
+
+  document.getElementById("donateLink").href = C.donations?.links?.donate || "#";
+
+  function refresh() {
+    const u = A.currentUser();
+    const st = document.getElementById("statusLine");
+    const body = document.getElementById("accessBody");
+    const lic = document.getElementById("licenseBox");
+    lic.textContent = A.getLicenseText();
+    if (!u) {
+      st.textContent = "Not signed in";
+      body.innerHTML = "Sign in to see role & quotas.";
+      return;
+    }
+    const tierClass = u.role === "admin" ? "admin" : u.role === "trial" ? "trial" : "";
+    st.innerHTML = u.email + ' <span class="tier ' + tierClass + '">' + u.role + "</span>";
+    let g = u.generationGrant;
+    let genHtml = "Generation: <strong>not available</strong> on free trial (donors/sponsors only).";
+    if (g && g.expiresAt > Date.now()) {
+      genHtml = "Generation grant: <strong>" + g.remaining + "</strong> left · expires " + new Date(g.expiresAt).toLocaleString();
+    } else if (u.role === "admin") {
+      genHtml = "Generation: <strong>unlimited (admin)</strong>";
+    }
+    const ft = C.freeTrial || {};
+    body.innerHTML =
+      "<p><strong>Role:</strong> " + u.role + " via " + u.provider + "</p>" +
+      "<p>" + genHtml + "</p>" +
+      (u.role === "trial"
+        ? "<p>Trial edits: " + (u.trial?.edits||0) + " / " + ft.maxPatternEdits +
+          " · exports: " + (u.trial?.exports||0) + " / " + ft.maxExports +
+          " · gens: " + (u.trial?.generations||0) + " / " + ft.maxGenerations + "</p>" +
+          "<p class='notice'>Blocked on trial: FX Labs, MIDI out, sample kit, matrix, song mode, WAV/MIDI export (see config).</p>"
+        : "<p>Elevated access active.</p>");
+  }
+
+  document.getElementById("btnMath").onclick = () => {
+    humanMode = "math";
+    const ch = A.issueMathChallenge();
+    mathToken = ch.token;
+    document.getElementById("mathBox").style.display = "flex";
+    document.getElementById("mathPrompt").textContent = ch.prompt;
+    document.getElementById("humanBox").style.display = "none";
+  };
+
+  document.getElementById("btnLogin").onclick = () => {
+    const email = document.getElementById("emailIn").value;
+    let token = null;
+    try {
+      if (humanMode === "checkbox") {
+        token = A.verifyHuman({ mode: "checkbox", checkbox: document.getElementById("humanCheck").checked });
+      } else {
+        token = A.verifyHuman({ mode: "math", token: mathToken, answer: document.getElementById("mathAnswer").value });
+      }
+      if (!token) throw new Error("Human check failed");
+      const u = A.login({ email, provider: "email", humanToken: token });
+      document.getElementById("loginMsg").textContent = "Signed in as " + u.email + " (" + u.role + ")";
+      refresh();
+    } catch (e) {
+      document.getElementById("loginMsg").textContent = e.message || String(e);
+    }
+  };
+
+  document.getElementById("btnLogout").onclick = () => { A.logout(); refresh(); };
+
+  document.getElementById("btnDonor").onclick = () => {
+    try {
+      A.activateDonor(A.currentUser()?.email, "donor");
+      alert("Donor grant applied (demo). 7-day generation window started.");
+      refresh();
+    } catch (e) { alert(e.message); }
+  };
+  document.getElementById("btnSponsor").onclick = () => {
+    try {
+      A.activateDonor(A.currentUser()?.email, "sponsor");
+      alert("Sponsor grant applied (demo).");
+      refresh();
+    } catch (e) { alert(e.message); }
+  };
+
+  document.getElementById("btnScan").onclick = () => {
+    const list = A.pullLocalSessions();
+    const el = document.getElementById("sessionList");
+    if (!list.length) { el.innerHTML = "<p class='notice'>No local PulseGrid sessions found.</p>"; return; }
+    el.innerHTML = list.map((s, i) =>
+      "<div class='session-item'><span>" + s.source + " · <strong>" + s.key + "</strong> · " + s.size + " B</span>" +
+      "<button class='btn' data-i='" + i + "'>Use</button></div>"
+    ).join("");
+    el.querySelectorAll("button[data-i]").forEach(btn => {
+      btn.onclick = () => {
+        const s = list[+btn.getAttribute("data-i")];
+        localStorage.setItem("pulsegrid_v7", JSON.stringify(s.data?.project ? s.data : { project: s.data, settings: s.data?.settings || {} }));
+        alert("Copied into pulsegrid_v7. Open the sequencer to restore.");
+      };
+    });
+  };
+
+  document.getElementById("importFile").onchange = async (e) => {
+    const f = e.target.files?.[0]; if (!f) return;
+    const text = await f.text();
+    try {
+      const data = JSON.parse(text);
+      localStorage.setItem("pulsegrid_import", JSON.stringify(data));
+      localStorage.setItem("pulsegrid_v7", JSON.stringify({ project: data.banks ? data : data.project || data, settings: {} }));
+      alert("Imported → open sequencer");
+    } catch {
+      localStorage.setItem("pulsegrid_import_raw", text);
+      alert("Stored raw import");
+    }
+  };
+
+  refresh();
+})();
+</script>
+</body>
+</html>

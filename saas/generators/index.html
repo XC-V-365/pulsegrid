@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PulseGrid Music Generators</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root { --navy:#0a0e1a; --surface:#121820; --border:#1e2a3a; --text:#e8ecf4; --muted:#8b95a8; --rose:#d4a574; --midi:#7ee0a0; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:"DM Sans",system-ui,sans-serif; background:var(--navy); color:var(--text); padding:1.5rem; }
+.wrap { max-width:900px; margin:0 auto; }
+h1 { font-size:1.2rem; margin-bottom:.5rem; }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:1rem; margin:1rem 0; }
+h2 { font-size:.75rem; color:var(--rose); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.6rem; }
+label { font-size:.75rem; color:var(--muted); display:block; margin:.4rem 0 .2rem; }
+input, select, textarea { width:100%; background:#0a0e1a; border:1px solid var(--border); color:var(--text); border-radius:8px; padding:.5rem; font-size:.85rem; }
+textarea { min-height:140px; font-family:"JetBrains Mono",monospace; font-size:.72rem; }
+.btn { border:1px solid var(--border); background:#1a2230; color:var(--text); border-radius:8px; padding:.5rem .8rem; cursor:pointer; font-weight:600; margin:.35rem .25rem 0 0; }
+.btn-primary { background:linear-gradient(135deg,#c0c8d4,#d4a574); color:#0a0e1a; border:none; }
+.notice { font-size:.75rem; color:var(--muted); line-height:1.45; }
+.row { display:flex; flex-wrap:wrap; gap:.4rem; }
+a { color:var(--rose); }
+.err { color:#e8a0b0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Music generators</h1>
+  <p class="notice"><a href="../../index.html">← Portal</a> · Local packages + Suno/Udio/Shoom paste · Generation gated for donors/sponsors (7-day)</p>
+  <div class="card">
+    <h2>Access check</h2>
+    <div id="access" class="notice"></div>
+  </div>
+  <div class="card">
+    <h2>Local style generator (BPM + mood → packages)</h2>
+    <label>BPM</label><input type="number" id="bpm" value="120" min="60" max="180"/>
+    <label>Mood / genre</label><input type="text" id="mood" value="dark luxury electronic drums, navy rose-gold"/>
+    <label>Density</label>
+    <select id="density"><option>sparse</option><option selected>medium</option><option>dense</option></select>
+    <div class="row">
+      <button class="btn btn-primary" id="genAll">Generate all packages</button>
+      <button class="btn" id="genSuno">Suno only</button>
+      <button class="btn" id="genUdio">Udio only</button>
+      <button class="btn" id="genLocal">Local pattern seed JSON</button>
+    </div>
+    <label>Output</label>
+    <textarea id="out" readonly></textarea>
+    <button class="btn" id="copy">Copy</button>
+  </div>
+  <div class="card">
+    <h2>Procedural beat seed (16-step masks)</h2>
+    <p class="notice">Creates a random-but-musical seed you can paste into the sequencer import.</p>
+    <button class="btn" id="seedBeat">Create seed pattern</button>
+  </div>
+</div>
+<script src="../access-config.js"></script>
+<script src="../auth/access-engine.js"></script>
+<script>
+const A = PulseGridAuth;
+function refreshAccess() {
+  const u = A.currentUser();
+  const c = A.can("generate");
+  document.getElementById("access").innerHTML = u
+    ? (u.email + " · " + u.role + " · generate: " + (c.ok ? "YES" : c.reason))
+    : "Not signed in — <a href='../../index.html'>portal</a>";
+}
+function gateGenerate() {
+  const c = A.can("generate");
+  if (!c.ok) {
+    // allow trial tiny generation_trial once
+    const t = A.can("generation_trial");
+    if (t.ok) {
+      A.consume("generation_trial");
+      return true;
+    }
+    alert(c.reason);
+    return false;
+  }
+  A.consume("generate");
+  return true;
+}
+function sunoPkg(bpm, mood, dens) {
+  return `[Suno Custom]\nTitle: PulseGrid ${dens} ${bpm}\nSTYLE OF MUSIC:\nelectronic drums, ${mood}, ${bpm} BPM, ${dens} 16-step sequencer, instrumental\n[Instrumental]\n`;
+}
+function udioPkg(bpm, mood, dens) {
+  return `UDIO\nTitle: PulseGrid ${dens}\nStyle: ${mood}, ${bpm} BPM, instrumental drums, ${dens}\n`;
+}
+function localSeed(bpm, dens) {
+  const densN = dens === "dense" ? 0.55 : dens === "sparse" ? 0.22 : 0.35;
+  const tracks = ["kick","snare","hat","perc"];
+  const banks = { A: {}, B: {} };
+  tracks.forEach(t => {
+    banks.A[t] = Array.from({length:16}, (_,i) => {
+      let on = Math.random() < densN;
+      if (t==="kick" && (i%4===0)) on = true;
+      if (t==="snare" && (i===4||i===12)) on = true;
+      return { v: on ? (1+Math.floor(Math.random()*3)) : 0, p: on ? 100 : 100 };
+    });
+    banks.B[t] = banks.A[t].map(c => ({...c}));
+  });
+  return JSON.stringify({ version: 8, app: "PulseGrid", bpm: +bpm, swing: 8, banks, source: "generator-seed" }, null, 2);
+}
+document.getElementById("genAll").onclick = () => {
+  if (!gateGenerate()) return;
+  const bpm = bpmEl(), mood = moodEl(), dens = densEl();
+  document.getElementById("out").value = sunoPkg(bpm,mood,dens) + "\n---\n" + udioPkg(bpm,mood,dens) + "\n---\n" + localSeed(bpm, dens);
+  refreshAccess();
+};
+document.getElementById("genSuno").onclick = () => { if (!gateGenerate()) return; document.getElementById("out").value = sunoPkg(bpmEl(),moodEl(),densEl()); refreshAccess(); };
+document.getElementById("genUdio").onclick = () => { if (!gateGenerate()) return; document.getElementById("out").value = udioPkg(bpmEl(),moodEl(),densEl()); refreshAccess(); };
+document.getElementById("genLocal").onclick = () => { if (!gateGenerate()) return; document.getElementById("out").value = localSeed(bpmEl(), densEl()); refreshAccess(); };
+document.getElementById("seedBeat").onclick = () => { if (!gateGenerate()) return; document.getElementById("out").value = localSeed(bpmEl(), densEl()); refreshAccess(); };
+document.getElementById("copy").onclick = () => { navigator.clipboard.writeText(document.getElementById("out").value); };
+function bpmEl(){return document.getElementById("bpm").value}
+function moodEl(){return document.getElementById("mood").value}
+function densEl(){return document.getElementById("density").value}
+refreshAccess();
+</script>
+</body>
+</html>

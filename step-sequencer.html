@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>PulseGrid v7 — QOL · Settings · Pipelines · Suno · Shoom · Faves · Composio</title>
+<title>PulseGrid v8 — SaaS · Access · Generators · Settings · Pipelines · Suno · Shoom · Faves · Composio</title>
 <style>
   :root {
     --bg: #05080f; --navy: #0a0e1a; --surface: #0c1018; --surface-2: #121820;
@@ -339,6 +339,18 @@
   .status-dot { width:6px; height:6px; border-radius:50%; background:#2a3040; display:inline-block; margin-right:.25rem; }
   .status-dot.on { background:var(--midi); box-shadow:0 0 6px #7ee0a066; }
 
+
+  .trial-banner {
+    display:none; margin:.5rem 0; padding:.55rem .75rem; border-radius:8px;
+    background:#1a1220; border:1px solid #603040; color:#e8a0b0; font-size:.72rem; line-height:1.4;
+  }
+  .trial-banner.show { display:block; }
+  .trial-banner a { color:var(--rose-gold); }
+  .admin-banner {
+    display:none; margin:.5rem 0; padding:.45rem .75rem; border-radius:8px;
+    background:#122018; border:1px solid #2a5040; color:var(--midi); font-size:.72rem;
+  }
+  .admin-banner.show { display:block; }
 </style>
 </head>
 <body>
@@ -361,11 +373,14 @@
       <div class="led" id="led"></div>
       <span class="badge dim" id="engineBadge">SYNTH</span>
       <span class="badge" id="midiBadge">MIDI OFF</span>
-      <span class="badge">v7</span>
+      <span class="badge">v8</span>
     </div>
   </header>
 
-  <main>
+  
+    <div class="trial-banner" id="trialBanner"></div>
+    <div class="admin-banner" id="adminBanner"></div>
+<main>
     <div class="transport">
       <button type="button" class="btn btn-play" id="btnPlay"><span id="playLabel">Play</span></button>
       <div class="bank-group">
@@ -664,9 +679,11 @@
       </section>
     </div>
   </main>
-  <footer>PulseGrid v7 · QOL · Settings · Undo · Autosave · Metronome · Pipelines · Full docs</footer>
+  <footer>PulseGrid v8 · <a href="index.html" style="color:var(--rose-gold)">Portal</a> · SaaS access · Generators · Admin</footer>
   <div class="toast" id="toast"></div>
 
+<script src="saas/access-config.js"></script>
+<script src="saas/auth/access-engine.js"></script>
 <script>
 (function () {
   "use strict";
@@ -2066,7 +2083,7 @@ CTA: "Duet with your melody 🎹"
   // setStep is function - we can't easily patch; call refresh on matrix open
 
 
-  // ═══════════════ PulseGrid v7 — QOL · History · Settings · Shortcuts ═══════════════
+  // ═══════════════ PulseGrid v8 — SaaS · Access · Generators · History · Settings · Shortcuts ═══════════════
   const PG_STORAGE = "pulsegrid_v7";
   const historyStack = [];
   let historyIndex = -1;
@@ -2310,6 +2327,84 @@ CTA: "Duet with your melody 🎹"
   pushHistory("init");
   loadLocal();
   setInterval(function() { if (settings.autosave) saveLocal(); }, 30000);
+
+  
+  // ═══════════════ v8 SaaS access gate ═══════════════
+  (function saasGate() {
+    const A = window.PulseGridAuth;
+    const C = window.PulseGridAccess;
+    if (!A) return;
+    const u = A.currentUser();
+    const tb = $("trialBanner");
+    const ab = $("adminBanner");
+    if (!u) {
+      if (tb) {
+        tb.classList.add("show");
+        tb.innerHTML = 'Not signed in — <a href="index.html">open Portal</a> for OAuth / email + human check. Full admin is limited to owner + 12 emails; others get a very limited free trial.';
+      }
+      return;
+    }
+    if (u.role === "admin" && ab) {
+      ab.classList.add("show");
+      ab.innerHTML = "Admin: " + u.email + " · full access · <a href='saas/admin/index.html' style='color:inherit'>Admin console</a>";
+    } else if (u.role === "trial" && tb) {
+      const ft = C.freeTrial || {};
+      tb.classList.add("show");
+      tb.innerHTML = "Free trial (very limited) · " + u.email +
+        " · edits " + (u.trial?.edits||0) + "/" + ft.maxPatternEdits +
+        " · Generation (7-day) only for <a href='index.html'>donors/sponsors</a>.";
+    } else if ((u.role === "donor" || u.role === "sponsor") && ab) {
+      ab.classList.add("show");
+      ab.style.borderColor = "#504020";
+      ab.style.color = "var(--rose-gold)";
+      const g = u.generationGrant;
+      ab.innerHTML = u.role + " · gen left " + (g?.remaining ?? 0) + " · exp " + (g ? new Date(g.expiresAt).toLocaleDateString() : "—");
+    }
+
+    function block(action, label) {
+      const c = A.can(action);
+      if (c.ok) return false;
+      if (typeof showToast === "function") showToast(c.reason || (label + " locked on trial"));
+      else alert(c.reason || label);
+      return true;
+    }
+
+    // Hook exports / bounce / midi / fx open
+    const wrapClick = (id, action, label) => {
+      const el = $(id);
+      if (!el) return;
+      el.addEventListener("click", function(ev) {
+        if (u.role === "admin") return;
+        if (block(action, label)) { ev.preventDefault(); ev.stopImmediatePropagation(); }
+        else A.consume(action === "generate" ? "generate" : action);
+      }, true);
+    };
+    wrapClick("btnExport", "export", "Export");
+    wrapClick("btnBounceWav", "bounce", "WAV bounce");
+    wrapClick("btnMidiFile", "midi", "MIDI export");
+    wrapClick("btnFxLab", "fx", "FX Labs");
+    wrapClick("btnMatrix", "matrix", "Matrix");
+    wrapClick("btnFullIO", "export", "I/O Hub");
+
+    // Count edits on grid paint
+    const grid = $("grid");
+    if (grid && u.role === "trial") {
+      grid.addEventListener("pointerdown", function() {
+        const c = A.can("edit");
+        if (!c.ok) {
+          showToast(c.reason);
+          return;
+        }
+        A.consume("edit");
+        if (tb) {
+          const uu = A.currentUser();
+          const ft = C.freeTrial || {};
+          tb.innerHTML = "Free trial · edits " + (uu.trial?.edits||0) + "/" + ft.maxPatternEdits +
+            " · <a href='index.html'>Upgrade via donation/sponsor for 7-day generation</a>";
+        }
+      }, true);
+    }
+  })();
 
   console.info("PulseGrid v7 QOL: History · Settings · Shortcuts · Metro · Pipelines · Autosave");
 

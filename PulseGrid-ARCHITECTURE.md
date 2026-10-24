@@ -1,45 +1,20 @@
-# PulseGrid — v7 Architecture
+# PulseGrid v8 Architecture
 
-**QOL · Settings · History · Modules · Pipelines · Full audio · Universal I/O · Connections**
+## Layers
 
-## Docs map
+1. **Portal / SaaS** (`index.html`, `saas/`) — auth, human check, roles, licence, generators, sessions  
+2. **Sequencer** (`step-sequencer.html`) — v7 engine + v8 access banners/gates  
+3. **Native** (`native/`) — C++/Rust scaffolds  
+4. **Docs** — functions, modules, SaaS access  
 
-| Doc | Contents |
-|-----|----------|
-| **This file** | System overview & status |
-| `docs/FUNCTION_REFERENCE.md` | In-depth function/functionality descriptions |
-| `docs/MODULES_AND_PIPELINES.md` | Module graph, pipelines P1–P7, settings |
-| `integrations/` | Per-service paste workflows |
-| `native/` | C++ / Rust scaffolds |
+## Roles
 
-## v7 QOL feature list
+admin (owner+12) · sponsor · donor · trial · anonymous  
 
-- Undo / redo (Ctrl+Z / Ctrl+Shift+Z) with depth setting  
-- Autosave + restore (`pulsegrid_v7`)  
-- Settings panel (transport, editing, display, audio/MIDI)  
-- Help panel (shortcuts + module map)  
-- Pipelines panel (8-step creative workflows)  
-- Metronome (M)  
-- Shift pattern « » (`[` `]`)  
-- Thicken pattern  
-- Confirm clear  
-- Compact + high-contrast modes  
-- Autosave indicator badge  
+## Generation
 
-## Still included from v4–v6
+Only `donor` | `sponsor` | `admin` get a **7-day** generation grant. Free trial is explicitly excluded.
 
-Sample kit · Web MIDI + clock · FX Labs · Matrix/binary · WAV bounce · MIDI SMF ·  
-JSON/CSV/.pgbin import-export · Suno · Udio · Shoom · Faves · Composio · Copilot · TikTok  
+## Config
 
-## App entry
-
-Open **`step-sequencer.html`** (Chrome/Edge recommended for Web MIDI).
-
-## Native
-
-```bash
-cd native/rust && cargo build --release --features full
-cd native/cpp && cmake . && cmake --build .
-```
-
-Shared model: `StepCell { vel, prob }`, banks A/B, song chain, GM drum map.
+`saas/access-config.js` is the live control plane for demos. Admin UI can override admin emails + licence text in localStorage.

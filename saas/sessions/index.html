@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PulseGrid Session Vault</title>
+<style>
+body{font-family:system-ui;background:#0a0e1a;color:#e8ecf4;padding:1.5rem}
+.card{background:#121820;border:1px solid #1e2a3a;border-radius:12px;padding:1rem;margin:1rem 0}
+.btn{background:#1a2230;border:1px solid #1e2a3a;color:#e8ecf4;padding:.5rem .8rem;border-radius:8px;cursor:pointer;margin:.2rem}
+a{color:#d4a574} pre{font-size:.7rem;overflow:auto;max-height:240px;background:#0a0e1a;padding:.5rem;border-radius:8px}
+.muted{color:#8b95a8;font-size:.8rem}
+</style>
+</head>
+<body>
+<h1>Session vault</h1>
+<p class="muted"><a href="../../index.html">← Portal</a> · Pull old sessions from localStorage + files</p>
+<div class="card">
+  <button class="btn" id="scan">Scan everywhere</button>
+  <button class="btn" id="exportAll">Export all found as JSON</button>
+  <div id="list"></div>
+  <pre id="preview"></pre>
+</div>
+<script src="../access-config.js"></script>
+<script src="../auth/access-engine.js"></script>
+<script>
+let found = [];
+document.getElementById("scan").onclick = () => {
+  found = PulseGridAuth.pullLocalSessions();
+  document.getElementById("list").innerHTML = found.map((s,i) =>
+    `<div><button class="btn" data-i="${i}">Preview ${s.key}</button> <span class="muted">${s.source} ${s.size}B</span></div>`
+  ).join("") || "<p class='muted'>None found</p>";
+  document.querySelectorAll("[data-i]").forEach(b => b.onclick = () => {
+    const s = found[+b.dataset.i];
+    document.getElementById("preview").textContent = JSON.stringify(s.data || s, null, 2).slice(0, 8000);
+  });
+};
+document.getElementById("exportAll").onclick = () => {
+  const blob = new Blob([JSON.stringify(found, null, 2)], {type:"application/json"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "pulsegrid-sessions-" + Date.now() + ".json"; a.click();
+};
+</script>
+</body>
+</html>

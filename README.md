@@ -1,42 +1,45 @@
-# PulseGrid v7
+# PulseGrid v8 — SaaS access · generators · QOL
 
-Premium **16-step drum sequencer** with full audio FX, universal I/O, AI/social connections, and deep QOL.
+Premium 16-step drum platform with **access control**, **music generators**, **session vault**, and full sequencer (FX, MIDI, matrix, AI paste packs).
 
-## Open the app
+## Start here
+
+1. Open **`index.html`** (Portal) — OAuth/email + human check  
+2. Put **your email** first in `saas/access-config.js` → `adminEmails`  
+3. Sign in → full admin for owner + 12 emails  
+4. Everyone else: **very limited free trial**  
+5. **7-day generation** only for **donators & sponsors** (demo buttons on portal)
 
 ```bash
-# static server recommended (Web MIDI)
 python3 -m http.server 8765
-# → http://localhost:8765/step-sequencer.html
+# http://localhost:8765/index.html
 ```
 
-## Highlights
+## Access policy
 
-- **Transport** — BPM, swing, A/B banks, song chain, metronome  
-- **Editor** — Gate / Vel / Prob, paint, mute, shift, thicken, undo/redo  
-- **Audio** — Synth + sample kit, **FX Labs** bus, WAV bounce  
-- **MIDI** — Web MIDI out, clock, SMF export  
-- **Matrix / binary** — masks, CSV, `.pgbin`  
-- **I/O Hub** — JSON · MIDI · WAV · binary · CSV · TXT · Ableton notes  
-- **Connections** — Suno · Udio · Shoom · Faves · Composio · Copilot · TikTok  
-- **QOL** — Settings, autosave, shortcuts, pipelines panel  
+| Who | Access |
+|-----|--------|
+| Owner + 12 admin emails | Full (admin) |
+| Donors / sponsors | Generation grant **7 days** |
+| Everyone else | Free trial — very limited |
+| Bots | Human check required |
 
-## Docs
+Licence clause covers **all licences** and can be **changed inside Admin** by admins.
 
-| File | Description |
-|------|-------------|
-| [docs/FUNCTION_REFERENCE.md](docs/FUNCTION_REFERENCE.md) | In-depth function & functionality reference |
-| [docs/MODULES_AND_PIPELINES.md](docs/MODULES_AND_PIPELINES.md) | Module graph + pipelines P1–P7 |
-| [PulseGrid-ARCHITECTURE.md](PulseGrid-ARCHITECTURE.md) | System overview |
-| [integrations/](integrations/) | Per-service workflows |
+## App map
 
-## Native
+| Path | Purpose |
+|------|---------|
+| `index.html` | Portal · OAuth · trial · donate · session scan |
+| `step-sequencer.html` | Full sequencer (gated features) |
+| `saas/admin/` | Admin list + editable licence |
+| `saas/generators/` | Suno/Udio/local music packages |
+| `saas/sessions/` | Pull old sessions from everywhere |
+| `saas/access-config.js` | **Edit emails, trial limits, licence default** |
+| `docs/SAAS_ACCESS.md` | Policy detail |
+| `docs/FUNCTION_REFERENCE.md` | Sequencer functions |
+| `docs/MODULES_AND_PIPELINES.md` | Modules & pipelines |
 
-```bash
-cd native/rust && cargo build --release
-cd native/cpp && make   # or cmake
-```
+## Production note
 
-## License
-
-MIT — build-ready concept for web / C++ / Rust.
+Browser gates are UX. Enforce allowlists, trials, and Stripe/GitHub Sponsors webhooks on a **server** before real billing.
