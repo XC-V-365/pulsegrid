@@ -1,4 +1,6 @@
-# PulseGrid v12 — Resources · Skills · Sources
+# PulseGrid v13 — REAP · REA Investigation
+
+ — Resources · Skills · Sources
 
  — Studio · EPB · Canvas · Plugins · Genres
 
@@ -55,3 +57,12 @@ MIT default for scaffold; admin-editable clause; review plugin upstream licenses
 | `saas/resources/sources.json` | Docs, OSS, standards, templates |
 | `integrations/sources/` | Research source cards |
 | `docs/RESOURCES_AND_SKILLS.md` | Guide |
+
+
+## REAP · REA (v13)
+
+Authorized reverse-engineering prompt pack for [REA](https://rea.tools/).
+
+- Hub: `integrations/rea/index.html`
+- Prompts: `integrations/rea/REAP_PROMPTS.md`
+- Docs: `docs/REAP.md` · `docs/SESSION_REVISION_v13.md`

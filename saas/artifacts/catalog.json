@@ -1,515 +1,480 @@
 {
-  "version": 12,
-  "count": 85,
+  "version": 13,
+  "count": 95,
   "items": [
     {
       "path": "PulseGrid-ARCHITECTURE.md",
-      "size": 869,
-      "category": "other",
+      "size": 1004,
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/PulseGrid-ARCHITECTURE.md"
     },
     {
       "path": "README.md",
-      "size": 1692,
-      "category": "other",
+      "size": 1963,
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/README.md"
     },
     {
       "path": "docs/AGENTS_AND_MATRICES.md",
       "size": 1263,
-      "category": "docs",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/AGENTS_AND_MATRICES.md"
     },
     {
       "path": "docs/DASHBOARDS.md",
       "size": 1053,
-      "category": "docs",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/DASHBOARDS.md"
     },
     {
       "path": "docs/FUNCTION_REFERENCE.md",
       "size": 4712,
-      "category": "docs",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/FUNCTION_REFERENCE.md"
+    },
+    {
+      "path": "docs/INVESTIGATION_MAP.md",
+      "size": 1521,
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/INVESTIGATION_MAP.md"
     },
     {
       "path": "docs/MODULES_AND_PIPELINES.md",
       "size": 1736,
-      "category": "docs",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/MODULES_AND_PIPELINES.md"
+    },
+    {
+      "path": "docs/REAP.md",
+      "size": 1091,
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/REAP.md"
     },
     {
       "path": "docs/RESOURCES_AND_SKILLS.md",
       "size": 923,
-      "category": "docs",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/RESOURCES_AND_SKILLS.md"
     },
     {
       "path": "docs/SAAS_ACCESS.md",
       "size": 1652,
-      "category": "docs",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/SAAS_ACCESS.md"
+    },
+    {
+      "path": "docs/SESSION_REVISION_v13.md",
+      "size": 1423,
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/SESSION_REVISION_v13.md"
     },
     {
       "path": "docs/STUDIO_EPB.md",
       "size": 989,
-      "category": "docs",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/STUDIO_EPB.md"
     },
     {
       "path": "index.html",
-      "size": 13795,
-      "category": "app",
+      "size": 13869,
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/index.html"
     },
     {
       "path": "integrations/README.md",
       "size": 715,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/README.md"
     },
     {
       "path": "integrations/agents/PROMPTS.md",
       "size": 783,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/agents/PROMPTS.md"
     },
     {
       "path": "integrations/composio/README.md",
       "size": 1573,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/composio/README.md"
     },
     {
       "path": "integrations/composio/agent_session.example.ts",
       "size": 1836,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/composio/agent_session.example.ts"
     },
     {
       "path": "integrations/composio/pulsegrid_tools.json",
       "size": 3512,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/composio/pulsegrid_tools.json"
     },
     {
       "path": "integrations/exports/BINARY_FORMAT.md",
       "size": 331,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/exports/BINARY_FORMAT.md"
     },
     {
       "path": "integrations/exports/EXAMPLE_SUNO_PulseGrid.txt",
       "size": 435,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/exports/EXAMPLE_SUNO_PulseGrid.txt"
     },
     {
       "path": "integrations/exports/copilot-brief.md",
       "size": 264,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/exports/copilot-brief.md"
     },
     {
       "path": "integrations/exports/faves-share.md",
       "size": 401,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/exports/faves-share.md"
     },
     {
       "path": "integrations/exports/shoom-from-pattern.md",
       "size": 444,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/exports/shoom-from-pattern.md"
     },
     {
       "path": "integrations/exports/suno-from-pattern.md",
       "size": 880,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/exports/suno-from-pattern.md"
     },
     {
       "path": "integrations/exports/tiktok-pack.md",
       "size": 217,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/exports/tiktok-pack.md"
     },
     {
       "path": "integrations/exports/udio-from-pattern.md",
       "size": 360,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/exports/udio-from-pattern.md"
     },
     {
       "path": "integrations/fx/README.md",
       "size": 351,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/fx/README.md"
     },
     {
       "path": "integrations/grok/CONNECTED_SERVICES.json",
       "size": 3589,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/grok/CONNECTED_SERVICES.json"
     },
     {
       "path": "integrations/opensource/README.md",
       "size": 305,
-      "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/opensource/README.md"
+    },
+    {
+      "path": "integrations/rea/README.md",
+      "size": 2103,
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/rea/README.md"
+    },
+    {
+      "path": "integrations/rea/REAP_PROMPTS.md",
+      "size": 8674,
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/rea/REAP_PROMPTS.md"
+    },
+    {
+      "path": "integrations/rea/catalog.json",
+      "size": 1991,
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/rea/catalog.json"
+    },
+    {
+      "path": "integrations/rea/evidence-log.template.md",
+      "size": 281,
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/rea/evidence-log.template.md"
+    },
+    {
+      "path": "integrations/rea/index.html",
+      "size": 3340,
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/rea/index.html"
+    },
+    {
+      "path": "integrations/rea/workflows.json",
+      "size": 1415,
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/rea/workflows.json"
     },
     {
       "path": "integrations/sources/index.md",
       "size": 664,
-      "category": "resources",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/sources/index.md"
+    },
+    {
+      "path": "integrations/sources/rea.md",
+      "size": 408,
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/sources/rea.md"
     },
     {
       "path": "integrations/sources/suno-udio.md",
       "size": 322,
-      "category": "resources",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/sources/suno-udio.md"
     },
     {
       "path": "integrations/sources/webaudio-webmidi.md",
       "size": 382,
-      "category": "resources",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/sources/webaudio-webmidi.md"
     },
     {
       "path": "native/cpp/CMakeLists.txt",
       "size": 501,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/CMakeLists.txt"
     },
     {
       "path": "native/cpp/README.md",
       "size": 1039,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/README.md"
     },
     {
       "path": "native/cpp/include/pulsegrid/clock.hpp",
       "size": 625,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/include/pulsegrid/clock.hpp"
     },
     {
       "path": "native/cpp/include/pulsegrid/engine.hpp",
       "size": 691,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/include/pulsegrid/engine.hpp"
     },
     {
       "path": "native/cpp/include/pulsegrid/midi_out.hpp",
       "size": 806,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/include/pulsegrid/midi_out.hpp"
     },
     {
       "path": "native/cpp/include/pulsegrid/pattern.hpp",
       "size": 383,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/include/pulsegrid/pattern.hpp"
     },
     {
       "path": "native/cpp/include/pulsegrid/rtmidi_out.hpp",
       "size": 839,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/include/pulsegrid/rtmidi_out.hpp"
     },
     {
       "path": "native/cpp/include/pulsegrid/types.hpp",
       "size": 1208,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/include/pulsegrid/types.hpp"
     },
     {
       "path": "native/cpp/pulsegrid",
       "size": 24592,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/pulsegrid"
     },
     {
       "path": "native/cpp/src/clock.cpp",
       "size": 1370,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/src/clock.cpp"
     },
     {
       "path": "native/cpp/src/engine.cpp",
       "size": 912,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/src/engine.cpp"
     },
     {
       "path": "native/cpp/src/main.cpp",
       "size": 1334,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/src/main.cpp"
     },
     {
       "path": "native/cpp/src/midi_out.cpp",
       "size": 94,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/src/midi_out.cpp"
     },
     {
       "path": "native/cpp/src/pattern.cpp",
       "size": 917,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/cpp/src/pattern.cpp"
     },
     {
       "path": "native/rust/Cargo.lock",
       "size": 153,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/rust/Cargo.lock"
     },
     {
       "path": "native/rust/Cargo.toml",
       "size": 460,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/rust/Cargo.toml"
     },
     {
       "path": "native/rust/README.md",
       "size": 634,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/rust/README.md"
     },
     {
       "path": "native/rust/src/audio_cpal.rs",
       "size": 1809,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/rust/src/audio_cpal.rs"
     },
     {
       "path": "native/rust/src/clock.rs",
       "size": 2151,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/rust/src/clock.rs"
     },
     {
       "path": "native/rust/src/engine.rs",
       "size": 1153,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/rust/src/engine.rs"
     },
     {
       "path": "native/rust/src/lib.rs",
       "size": 384,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/rust/src/lib.rs"
     },
     {
       "path": "native/rust/src/main.rs",
       "size": 1958,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/rust/src/main.rs"
     },
     {
       "path": "native/rust/src/midi.rs",
       "size": 890,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/rust/src/midi.rs"
     },
     {
       "path": "native/rust/src/midi_midir.rs",
       "size": 2461,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/rust/src/midi_midir.rs"
     },
     {
       "path": "native/rust/src/pattern.rs",
       "size": 2659,
-      "category": "native",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/native/rust/src/pattern.rs"
     },
     {
       "path": "saas/access-config.js",
       "size": 4979,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/access-config.js"
     },
     {
       "path": "saas/admin/index.html",
       "size": 4465,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/admin/index.html"
     },
     {
       "path": "saas/agents/index.html",
       "size": 7869,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/agents/index.html"
     },
     {
       "path": "saas/agents/master-music/constitution.md",
       "size": 1818,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/agents/master-music/constitution.md"
     },
     {
       "path": "saas/agents/master-music/router.js",
       "size": 3247,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/agents/master-music/router.js"
     },
     {
       "path": "saas/agents/registry.js",
       "size": 2975,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/agents/registry.js"
     },
     {
       "path": "saas/artifacts/catalog.json",
-      "size": 15962,
-      "category": "saas",
+      "size": 17196,
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/artifacts/catalog.json"
     },
     {
       "path": "saas/auth/access-engine.js",
       "size": 8797,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/auth/access-engine.js"
     },
     {
       "path": "saas/canvas/default-graph.json",
       "size": 964,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/canvas/default-graph.json"
     },
     {
       "path": "saas/canvas/index.html",
       "size": 4776,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/canvas/index.html"
     },
     {
       "path": "saas/dashboard/index.html",
-      "size": 28199,
-      "category": "saas",
+      "size": 28292,
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/dashboard/index.html"
     },
     {
       "path": "saas/generators/index.html",
       "size": 6261,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/generators/index.html"
     },
     {
       "path": "saas/legal/LICENSE.md",
       "size": 1122,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/legal/LICENSE.md"
     },
     {
       "path": "saas/matrices/engines.js",
       "size": 7766,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/matrices/engines.js"
     },
     {
       "path": "saas/matrices/index.html",
       "size": 9863,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/matrices/index.html"
     },
     {
       "path": "saas/modules/catalog.json",
       "size": 1845,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/modules/catalog.json"
     },
     {
       "path": "saas/modules/index.html",
       "size": 2215,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/modules/index.html"
     },
     {
       "path": "saas/plugins/index.html",
       "size": 2404,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/plugins/index.html"
     },
     {
       "path": "saas/plugins/registry.json",
       "size": 2124,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/plugins/registry.json"
     },
     {
       "path": "saas/resources/index.html",
-      "size": 7927,
-      "category": "resources",
+      "size": 8082,
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/resources/index.html"
     },
     {
       "path": "saas/resources/skills.json",
-      "size": 5433,
-      "category": "resources",
+      "size": 6958,
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/resources/skills.json"
     },
     {
       "path": "saas/resources/sources.json",
-      "size": 6518,
-      "category": "resources",
+      "size": 9408,
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/resources/sources.json"
     },
     {
       "path": "saas/sessions/index.html",
       "size": 2002,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/sessions/index.html"
     },
     {
       "path": "saas/studio/index.html",
-      "size": 12461,
-      "category": "saas",
+      "size": 12516,
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/studio/index.html"
     },
     {
       "path": "saas/styles/genres.json",
       "size": 2600,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/styles/genres.json"
     },
     {
       "path": "saas/styles/index.html",
       "size": 2643,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/styles/index.html"
     },
     {
       "path": "saas/widgets/catalog.json",
       "size": 1843,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/widgets/catalog.json"
     },
     {
       "path": "saas/widgets/index.html",
       "size": 2155,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/widgets/index.html"
     },
     {
       "path": "saas/workflows/catalog.json",
       "size": 2240,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/workflows/catalog.json"
     },
     {
       "path": "saas/workflows/index.html",
       "size": 2294,
-      "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/workflows/index.html"
     },
     {
       "path": "step-sequencer.html",
       "size": 120094,
-      "category": "app",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/step-sequencer.html"
     }
   ]

@@ -1,4 +1,4 @@
-# PulseGrid v12 Architecture
+# PulseGrid v13 Architecture
 
 ## Explore → Plan → Build → Ship
 
@@ -36,3 +36,9 @@ C++17 · Rust (cpal/midir hooks)
 
 `saas/resources/` — skills.json · sources.json · hub UI
 `integrations/sources/` — research notebook cards
+
+
+## REAP / REA (v13)
+
+`integrations/rea/` — investigation prompts, workflows, first-party traces.
+Ethics: authorized software only.

@@ -1,0 +1,27 @@
+{
+  "version": 13,
+  "name": "REAP — REA Investigation Prompts",
+  "home": "https://rea.tools/",
+  "gallery": "https://madewithrea.com/prompts",
+  "ethics": "authorized-only; facts-vs-hypotheses; cite-evidence",
+  "sections": [
+    {"id": 0, "title": "Install & verify", "tags": ["setup"]},
+    {"id": 1, "title": "Getting started", "tags": ["beginner", "trace"]},
+    {"id": 2, "title": "Feature tracing", "tags": ["any-program"]},
+    {"id": 3, "title": "Native binary exploration", "tags": ["native", "elf", "pe"]},
+    {"id": 4, "title": "Software & feature cloning", "tags": ["interop", "rebuild"], "note": "Rebuild from observed behavior of software you may legally reimplement"},
+    {"id": 5, "title": "Games", "tags": ["games"], "note": "Single-player / own builds; not online cheating"},
+    {"id": 6, "title": "Game portability to WASM", "tags": ["wasm", "port"]},
+    {"id": 7, "title": "Firmware & embedded", "tags": ["firmware"]},
+    {"id": 8, "title": "Android", "tags": ["apk"]},
+    {"id": 9, "title": "Kernel analysis", "tags": ["kernel", "research"]},
+    {"id": 10, "title": "Vulnerability research", "tags": ["vuln", "bounty"], "note": "Report responsibly; no weaponization guide"},
+    {"id": 11, "title": "Electron & JavaScript", "tags": ["electron", "js", "pulsegrid"]},
+    {"id": 12, "title": "Anti-cheat & protection research", "tags": ["security", "defensive"], "note": "Own product / authorized lab only"},
+    {"id": 13, "title": "DMA & hardware-assisted research (defensive)", "tags": ["security", "defensive"], "note": "Hardening research only"},
+    {"id": 14, "title": "License / protection research", "tags": ["security", "interop"], "note": "Understand own DRM; not cracking third-party apps"},
+    {"id": 15, "title": "Version comparison & crash work", "tags": ["diff", "crash"]},
+    {"id": 16, "title": "Long-running investigations", "tags": ["campaign"]},
+    {"id": 17, "title": "PulseGrid first-party", "tags": ["pulsegrid", "authorized"]}
+  ]
+}

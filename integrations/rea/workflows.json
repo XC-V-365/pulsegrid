@@ -1,0 +1,40 @@
+{
+  "version": 13,
+  "workflows": [
+    {
+      "id": "rea-setup",
+      "name": "Install & verify REA",
+      "steps": ["npx rea-agents@latest setup (plan first)", "approve config", "list tools/workflows", "smoke trace own sample"]
+    },
+    {
+      "id": "feature-trace",
+      "name": "One-feature trace",
+      "steps": ["name feature + path", "entry point", "call graph", "data flow", "evidence files/functions", "facts vs hypotheses"]
+    },
+    {
+      "id": "map-app",
+      "name": "First map of unfamiliar app",
+      "steps": ["main parts", "entry points", "top 3 features to investigate", "evidence each claim"]
+    },
+    {
+      "id": "pg-export-trace",
+      "name": "PulseGrid: Export / bounce / MIDI",
+      "steps": ["open step-sequencer.html", "trace Export JSON", "trace WAV offline render", "trace MIDI note-on", "document matrices hooks"]
+    },
+    {
+      "id": "pg-access-trace",
+      "name": "PulseGrid: SaaS access gate",
+      "steps": ["access-config.js", "portal human check", "role resolution", "trial counters", "donor grant"]
+    },
+    {
+      "id": "electron-js",
+      "name": "Electron / JS surface",
+      "steps": ["find main/preload/renderer", "IPC channels", "sensitive APIs", "evidence"]
+    },
+    {
+      "id": "long-running",
+      "name": "Long-running investigation",
+      "steps": ["scope doc", "checkpoint notes", "source cards", "diff next session"]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "version": 12,
+  "version": 13,
   "updated": "2026-10-24",
   "skills": [
     {
@@ -9,7 +9,13 @@
       "lifecycle": "active",
       "path": "/root/.grok/server-skills/creative-content-saas/SKILL.md",
       "when": "Building interactive creative platforms, auth, dashboards, song structure, lore graphs",
-      "pulsegrid": ["saas/", "dashboard", "admin", "access-config", "studio"]
+      "pulsegrid": [
+        "saas/",
+        "dashboard",
+        "admin",
+        "access-config",
+        "studio"
+      ]
     },
     {
       "id": "suno-ai-music-generator",
@@ -18,7 +24,11 @@
       "lifecycle": "active",
       "path": "/root/.grok/server-skills/suno-ai-music-generator/SKILL.md",
       "when": "Paste-ready Suno title/style/lyrics with [Verse]/[Chorus] tags",
-      "pulsegrid": ["integrations/exports/suno-from-pattern.md", "generators", "connections"]
+      "pulsegrid": [
+        "integrations/exports/suno-from-pattern.md",
+        "generators",
+        "connections"
+      ]
     },
     {
       "id": "deep-research-notebook",
@@ -27,7 +37,11 @@
       "lifecycle": "active",
       "path": "/root/.grok/server-skills/deep-research-notebook/SKILL.md",
       "when": "Cache APIs, source cards, durable research notes",
-      "pulsegrid": ["integrations/sources/", "saas/resources/", "docs/"]
+      "pulsegrid": [
+        "integrations/sources/",
+        "saas/resources/",
+        "docs/"
+      ]
     },
     {
       "id": "editorial-portfolio",
@@ -36,7 +50,11 @@
       "lifecycle": "active",
       "path": "/root/.grok/server-skills/editorial-portfolio/SKILL.md",
       "when": "Studio/portfolio site, project cards, editorial layout",
-      "pulsegrid": ["saas/studio/", "styles", "brand navy-rose"]
+      "pulsegrid": [
+        "saas/studio/",
+        "styles",
+        "brand navy-rose"
+      ]
     },
     {
       "id": "pg-conductor",
@@ -45,7 +63,10 @@
       "lifecycle": "active",
       "path": "saas/agents/registry.js",
       "when": "Orchestrate multi-step music pipelines",
-      "pulsegrid": ["workflows", "studio EPB"]
+      "pulsegrid": [
+        "workflows",
+        "studio EPB"
+      ]
     },
     {
       "id": "pg-antislop",
@@ -54,7 +75,10 @@
       "lifecycle": "active",
       "path": "saas/matrices/engines.js",
       "when": "Reject generic AI music copy",
-      "pulsegrid": ["matrices", "generators"]
+      "pulsegrid": [
+        "matrices",
+        "generators"
+      ]
     },
     {
       "id": "pg-appraiser",
@@ -63,7 +87,9 @@
       "lifecycle": "active",
       "path": "saas/matrices/",
       "when": "Score patterns on appraisal/awesome matrices",
-      "pulsegrid": ["matrices"]
+      "pulsegrid": [
+        "matrices"
+      ]
     },
     {
       "id": "pg-master-music-llm",
@@ -72,7 +98,11 @@
       "lifecycle": "active",
       "path": "saas/agents/master-music/",
       "when": "Music-specialist critique, compose briefs, packages",
-      "pulsegrid": ["agents", "constitution", "router"]
+      "pulsegrid": [
+        "agents",
+        "constitution",
+        "router"
+      ]
     },
     {
       "id": "pg-export-runner",
@@ -81,7 +111,10 @@
       "lifecycle": "active",
       "path": "saas/agents/registry.js",
       "when": "Suno/Udio/TikTok/Copilot/Composio packages",
-      "pulsegrid": ["connections", "generators"]
+      "pulsegrid": [
+        "connections",
+        "generators"
+      ]
     },
     {
       "id": "pg-groove-smith",
@@ -90,7 +123,9 @@
       "lifecycle": "active",
       "path": "saas/agents/registry.js",
       "when": "Velocity, swing, probability, fills",
-      "pulsegrid": ["sequencer"]
+      "pulsegrid": [
+        "sequencer"
+      ]
     },
     {
       "id": "pg-session-vault",
@@ -99,7 +134,9 @@
       "lifecycle": "active",
       "path": "saas/sessions/",
       "when": "Pull localStorage sessions",
-      "pulsegrid": ["sessions"]
+      "pulsegrid": [
+        "sessions"
+      ]
     },
     {
       "id": "pg-native-bridge",
@@ -108,7 +145,10 @@
       "lifecycle": "active",
       "path": "native/",
       "when": "C++/Rust parity JSON",
-      "pulsegrid": ["native/cpp", "native/rust"]
+      "pulsegrid": [
+        "native/cpp",
+        "native/rust"
+      ]
     },
     {
       "id": "imagine-music",
@@ -117,7 +157,10 @@
       "lifecycle": "active",
       "path": "imagine_generate_music",
       "when": "Compose audio tracks in Grok Imagine library",
-      "pulsegrid": ["video+music", "promo"]
+      "pulsegrid": [
+        "video+music",
+        "promo"
+      ]
     },
     {
       "id": "imagine-video",
@@ -126,7 +169,10 @@
       "lifecycle": "active",
       "path": "imagine_text_to_video / image_to_video",
       "when": "Promo clips, UI animations, spectrogram motion",
-      "pulsegrid": ["brand", "tiktok"]
+      "pulsegrid": [
+        "brand",
+        "tiktok"
+      ]
     },
     {
       "id": "connected-github",
@@ -135,25 +181,32 @@
       "lifecycle": "active",
       "path": "integrations/grok/CONNECTED_SERVICES.json",
       "when": "Push, tree, issues, releases",
-      "pulsegrid": ["XC-V-365/pulsegrid"]
+      "pulsegrid": [
+        "XC-V-365/pulsegrid"
+      ]
     },
     {
       "id": "connected-notion-drive",
-      "name": "Notion · Drive · Gmail · Calendar",
+      "name": "Notion \u00b7 Drive \u00b7 Gmail \u00b7 Calendar",
       "kind": "grok-connected",
       "lifecycle": "active",
       "path": "integrations/grok/",
       "when": "Docs, backup, mail, scheduling",
-      "pulsegrid": ["ops", "ship"]
+      "pulsegrid": [
+        "ops",
+        "ship"
+      ]
     },
     {
       "id": "connected-deploy-social",
-      "name": "Vercel · Netlify · Buffer · Canva · Figma",
+      "name": "Vercel \u00b7 Netlify \u00b7 Buffer \u00b7 Canva \u00b7 Figma",
       "kind": "grok-connected",
       "lifecycle": "active",
       "path": "integrations/grok/",
       "when": "Deploy, social, design",
-      "pulsegrid": ["ship"]
+      "pulsegrid": [
+        "ship"
+      ]
     },
     {
       "id": "composio",
@@ -162,7 +215,46 @@
       "lifecycle": "active",
       "path": "integrations/composio/",
       "when": "1000+ app agent publish",
-      "pulsegrid": ["agent collab"]
+      "pulsegrid": [
+        "agent collab"
+      ]
+    },
+    {
+      "id": "rea-reap",
+      "name": "REAP \u00b7 REA Investigation",
+      "kind": "research-skill",
+      "lifecycle": "active",
+      "path": "integrations/rea/",
+      "when": "Reverse-engineer authorized software with REA; feature tracing; first-party PulseGrid maps",
+      "pulsegrid": [
+        "integrations/rea",
+        "docs/REAP.md",
+        "sources"
+      ]
+    },
+    {
+      "id": "rea-feature-trace",
+      "name": "REA Feature Trace",
+      "kind": "research-workflow",
+      "lifecycle": "active",
+      "path": "integrations/rea/workflows.json",
+      "when": "One-feature entry\u2192dataflow\u2192evidence",
+      "pulsegrid": [
+        "sequencer",
+        "saas",
+        "native"
+      ]
+    },
+    {
+      "id": "rea-pg-first-party",
+      "name": "PulseGrid First-Party RE",
+      "kind": "research-workflow",
+      "lifecycle": "active",
+      "path": "integrations/rea/REAP_PROMPTS.md#17",
+      "when": "Trace export, MIDI, access, matrices, native parity in this repo",
+      "pulsegrid": [
+        "all"
+      ]
     }
   ]
 }

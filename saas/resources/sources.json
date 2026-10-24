@@ -1,111 +1,345 @@
 {
-  "version": 12,
+  "version": 13,
   "updated": "2026-10-24",
   "categories": [
+    {
+      "id": "rea",
+      "label": "REA / REAP reverse engineering",
+      "items": [
+        {
+          "title": "REA tools",
+          "url": "https://rea.tools/"
+        },
+        {
+          "title": "Prompt gallery",
+          "url": "https://madewithrea.com/prompts"
+        },
+        {
+          "title": "REAP pack (this repo)",
+          "path": "integrations/rea/REAP_PROMPTS.md"
+        },
+        {
+          "title": "REAP catalog",
+          "path": "integrations/rea/catalog.json"
+        },
+        {
+          "title": "REAP workflows",
+          "path": "integrations/rea/workflows.json"
+        },
+        {
+          "title": "REAP hub UI",
+          "path": "integrations/rea/index.html"
+        },
+        {
+          "title": "Docs REAP",
+          "path": "docs/REAP.md"
+        },
+        {
+          "title": "Source card",
+          "path": "integrations/sources/rea.md"
+        }
+      ]
+    },
     {
       "id": "project-docs",
       "label": "Project documentation",
       "items": [
-        {"title": "Architecture", "path": "PulseGrid-ARCHITECTURE.md", "url": "https://github.com/XC-V-365/pulsegrid/blob/main/PulseGrid-ARCHITECTURE.md"},
-        {"title": "README", "path": "README.md", "url": "https://github.com/XC-V-365/pulsegrid/blob/main/README.md"},
-        {"title": "Studio EPB", "path": "docs/STUDIO_EPB.md", "url": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/STUDIO_EPB.md"},
-        {"title": "Agents & Matrices", "path": "docs/AGENTS_AND_MATRICES.md", "url": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/AGENTS_AND_MATRICES.md"},
-        {"title": "Function reference", "path": "docs/FUNCTION_REFERENCE.md", "url": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/FUNCTION_REFERENCE.md"},
-        {"title": "Modules & pipelines", "path": "docs/MODULES_AND_PIPELINES.md", "url": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/MODULES_AND_PIPELINES.md"},
-        {"title": "SaaS access", "path": "docs/SAAS_ACCESS.md", "url": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/SAAS_ACCESS.md"},
-        {"title": "Dashboards", "path": "docs/DASHBOARDS.md", "url": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/DASHBOARDS.md"},
-        {"title": "Binary format", "path": "integrations/exports/BINARY_FORMAT.md", "url": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/exports/BINARY_FORMAT.md"},
-        {"title": "Master Music constitution", "path": "saas/agents/master-music/constitution.md", "url": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/agents/master-music/constitution.md"}
+        {
+          "title": "Architecture",
+          "path": "PulseGrid-ARCHITECTURE.md",
+          "url": "https://github.com/XC-V-365/pulsegrid/blob/main/PulseGrid-ARCHITECTURE.md"
+        },
+        {
+          "title": "README",
+          "path": "README.md",
+          "url": "https://github.com/XC-V-365/pulsegrid/blob/main/README.md"
+        },
+        {
+          "title": "Studio EPB",
+          "path": "docs/STUDIO_EPB.md",
+          "url": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/STUDIO_EPB.md"
+        },
+        {
+          "title": "Agents & Matrices",
+          "path": "docs/AGENTS_AND_MATRICES.md",
+          "url": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/AGENTS_AND_MATRICES.md"
+        },
+        {
+          "title": "Function reference",
+          "path": "docs/FUNCTION_REFERENCE.md",
+          "url": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/FUNCTION_REFERENCE.md"
+        },
+        {
+          "title": "Modules & pipelines",
+          "path": "docs/MODULES_AND_PIPELINES.md",
+          "url": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/MODULES_AND_PIPELINES.md"
+        },
+        {
+          "title": "SaaS access",
+          "path": "docs/SAAS_ACCESS.md",
+          "url": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/SAAS_ACCESS.md"
+        },
+        {
+          "title": "Dashboards",
+          "path": "docs/DASHBOARDS.md",
+          "url": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/DASHBOARDS.md"
+        },
+        {
+          "title": "Binary format",
+          "path": "integrations/exports/BINARY_FORMAT.md",
+          "url": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/exports/BINARY_FORMAT.md"
+        },
+        {
+          "title": "Master Music constitution",
+          "path": "saas/agents/master-music/constitution.md",
+          "url": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/agents/master-music/constitution.md"
+        }
       ]
     },
     {
       "id": "catalogs",
       "label": "Data catalogs",
       "items": [
-        {"title": "Workflows", "path": "saas/workflows/catalog.json"},
-        {"title": "Widgets", "path": "saas/widgets/catalog.json"},
-        {"title": "Modules", "path": "saas/modules/catalog.json"},
-        {"title": "Plugins OSS", "path": "saas/plugins/registry.json"},
-        {"title": "Genres & styles", "path": "saas/styles/genres.json"},
-        {"title": "Canvas default graph", "path": "saas/canvas/default-graph.json"},
-        {"title": "Artifact catalog", "path": "saas/artifacts/catalog.json"},
-        {"title": "Skills registry", "path": "saas/resources/skills.json"},
-        {"title": "Sources registry", "path": "saas/resources/sources.json"},
-        {"title": "Grok connected services", "path": "integrations/grok/CONNECTED_SERVICES.json"},
-        {"title": "Composio tools", "path": "integrations/composio/pulsegrid_tools.json"},
-        {"title": "Access config", "path": "saas/access-config.js"}
+        {
+          "title": "Workflows",
+          "path": "saas/workflows/catalog.json"
+        },
+        {
+          "title": "Widgets",
+          "path": "saas/widgets/catalog.json"
+        },
+        {
+          "title": "Modules",
+          "path": "saas/modules/catalog.json"
+        },
+        {
+          "title": "Plugins OSS",
+          "path": "saas/plugins/registry.json"
+        },
+        {
+          "title": "Genres & styles",
+          "path": "saas/styles/genres.json"
+        },
+        {
+          "title": "Canvas default graph",
+          "path": "saas/canvas/default-graph.json"
+        },
+        {
+          "title": "Artifact catalog",
+          "path": "saas/artifacts/catalog.json"
+        },
+        {
+          "title": "Skills registry",
+          "path": "saas/resources/skills.json"
+        },
+        {
+          "title": "Sources registry",
+          "path": "saas/resources/sources.json"
+        },
+        {
+          "title": "Grok connected services",
+          "path": "integrations/grok/CONNECTED_SERVICES.json"
+        },
+        {
+          "title": "Composio tools",
+          "path": "integrations/composio/pulsegrid_tools.json"
+        },
+        {
+          "title": "Access config",
+          "path": "saas/access-config.js"
+        }
       ]
     },
     {
       "id": "exports-templates",
       "label": "Export templates",
       "items": [
-        {"title": "Suno from pattern", "path": "integrations/exports/suno-from-pattern.md"},
-        {"title": "Udio from pattern", "path": "integrations/exports/udio-from-pattern.md"},
-        {"title": "Shoom", "path": "integrations/exports/shoom-from-pattern.md"},
-        {"title": "Faves share", "path": "integrations/exports/faves-share.md"},
-        {"title": "TikTok pack", "path": "integrations/exports/tiktok-pack.md"},
-        {"title": "Copilot brief", "path": "integrations/exports/copilot-brief.md"},
-        {"title": "Example Suno", "path": "integrations/exports/EXAMPLE_SUNO_PulseGrid.txt"},
-        {"title": "Agent prompts", "path": "integrations/agents/PROMPTS.md"}
+        {
+          "title": "Suno from pattern",
+          "path": "integrations/exports/suno-from-pattern.md"
+        },
+        {
+          "title": "Udio from pattern",
+          "path": "integrations/exports/udio-from-pattern.md"
+        },
+        {
+          "title": "Shoom",
+          "path": "integrations/exports/shoom-from-pattern.md"
+        },
+        {
+          "title": "Faves share",
+          "path": "integrations/exports/faves-share.md"
+        },
+        {
+          "title": "TikTok pack",
+          "path": "integrations/exports/tiktok-pack.md"
+        },
+        {
+          "title": "Copilot brief",
+          "path": "integrations/exports/copilot-brief.md"
+        },
+        {
+          "title": "Example Suno",
+          "path": "integrations/exports/EXAMPLE_SUNO_PulseGrid.txt"
+        },
+        {
+          "title": "Agent prompts",
+          "path": "integrations/agents/PROMPTS.md"
+        }
       ]
     },
     {
       "id": "open-source",
       "label": "Open-source libraries",
       "items": [
-        {"title": "Tone.js", "url": "https://tonejs.github.io", "license": "MIT"},
-        {"title": "@tonejs/midi", "url": "https://github.com/Tonejs/Midi", "license": "MIT"},
-        {"title": "NexusUI", "url": "https://nexus-js.github.io/ui/", "license": "MIT"},
-        {"title": "wavesurfer.js", "url": "https://wavesurfer.xyz", "license": "BSD-3"},
-        {"title": "WebMidi.js", "url": "https://webmidijs.org", "license": "Apache-2.0"},
-        {"title": "TunaJS", "url": "https://github.com/Theodeus/tuna", "license": "MIT"},
-        {"title": "RtMidi", "url": "https://github.com/thestk/rtmidi", "license": "MIT-like"},
-        {"title": "cpal", "url": "https://github.com/rustaudio/cpal", "license": "Apache-2.0/MIT"},
-        {"title": "midir", "url": "https://github.com/Boddlnagg/midir", "license": "MIT"},
-        {"title": "Pedalboard", "url": "https://github.com/spotify/pedalboard", "license": "GPL-3.0"},
-        {"title": "Essentia", "url": "https://essentia.upf.edu", "license": "AGPL-3.0"},
-        {"title": "PulseGrid repo", "url": "https://github.com/XC-V-365/pulsegrid", "license": "MIT (default)"}
+        {
+          "title": "Tone.js",
+          "url": "https://tonejs.github.io",
+          "license": "MIT"
+        },
+        {
+          "title": "@tonejs/midi",
+          "url": "https://github.com/Tonejs/Midi",
+          "license": "MIT"
+        },
+        {
+          "title": "NexusUI",
+          "url": "https://nexus-js.github.io/ui/",
+          "license": "MIT"
+        },
+        {
+          "title": "wavesurfer.js",
+          "url": "https://wavesurfer.xyz",
+          "license": "BSD-3"
+        },
+        {
+          "title": "WebMidi.js",
+          "url": "https://webmidijs.org",
+          "license": "Apache-2.0"
+        },
+        {
+          "title": "TunaJS",
+          "url": "https://github.com/Theodeus/tuna",
+          "license": "MIT"
+        },
+        {
+          "title": "RtMidi",
+          "url": "https://github.com/thestk/rtmidi",
+          "license": "MIT-like"
+        },
+        {
+          "title": "cpal",
+          "url": "https://github.com/rustaudio/cpal",
+          "license": "Apache-2.0/MIT"
+        },
+        {
+          "title": "midir",
+          "url": "https://github.com/Boddlnagg/midir",
+          "license": "MIT"
+        },
+        {
+          "title": "Pedalboard",
+          "url": "https://github.com/spotify/pedalboard",
+          "license": "GPL-3.0"
+        },
+        {
+          "title": "Essentia",
+          "url": "https://essentia.upf.edu",
+          "license": "AGPL-3.0"
+        },
+        {
+          "title": "PulseGrid repo",
+          "url": "https://github.com/XC-V-365/pulsegrid",
+          "license": "MIT (default)"
+        }
       ]
     },
     {
       "id": "web-standards",
       "label": "Web & MIDI standards",
       "items": [
-        {"title": "Web Audio API", "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API"},
-        {"title": "Web MIDI API", "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_MIDI_API"},
-        {"title": "MIDI 1.0 / SMF", "url": "https://www.midi.org/specifications"},
-        {"title": "General MIDI drum map", "url": "https://en.wikipedia.org/wiki/General_MIDI"},
-        {"title": "W3C Web Audio", "url": "https://www.w3.org/TR/webaudio/"}
+        {
+          "title": "Web Audio API",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API"
+        },
+        {
+          "title": "Web MIDI API",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/Web_MIDI_API"
+        },
+        {
+          "title": "MIDI 1.0 / SMF",
+          "url": "https://www.midi.org/specifications"
+        },
+        {
+          "title": "General MIDI drum map",
+          "url": "https://en.wikipedia.org/wiki/General_MIDI"
+        },
+        {
+          "title": "W3C Web Audio",
+          "url": "https://www.w3.org/TR/webaudio/"
+        }
       ]
     },
     {
       "id": "ai-music-services",
       "label": "AI music & social (paste workflows)",
       "items": [
-        {"title": "Suno", "url": "https://suno.com"},
-        {"title": "Udio", "url": "https://www.udio.com"},
-        {"title": "TikTok", "url": "https://www.tiktok.com"},
-        {"title": "Composio", "url": "https://composio.dev"},
-        {"title": "GitHub Copilot", "url": "https://github.com/features/copilot"}
+        {
+          "title": "Suno",
+          "url": "https://suno.com"
+        },
+        {
+          "title": "Udio",
+          "url": "https://www.udio.com"
+        },
+        {
+          "title": "TikTok",
+          "url": "https://www.tiktok.com"
+        },
+        {
+          "title": "Composio",
+          "url": "https://composio.dev"
+        },
+        {
+          "title": "GitHub Copilot",
+          "url": "https://github.com/features/copilot"
+        }
       ]
     },
     {
       "id": "native-tooling",
       "label": "Native tooling",
       "items": [
-        {"title": "CMake", "url": "https://cmake.org"},
-        {"title": "Cargo / Rust", "url": "https://doc.rust-lang.org/cargo/"},
-        {"title": "C++17", "url": "https://en.cppreference.com/w/cpp/17"}
+        {
+          "title": "CMake",
+          "url": "https://cmake.org"
+        },
+        {
+          "title": "Cargo / Rust",
+          "url": "https://doc.rust-lang.org/cargo/"
+        },
+        {
+          "title": "C++17",
+          "url": "https://en.cppreference.com/w/cpp/17"
+        }
       ]
     },
     {
       "id": "learning",
       "label": "Learning & design resources",
       "items": [
-        {"title": "MDN Web Docs", "url": "https://developer.mozilla.org"},
-        {"title": "Web Audio samples", "url": "https://github.com/mdn/webaudio-examples"},
-        {"title": "MIDI note chart", "url": "https://inspiredacoustics.com/en/MIDI_note_numbers_and_center_frequencies"}
+        {
+          "title": "MDN Web Docs",
+          "url": "https://developer.mozilla.org"
+        },
+        {
+          "title": "Web Audio samples",
+          "url": "https://github.com/mdn/webaudio-examples"
+        },
+        {
+          "title": "MIDI note chart",
+          "url": "https://inspiredacoustics.com/en/MIDI_note_numbers_and_center_frequencies"
+        }
       ]
     }
   ]

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>REAP · REA Investigation · PulseGrid</title>
+<style>
+:root{--navy:#060a12;--surface:#101820;--border:#1e2a3a;--text:#e8ecf4;--muted:#8b95a8;--rose:#d4a574;--warn:#e8a0b0;--midi:#7ee0a0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--navy);color:var(--text);padding:1.25rem;line-height:1.45}
+a{color:var(--rose)}.wrap{max-width:960px;margin:0 auto}
+h1{font-size:1.2rem}.sub{font-size:.78rem;color:var(--muted);margin:.35rem 0 1rem}
+.warn{background:#281818;border:1px solid #603030;color:var(--warn);border-radius:10px;padding:.75rem;font-size:.78rem;margin-bottom:1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.55rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.75rem}
+.card h3{font-size:.8rem;margin-bottom:.25rem}
+.card p{font-size:.7rem;color:var(--muted)}
+.chip{font-size:.58rem;padding:.1rem .3rem;border-radius:4px;background:#1a2840;color:#7ec8d8;margin:.1rem;display:inline-block}
+.btn{display:inline-block;margin:.25rem .25rem 0 0;border:1px solid var(--border);background:#161f2c;color:var(--text);border-radius:7px;padding:.35rem .55rem;font-size:.7rem;font-weight:600;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>REAP · REA Investigation Prompts</h1>
+  <p class="sub"><a href="../../index.html">Portal</a> · <a href="../../saas/resources/index.html">Resources</a> · <a href="https://rea.tools/" target="_blank" rel="noopener">rea.tools</a> · <a href="https://madewithrea.com/prompts" target="_blank" rel="noopener">gallery</a></p>
+  <div class="warn"><strong>Authorized use only.</strong> Own software / explicit permission. Security sections are defensive research, CTF, bounty, and hardening — not third-party cracks or online game cheats. Always separate facts from hypotheses and cite evidence.</div>
+  <p class="sub">Credits: REA · madewithrea · codila / Matthew Berman threads · REAP name (zazencodes). See README.</p>
+  <p>
+    <a class="btn" href="REAP_PROMPTS.md">Full prompt pack</a>
+    <a class="btn" href="catalog.json">Catalog JSON</a>
+    <a class="btn" href="workflows.json">Workflows</a>
+    <a class="btn" href="README.md">README</a>
+    <a class="btn" href="../../docs/REAP.md">Docs</a>
+  </p>
+  <h2 style="font-size:.85rem;color:var(--rose);margin:1rem 0 .5rem">Sections</h2>
+  <div class="grid" id="g"></div>
+  <h2 style="font-size:.85rem;color:var(--rose);margin:1.25rem 0 .5rem">Investigation workflows</h2>
+  <div class="grid" id="w"></div>
+</div>
+<script>
+Promise.all([
+  fetch("catalog.json").then(r=>r.json()),
+  fetch("workflows.json").then(r=>r.json())
+]).then(([c,w])=>{
+  document.getElementById("g").innerHTML=(c.sections||[]).map(s=>
+    `<div class="card"><h3>${s.id}. ${s.title}</h3>
+     <p>${(s.tags||[]).map(t=>'<span class="chip">'+t+'</span>').join(" ")}</p>
+     ${s.note?`<p style="margin-top:.3rem">${s.note}</p>`:""}</div>`
+  ).join("");
+  document.getElementById("w").innerHTML=(w.workflows||[]).map(x=>
+    `<div class="card"><h3>${x.name}</h3>
+     <p>${(x.steps||[]).map((s,i)=>(i+1)+". "+s).join("<br/>")}</p></div>`
+  ).join("");
+});
+</script>
+</body>
+</html>
