@@ -1,0 +1,30 @@
+{
+  "version": 9,
+  "product": "PulseGrid",
+  "github": { "owner": "XC-V-365", "repo": "pulsegrid", "url": "https://github.com/XC-V-365/pulsegrid" },
+  "grokConnected": [
+    { "id": "github", "name": "GitHub", "role": "source of truth · push/pull · issues", "pulsegrid": "Repo XC-V-365/pulsegrid · scaffolds · releases", "actions": ["push_files", "tree", "search", "collaborators"] },
+    { "id": "notion", "name": "Notion", "role": "docs · dashboards · lore/song structure", "pulsegrid": "Publish architecture · session notes · pipeline boards", "actions": ["create page", "database view", "attachments"] },
+    { "id": "google_drive", "name": "Google Drive", "role": "artifact storage · backups", "pulsegrid": "Upload pattern JSON · WAV · kits · session vaults", "actions": ["search", "upload_artifact", "list_folder"] },
+    { "id": "gmail", "name": "Gmail", "role": "outbound mail · magic-link ops", "pulsegrid": "Trial notices · donor receipts · admin alerts", "actions": ["send", "read"] },
+    { "id": "outlook", "name": "Outlook", "role": "mail · calendar alternate", "pulsegrid": "Same as Gmail path for Microsoft tenants", "actions": ["send", "calendar"] },
+    { "id": "google_calendar", "name": "Google Calendar", "role": "release · collab · live session slots", "pulsegrid": "Schedule drops · stream times", "actions": ["events"] },
+    { "id": "outlook_calendar", "name": "Outlook Calendar", "role": "enterprise calendar", "pulsegrid": "Parallel scheduling", "actions": ["events"] },
+    { "id": "vercel", "name": "Vercel", "role": "host static portal + sequencer", "pulsegrid": "Deploy index.html · step-sequencer · saas/*", "actions": ["deploy"] },
+    { "id": "netlify", "name": "Netlify", "role": "alternate static host", "pulsegrid": "Mirror deploy", "actions": ["deploy"] },
+    { "id": "buffer", "name": "Buffer", "role": "social schedule", "pulsegrid": "TikTok/Suno promo packs", "actions": ["schedule"] },
+    { "id": "canva", "name": "Canva", "role": "cover art · spectrogram frames", "pulsegrid": "Brand navy/rose-gold assets", "actions": ["design"] },
+    { "id": "figma", "name": "Figma", "role": "UI kits · dashboard wireframes", "pulsegrid": "Sequencer chrome · dashboards", "actions": ["files"] },
+    { "id": "excalidraw", "name": "Excalidraw", "role": "architecture diagrams", "pulsegrid": "Module graph · pipelines", "actions": ["draw"] },
+    { "id": "gamma", "name": "Gamma", "role": "pitch decks · investor/sponsor pages", "pulsegrid": "Donor/sponsor 7-day gen story", "actions": ["decks"] },
+    { "id": "hyperframes", "name": "HyperFrames (HeyGen)", "role": "video avatars · promo clips", "pulsegrid": "Beat explainers · TikTok clips", "actions": ["video"] },
+    { "id": "bigdata", "name": "Bigdata.com", "role": "markets · research (optional)", "pulsegrid": "Sponsor metrics · public market context", "actions": ["research"] },
+    { "id": "voice", "name": "Voice", "role": "TTS audio", "pulsegrid": "Tutorial voice-over · metronome cues", "actions": ["speak"] },
+    { "id": "automations", "name": "Automations", "role": "scheduled Grok prompts", "pulsegrid": "Nightly backup · social pack · health check", "actions": ["schedule prompt"] },
+    { "id": "composio", "name": "Composio", "role": "1000+ app agent tools", "pulsegrid": "integrations/composio/*", "actions": ["agent tools"] }
+  ],
+  "creativeConnections": ["suno","udio","shoom","faves","tiktok","copilot","fxlabs"],
+  "artifactCategories": [
+    "app", "saas", "docs", "integrations", "native-cpp", "native-rust", "exports", "legal", "dashboard"
+  ]
+}

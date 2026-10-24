@@ -2,6 +2,13 @@
 
 Premium 16-step drum platform with **access control**, **music generators**, **session vault**, and full sequencer (FX, MIDI, matrix, AI paste packs).
 
+## Command Center
+
+**`saas/dashboard/index.html`** — Overview · Artifacts catalog · Grok integrations hub · Creator + Admin dashboards · Pipelines · Health.
+
+Grok-connected services map: `integrations/grok/CONNECTED_SERVICES.json`  
+Artifact catalog: `saas/artifacts/catalog.json`
+
 ## Start here
 
 1. Open **`index.html`** (Portal) — OAuth/email + human check  

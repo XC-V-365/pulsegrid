@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PulseGrid Command Center · Dashboards · Artifacts · Grok</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:#070b14; --surface:#101820; --surface2:#161f2c; --border:#1e2a3a;
+  --text:#e8ecf4; --muted:#8b95a8; --silver:#c0c8d4; --rose:#d4a574; --midi:#7ee0a0;
+  --warn:#e8a0b0; --blue:#7ec8d8; --purple:#a890c8;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family:"DM Sans",system-ui,sans-serif; background:var(--navy); color:var(--text);
+  min-height:100vh;
+  background-image:
+    radial-gradient(ellipse 70% 40% at 10% 0%, #152038 0%, transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 100%, #281820 0%, transparent 50%);
+}
+a { color:var(--rose); text-decoration:none; }
+a:hover { text-decoration:underline; }
+.shell { display:grid; grid-template-columns:240px 1fr; min-height:100vh; }
+@media (max-width:900px) { .shell { grid-template-columns:1fr; } .nav { position:sticky; top:0; z-index:10; } }
+
+.nav {
+  background:var(--surface); border-right:1px solid var(--border); padding:1.1rem .9rem;
+  display:flex; flex-direction:column; gap:.35rem;
+}
+.brand { font-weight:700; font-size:1.05rem; letter-spacing:.03em; margin-bottom:.75rem; padding:.2rem .4rem; }
+.brand span { background:linear-gradient(135deg,var(--silver),var(--rose)); -webkit-background-clip:text; color:transparent; }
+.nav-btn {
+  text-align:left; background:transparent; border:1px solid transparent; color:var(--muted);
+  border-radius:8px; padding:.5rem .65rem; font-size:.78rem; font-weight:600; cursor:pointer; font-family:inherit;
+}
+.nav-btn:hover { color:var(--text); background:var(--surface2); }
+.nav-btn.active { color:var(--text); border-color:var(--border); background:var(--surface2); box-shadow:inset 3px 0 0 var(--rose); }
+.nav-foot { margin-top:auto; font-size:.65rem; color:var(--muted); padding:.5rem; line-height:1.4; }
+
+.main { padding:1.25rem 1.4rem 3rem; overflow:auto; }
+.top {
+  display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:.75rem; margin-bottom:1.1rem;
+}
+h1 { font-size:1.25rem; font-weight:700; }
+.sub { font-size:.78rem; color:var(--muted); margin-top:.25rem; }
+.chip {
+  display:inline-flex; align-items:center; gap:.35rem; font-size:.65rem; padding:.2rem .5rem;
+  border:1px solid var(--border); border-radius:999px; color:var(--muted); background:var(--surface);
+}
+.chip.on { color:var(--midi); border-color:#2a5040; }
+.chip.warn { color:var(--warn); border-color:#503040; }
+
+.panel { display:none; }
+.panel.active { display:block; }
+
+.metrics {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:.65rem; margin-bottom:1rem;
+}
+.metric {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:.75rem .85rem;
+}
+.metric .k { font-size:.62rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+.metric .v { font-size:1.35rem; font-weight:700; margin-top:.2rem; font-variant-numeric:tabular-nums; }
+.metric .d { font-size:.65rem; color:var(--muted); margin-top:.15rem; }
+
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:.75rem; }
+.card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:.9rem 1rem;
+  display:flex; flex-direction:column; gap:.35rem;
+}
+.card h3 { font-size:.8rem; color:var(--rose); text-transform:uppercase; letter-spacing:.05em; }
+.card p { font-size:.75rem; color:var(--muted); line-height:1.45; flex:1; }
+.card .actions { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.35rem; }
+.btn {
+  border:1px solid var(--border); background:var(--surface2); color:var(--text);
+  border-radius:7px; padding:.4rem .65rem; font-size:.7rem; font-weight:600; cursor:pointer; font-family:inherit;
+}
+.btn:hover { border-color:var(--silver); }
+.btn-primary { background:linear-gradient(135deg,#c0c8d4,#d4a574); color:#0a0e1a; border:none; }
+.btn-link { display:inline-block; }
+
+.table-wrap { overflow:auto; border:1px solid var(--border); border-radius:12px; background:var(--surface); }
+table { width:100%; border-collapse:collapse; font-size:.72rem; }
+th, td { padding:.45rem .65rem; border-bottom:1px solid var(--border); text-align:left; }
+th { color:var(--rose); font-size:.62rem; text-transform:uppercase; letter-spacing:.05em; background:var(--surface2); position:sticky; top:0; }
+td path, .mono { font-family:"JetBrains Mono",monospace; font-size:.68rem; }
+.tag {
+  display:inline-block; font-size:.58rem; padding:.1rem .35rem; border-radius:4px;
+  background:#1a2840; color:var(--blue); margin-right:.2rem;
+}
+.tag.saas { color:var(--midi); }
+.tag.docs { color:var(--purple); }
+.tag.integrations { color:var(--rose); }
+.tag.native-cpp, .tag.native-rust { color:var(--silver); }
+
+.filters { display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:.75rem; align-items:center; }
+.filters input, .filters select {
+  background:var(--surface); border:1px solid var(--border); color:var(--text);
+  border-radius:8px; padding:.4rem .55rem; font-size:.75rem; font-family:inherit;
+}
+.filters input { min-width:180px; }
+
+.pipeline {
+  display:flex; flex-direction:column; gap:.5rem;
+}
+.pipe-step {
+  display:grid; grid-template-columns:28px 1fr; gap:.55rem; align-items:start;
+  background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:.65rem .8rem;
+}
+.pipe-step .n {
+  width:28px; height:28px; border-radius:50%; display:grid; place-items:center;
+  background:linear-gradient(135deg,var(--silver),var(--rose)); color:#0a0e1a; font-size:.7rem; font-weight:700;
+}
+.pipe-step h4 { font-size:.8rem; margin-bottom:.15rem; }
+.pipe-step p { font-size:.72rem; color:var(--muted); line-height:1.4; }
+
+.svc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:.65rem; }
+.svc {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:.85rem;
+}
+.svc h3 { font-size:.85rem; display:flex; justify-content:space-between; align-items:center; }
+.svc .status { font-size:.58rem; padding:.12rem .35rem; border-radius:4px; background:#1a2840; color:var(--midi); }
+.svc .status.stub { color:var(--warn); background:#281820; }
+.svc p { font-size:.72rem; color:var(--muted); margin:.35rem 0; line-height:1.4; }
+.svc .pg { font-size:.68rem; color:var(--silver); border-top:1px solid var(--border); padding-top:.4rem; margin-top:.3rem; }
+
+.two { display:grid; grid-template-columns:1fr 1fr; gap:.85rem; }
+@media (max-width:800px) { .two { grid-template-columns:1fr; } }
+
+.activity {
+  font-family:"JetBrains Mono",monospace; font-size:.68rem; line-height:1.55;
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:.75rem; max-height:280px; overflow:auto; color:var(--muted);
+}
+.activity .t { color:var(--blue); }
+.activity .ok { color:var(--midi); }
+
+.hidden { display:none !important; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="nav">
+    <div class="brand">Pulse<span>Grid</span> CC</div>
+    <button class="nav-btn active" data-panel="overview">Overview</button>
+    <button class="nav-btn" data-panel="artifacts">Artifacts</button>
+    <button class="nav-btn" data-panel="grok">Grok integrations</button>
+    <button class="nav-btn" data-panel="creator">Creator dashboard</button>
+    <button class="nav-btn" data-panel="admin">Admin dashboard</button>
+    <button class="nav-btn" data-panel="pipelines">Pipelines</button>
+    <button class="nav-btn" data-panel="activity">Activity / health</button>
+    <div class="nav-foot">
+      v9 Command Center<br/>
+      Repo XC-V-365/pulsegrid<br/>
+      <a href="../../index.html">Portal</a> ·
+      <a href="../../step-sequencer.html">Sequencer</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="top">
+      <div>
+        <h1 id="pageTitle">Overview</h1>
+        <p class="sub" id="pageSub">Metrics, apps, and Grok-connected surfaces in one place.</p>
+      </div>
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;align-items:center">
+        <span class="chip" id="userChip">…</span>
+        <span class="chip" id="repoChip">github.com/XC-V-365/pulsegrid</span>
+        <a class="btn btn-primary btn-link" href="../../index.html">Portal</a>
+        <a class="btn btn-link" href="../../step-sequencer.html">Sequencer</a>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <section class="panel active" id="panel-overview">
+      <div class="metrics" id="metrics"></div>
+      <div class="two">
+        <div class="card">
+          <h3>Quick launch</h3>
+          <p>Primary product surfaces from this Grok build thread.</p>
+          <div class="actions">
+            <a class="btn btn-primary btn-link" href="../../index.html">SaaS Portal</a>
+            <a class="btn btn-link" href="../../step-sequencer.html">Step sequencer</a>
+            <a class="btn btn-link" href="../generators/index.html">Music generators</a>
+            <a class="btn btn-link" href="../sessions/index.html">Session vault</a>
+            <a class="btn btn-link" href="../admin/index.html">Admin console</a>
+            <a class="btn btn-link" href="https://github.com/XC-V-365/pulsegrid" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Coverage checklist</h3>
+          <p id="coverageList" style="font-size:.72rem;line-height:1.6;color:var(--muted)"></p>
+        </div>
+      </div>
+      <div class="grid" style="margin-top:.85rem" id="appCards"></div>
+    </section>
+
+    <!-- ARTIFACTS -->
+    <section class="panel" id="panel-artifacts">
+      <div class="filters">
+        <input type="search" id="artSearch" placeholder="Filter path…"/>
+        <select id="artCat"><option value="">All categories</option></select>
+        <button class="btn" id="artRefresh">Reload catalog</button>
+        <a class="btn btn-link" href="../artifacts/catalog.json" download>Download catalog.json</a>
+      </div>
+      <div class="table-wrap" style="max-height:60vh">
+        <table>
+          <thead><tr><th>Path</th><th>Category</th><th>Size</th><th>GitHub</th></tr></thead>
+          <tbody id="artBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- GROK -->
+    <section class="panel" id="panel-grok">
+      <p class="sub" style="margin-bottom:.75rem">Services available via Grok connected tools — mapped to PulseGrid workflows. Live API calls run from Grok chat; this hub documents + stages paste/actions.</p>
+      <div class="svc-grid" id="svcGrid"></div>
+      <div class="card" style="margin-top:.85rem">
+        <h3>Creative paste connections (in sequencer)</h3>
+        <p>Suno · Udio · Shoom · Faves · Composio · Copilot · TikTok · FX Labs — open sequencer Connections bar.</p>
+        <div class="actions">
+          <a class="btn btn-link" href="../../step-sequencer.html">Open Connections</a>
+          <a class="btn btn-link" href="../../integrations/README.md">integrations/README</a>
+          <a class="btn btn-link" href="../../integrations/composio/README.md">Composio</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREATOR -->
+    <section class="panel" id="panel-creator">
+      <div class="metrics" id="creatorMetrics"></div>
+      <div class="two">
+        <div class="card">
+          <h3>Today’s creator loop</h3>
+          <p>Sketch → sound → export → AI pack → social.</p>
+          <div class="actions">
+            <a class="btn btn-primary btn-link" href="../../step-sequencer.html">Make a beat</a>
+            <a class="btn btn-link" href="../generators/index.html">Generate packages</a>
+            <a class="btn btn-link" href="../../integrations/exports/tiktok-pack.md">TikTok pack doc</a>
+            <a class="btn btn-link" href="../../integrations/exports/suno-from-pattern.md">Suno doc</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Session & backup</h3>
+          <p>Pull local autosaves and import older Grok-session patterns.</p>
+          <div class="actions">
+            <a class="btn btn-link" href="../sessions/index.html">Session vault</a>
+            <button class="btn" id="btnScanSessions">Scan local now</button>
+          </div>
+          <div id="sessionMini" class="activity" style="margin-top:.5rem;max-height:140px"></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:.85rem">
+        <h3>Publish paths (via Grok)</h3>
+        <p>Ask Grok in chat to: push GitHub files · create Notion page · upload Drive artifact · schedule Buffer post · draft Gmail.</p>
+        <div class="actions">
+          <a class="btn btn-link" href="https://github.com/XC-V-365/pulsegrid" target="_blank">GitHub</a>
+          <span class="chip">Notion · Drive · Gmail · Buffer · Vercel</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN -->
+    <section class="panel" id="panel-admin">
+      <div class="metrics" id="adminMetrics"></div>
+      <div class="two">
+        <div class="card">
+          <h3>Access control</h3>
+          <p>Owner + 12 admin emails · free trial limits · donor/sponsor 7-day generation · human check · editable licence.</p>
+          <div class="actions">
+            <a class="btn btn-primary btn-link" href="../admin/index.html">Admin console</a>
+            <a class="btn btn-link" href="../access-config.js">access-config.js</a>
+            <a class="btn btn-link" href="../../docs/SAAS_ACCESS.md">SAAS_ACCESS.md</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Licence (live override)</h3>
+          <pre id="licPreview" class="activity" style="white-space:pre-wrap;max-height:180px"></pre>
+        </div>
+      </div>
+      <div class="card" style="margin-top:.85rem">
+        <h3>Deploy & ops (Grok-connected)</h3>
+        <p>Vercel / Netlify for static host · Automations for scheduled health · GitHub as source of truth.</p>
+        <div class="actions">
+          <a class="btn btn-link" href="https://github.com/XC-V-365/pulsegrid" target="_blank">Repo</a>
+          <span class="chip">Vercel</span><span class="chip">Netlify</span><span class="chip">Automations</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PIPELINES -->
+    <section class="panel" id="panel-pipelines">
+      <div class="pipeline" id="pipeList"></div>
+    </section>
+
+    <!-- ACTIVITY -->
+    <section class="panel" id="panel-activity">
+      <div class="two">
+        <div>
+          <h3 style="font-size:.8rem;color:var(--rose);margin-bottom:.5rem;text-transform:uppercase">Local health</h3>
+          <div class="activity" id="healthLog"></div>
+        </div>
+        <div>
+          <h3 style="font-size:.8rem;color:var(--rose);margin-bottom:.5rem;text-transform:uppercase">Artifact summary</h3>
+          <div class="activity" id="artSummary"></div>
+        </div>
+      </div>
+      <button class="btn" style="margin-top:.75rem" id="btnHealth">Re-run health</button>
+    </section>
+  </div>
+</div>
+
+<script src="../access-config.js"></script>
+<script src="../auth/access-engine.js"></script>
+<script>
+const titles = {
+  overview: ["Overview", "Metrics, apps, and Grok-connected surfaces in one place."],
+  artifacts: ["Artifacts", "Every file from the PulseGrid Grok build — catalog + GitHub links."],
+  grok: ["Grok integrations", "Connected services mapped to PulseGrid workflows."],
+  creator: ["Creator dashboard", "Beat → export → AI → social loop."],
+  admin: ["Admin dashboard", "Access, licence, deploy, and policy."],
+  pipelines: ["Pipelines", "End-to-end product workflows P1–P8."],
+  activity: ["Activity / health", "Local storage, gates, catalog integrity."]
+};
+
+document.querySelectorAll(".nav-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    const id = btn.dataset.panel;
+    document.getElementById("panel-" + id).classList.add("active");
+    document.getElementById("pageTitle").textContent = titles[id][0];
+    document.getElementById("pageSub").textContent = titles[id][1];
+  };
+});
+
+function fmt(n) {
+  if (n > 1048576) return (n/1048576).toFixed(1) + " MB";
+  if (n > 1024) return (n/1024).toFixed(1) + " KB";
+  return n + " B";
+}
+
+let catalog = { items: [] };
+let services = { grokConnected: [] };
+
+async function loadData() {
+  try {
+    catalog = await (await fetch("../artifacts/catalog.json")).json();
+  } catch (e) { console.warn(e); }
+  try {
+    services = await (await fetch("../../integrations/grok/CONNECTED_SERVICES.json")).json();
+  } catch (e) { console.warn(e); }
+  renderAll();
+}
+
+function renderAll() {
+  const A = window.PulseGridAuth;
+  const u = A?.currentUser?.();
+  const chip = document.getElementById("userChip");
+  if (u) {
+    chip.textContent = u.email + " · " + u.role;
+    chip.className = "chip on";
+  } else {
+    chip.textContent = "Not signed in · portal";
+    chip.className = "chip warn";
+  }
+
+  const items = catalog.items || [];
+  const byCat = {};
+  items.forEach(i => { byCat[i.category] = (byCat[i.category]||0)+1; });
+  const totalSize = items.reduce((s,i)=>s+(i.size||0),0);
+
+  document.getElementById("metrics").innerHTML = [
+    ["Artifacts", items.length, "catalogued files"],
+    ["Total size", fmt(totalSize), "workspace build"],
+    ["Grok services", (services.grokConnected||[]).length, "connected map"],
+    ["Creative links", (services.creativeConnections||[]).length, "paste packs"],
+    ["Role", u?.role || "anon", u?.email || "sign in"],
+    ["Repo", "pulsegrid", "XC-V-365"]
+  ].map(([k,v,d]) => `<div class="metric"><div class="k">${k}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join("");
+
+  document.getElementById("coverageList").innerHTML = [
+    "✓ Portal + human check + OAuth stubs",
+    "✓ Admin + 12 emails + trial + donor 7-day gen",
+    "✓ Sequencer v8 (FX, MIDI, matrix, I/O, QOL)",
+    "✓ Music generators + session vault",
+    "✓ Native C++/Rust scaffolds",
+    "✓ Composio + Suno/Udio/TikTok packs",
+    "✓ This Command Center (dashboards + artifacts)",
+    "→ Live publish via Grok: GitHub · Notion · Drive · Buffer…"
+  ].join("<br/>");
+
+  document.getElementById("appCards").innerHTML = [
+    { t:"Portal", d:"Auth, trial, donate, session scan", h:"../../index.html" },
+    { t:"Sequencer", d:"16-step full engine", h:"../../step-sequencer.html" },
+    { t:"Generators", d:"Suno/Udio/local seeds", h:"../generators/index.html" },
+    { t:"Sessions", d:"Pull old local sessions", h:"../sessions/index.html" },
+    { t:"Admin", d:"Emails + licence editor", h:"../admin/index.html" },
+    { t:"Docs", d:"Functions · modules · SaaS", h:"../../docs/FUNCTION_REFERENCE.md" },
+    { t:"Native C++", d:"Clock · engine · MIDI stubs", h:"../../native/cpp/README.md" },
+    { t:"Native Rust", d:"cpal/midir features", h:"../../native/rust/README.md" }
+  ].map(c => `<div class="card"><h3>${c.t}</h3><p>${c.d}</p><div class="actions"><a class="btn btn-link" href="${c.h}">Open</a></div></div>`).join("");
+
+  // artifacts table
+  const sel = document.getElementById("artCat");
+  const cats = [...new Set(items.map(i=>i.category))].sort();
+  if (sel.options.length <= 1) {
+    cats.forEach(c => { const o=document.createElement("option"); o.value=c; o.textContent=c; sel.appendChild(o); });
+  }
+  function renderArts() {
+    const q = (document.getElementById("artSearch").value||"").toLowerCase();
+    const cat = sel.value;
+    const rows = items.filter(i => (!cat || i.category===cat) && (!q || i.path.toLowerCase().includes(q)));
+    document.getElementById("artBody").innerHTML = rows.map(i =>
+      `<tr><td class="mono">${i.path}</td><td><span class="tag ${i.category}">${i.category}</span></td><td>${fmt(i.size||0)}</td><td><a href="${i.github}" target="_blank" rel="noopener">view</a></td></tr>`
+    ).join("");
+  }
+  document.getElementById("artSearch").oninput = renderArts;
+  sel.onchange = renderArts;
+  document.getElementById("artRefresh").onclick = loadData;
+  renderArts();
+
+  // services
+  document.getElementById("svcGrid").innerHTML = (services.grokConnected||[]).map(s =>
+    `<div class="svc"><h3>${s.name} <span class="status">mapped</span></h3>
+     <p>${s.role}</p>
+     <div class="pg"><strong>PulseGrid:</strong> ${s.pulsegrid}</div>
+     <div class="actions" style="margin-top:.4rem">${(s.actions||[]).map(a=>`<span class="chip">${a}</span>`).join("")}</div></div>`
+  ).join("");
+
+  // creator metrics
+  const trial = u?.trial || {};
+  document.getElementById("creatorMetrics").innerHTML = [
+    ["Edits used", trial.edits||0, "trial counter"],
+    ["Exports", trial.exports||0, "trial counter"],
+    ["Gen left", u?.generationGrant?.remaining ?? (u?.role==="admin"?"∞":0), "donor/sponsor window"],
+    ["Local sessions", "—", "scan below"]
+  ].map(([k,v,d])=>`<div class="metric"><div class="k">${k}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join("");
+
+  // admin
+  document.getElementById("adminMetrics").innerHTML = [
+    ["Admins", (A?.effectiveAdminEmails?.()||[]).length, "owner + up to 12"],
+    ["Trial max edits", window.PulseGridAccess?.freeTrial?.maxPatternEdits ?? "—", "config"],
+    ["Gen days", window.PulseGridAccess?.generationGrant?.durationDays ?? 7, "donor/sponsor only"],
+    ["Human check", window.PulseGridAccess?.humanCheck?.required ? "ON" : "off", "login gate"]
+  ].map(([k,v,d])=>`<div class="metric"><div class="k">${k}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join("");
+  document.getElementById("licPreview").textContent = (A?.getLicenseText?.() || "").slice(0, 1200);
+
+  // pipelines
+  const pipes = [
+    ["P1 Sketch→bounce", "Gate/Vel/Prob → kit → FX Labs → WAV bounce"],
+    ["P2 MIDI→DAW", "Grid → SMF .mid → Ableton/FL ch10"],
+    ["P3 AI bed", "BPM pattern → Suno/Udio package → paste"],
+    ["P4 Social", "Bounce/record → TikTok pack → Buffer via Grok"],
+    ["P5 Agent collab", "Copilot/Composio JSON → GitHub/Notion"],
+    ["P6 Native", "JSON/.pgbin → C++/Rust scaffolds"],
+    ["P7 Live MIDI", "Web MIDI out + clock → hardware"],
+    ["P8 Ops backup", "Session vault → Drive upload · Automations schedule"]
+  ];
+  document.getElementById("pipeList").innerHTML = pipes.map((p,i)=>
+    `<div class="pipe-step"><div class="n">${i+1}</div><div><h4>${p[0]}</h4><p>${p[1]}</p></div></div>`
+  ).join("");
+
+  // health
+  runHealth();
+}
+
+function runHealth() {
+  const A = window.PulseGridAuth;
+  const lines = [];
+  const log = (t, m, ok=true) => lines.push(`<span class="t">[${t}]</span> <span class="${ok?"ok":""}">${m}</span>`);
+  log("boot", "Command Center v9");
+  log("cfg", window.PulseGridAccess ? "access-config loaded" : "access-config MISSING", !!window.PulseGridAccess);
+  log("auth", window.PulseGridAuth ? "access-engine loaded" : "engine MISSING", !!window.PulseGridAuth);
+  log("user", A?.currentUser?.()?.email || "anonymous");
+  log("catalog", (catalog.items||[]).length + " artifacts");
+  log("services", (services.grokConnected||[]).length + " Grok maps");
+  // storage keys
+  let n = 0;
+  for (let i=0;i<localStorage.length;i++) {
+    const k = localStorage.key(i);
+    if (k && /pulsegrid|pg_/i.test(k)) { n++; log("ls", k); }
+  }
+  log("storage", n + " pulsegrid* keys");
+  document.getElementById("healthLog").innerHTML = lines.join("<br/>");
+
+  const byCat = {};
+  (catalog.items||[]).forEach(i => { byCat[i.category]=(byCat[i.category]||0)+1; });
+  document.getElementById("artSummary").innerHTML = Object.entries(byCat).map(([k,v])=>`${k}: ${v}`).join("<br/>") || "no catalog";
+}
+document.getElementById("btnHealth").onclick = runHealth;
+
+document.getElementById("btnScanSessions").onclick = () => {
+  const A = window.PulseGridAuth;
+  if (!A) return;
+  const found = A.pullLocalSessions();
+  document.getElementById("sessionMini").innerHTML = found.length
+    ? found.map(s => `${s.key} · ${s.size}B`).join("<br/>")
+    : "No local sessions found";
+};
+
+loadData();
+</script>
+</body>
+</html>
