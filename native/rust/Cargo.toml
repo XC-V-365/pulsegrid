@@ -1,0 +1,21 @@
+[package]
+name = "pulsegrid"
+version = "5.0.0"
+edition = "2021"
+description = "PulseGrid 16-step drum sequencer — Rust scaffold (cpal/midir optional)"
+license = "MIT"
+
+[dependencies]
+# Optional audio / MIDI (uncomment or use features)
+cpal = { version = "0.15", optional = true }
+midir = { version = "0.9", optional = true }
+
+[features]
+default = []
+audio = ["cpal"]
+midi = ["midir"]
+full = ["audio", "midi"]
+
+[[bin]]
+name = "pulsegrid"
+path = "src/main.rs"

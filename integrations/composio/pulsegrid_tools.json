@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "toolkit": "pulsegrid",
+  "description": "PulseGrid 16-step drum sequencer tools for Composio / MCP agents",
+  "tools": [
+    {
+      "slug": "PULSEGRID_EXPORT_PATTERN",
+      "name": "Export PulseGrid Pattern",
+      "description": "Return the current PulseGrid pattern JSON (v4/v5) for banks A/B, BPM, swing, song chain.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "include_song": { "type": "boolean", "default": true },
+          "bank": { "type": "string", "enum": ["A", "B", "both"], "default": "both" }
+        }
+      }
+    },
+    {
+      "slug": "PULSEGRID_EXPORT_SUNO",
+      "name": "Export Suno Custom Mode Package",
+      "description": "Build paste-ready Suno TITLE, STYLE OF MUSIC, and LYRICS (instrumental drum bed) from pattern density and BPM.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "genre": { "type": "string", "default": "electronic drum machine" },
+          "mood": { "type": "string", "default": "dark luxury, rose-gold neon" },
+          "title": { "type": "string" }
+        }
+      }
+    },
+    {
+      "slug": "PULSEGRID_EXPORT_SHOOM",
+      "name": "Export Shoom AI Prompt",
+      "description": "Build Shoom-style genre + mood + description + title for AI song/video generation.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "with_video": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    {
+      "slug": "PULSEGRID_EXPORT_FAVES",
+      "name": "Export Faves Share Card",
+      "description": "Create a human-curation share blurb for faves.fm / social (title, BPM, tags, why fave).",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "note": { "type": "string", "description": "Personal note for friends" }
+        }
+      }
+    },
+    {
+      "slug": "PULSEGRID_PUSH_GITHUB_GIST",
+      "name": "Push Pattern to GitHub Gist",
+      "description": "Via Composio GitHub toolkit: create a gist with pulsegrid-v5 JSON + README.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "public": { "type": "boolean", "default": false },
+          "description": { "type": "string", "default": "PulseGrid pattern export" }
+        },
+        "required": []
+      },
+      "composio_delegate": "GITHUB_CREATE_GIST"
+    },
+    {
+      "slug": "PULSEGRID_PUSH_NOTION",
+      "name": "Save Pattern to Notion",
+      "description": "Via Composio Notion toolkit: create a page with pattern summary and JSON code block.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parent_page_id": { "type": "string" },
+          "title": { "type": "string" }
+        }
+      },
+      "composio_delegate": "NOTION_CREATE_PAGE"
+    },
+    {
+      "slug": "PULSEGRID_MIDI_MAP",
+      "name": "Get GM MIDI Map",
+      "description": "Return General MIDI drum note map used by PulseGrid (ch 10 default).",
+      "parameters": { "type": "object", "properties": {} }
+    }
+  ],
+  "agent_workflow": [
+    "1. Call PULSEGRID_EXPORT_PATTERN to get JSON",
+    "2. Optionally PULSEGRID_EXPORT_SUNO / SHOOM / FAVES for creative copy",
+    "3. Push via GITHUB_CREATE_GIST or NOTION_CREATE_PAGE through Composio connected account",
+    "4. For music gen: hand Suno/Shoom text to user (no direct API) or BeatAPI via Composio if connected"
+  ],
+  "connected_services_recommended": [
+    "github", "notion", "google_drive", "gmail", "slack", "buffer", "beatapi"
+  ]
+}
