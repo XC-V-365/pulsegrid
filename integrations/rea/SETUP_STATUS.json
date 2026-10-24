@@ -1,13 +1,19 @@
 {
-  "version": 13,
-  "plan": "integrations/rea/SETUP_PLAN.md",
-  "status": "awaiting_approval",
-  "install_executed": false,
-  "approval_phrases": [
-    "APPROVE REA SETUP",
-    "APPROVE REA SETUP LOCAL ONLY",
-    "REJECT"
+  "version": 16,
+  "status": "approved_partial",
+  "approval": "APPROVE REA SETUP (user 2026-10-24)",
+  "package": "rea-agents@6.7.0",
+  "install_executed": true,
+  "setup_dry_run": "needs_human",
+  "doctor": {
+    "healthy": false,
+    "blocker": "Node.js 20.20.2 < required ^22.19 || ^24.11 || >=26",
+    "providers": ["ghidra", "ida", "jadx", "kuna", "hopper — not configured"]
+  },
+  "local_commands": [
+    "nvm install 22 && nvm use 22",
+    "npx rea-agents@latest setup --yes --all-detected",
+    "npx rea-agents@latest doctor"
   ],
-  "command": "npx rea-agents@latest setup",
-  "note": "Plan only until user approves. No install run in this ship."
+  "note": "CLI package installs; full agent integration needs Node 22+ and optional Ghidra/IDA/etc."
 }

@@ -1,54 +1,105 @@
-use pulsegrid::pattern::{default_pattern, empty_pattern, Banks, Transport};
-use pulsegrid::{NullMidiOut, SequencerClock, VoiceEngine, MidiOut, pattern::TrackId, pattern::TRACKS};
+//! PulseGrid CLI — smoke + optional cpal/midir
+//! cargo run --release
+//! cargo run --release --features audio -- --beep
+//! cargo run --release --features midi -- --list-midi
+//! cargo run --release --features full -- --list-midi
+
+use pulsegrid::pattern::{Banks, StepCell, TrackId, Transport, STEPS};
+use pulsegrid::{VoiceEngine, NullMidiOut, MidiOut};
+use pulsegrid::midi_midir::{list_ports, MidirOut};
+use pulsegrid::audio_cpal::{list_hosts, start_output};
+use std::sync::{Arc, Mutex};
 use std::thread;
-use std::time::{Duration, Instant};
+use std::time::Duration;
+
+fn track_idx(t: TrackId) -> usize {
+    t as usize
+}
 
 fn main() {
-    let banks = Banks {
-        a: default_pattern(),
-        b: empty_pattern(),
-    };
-    let mut tr = Transport::default();
-    let mut engine = VoiceEngine::new();
-    let mut midi = NullMidiOut;
-    let mut clock = SequencerClock::new();
+    let args: Vec<String> = std::env::args().collect();
+    println!(
+        "PulseGrid Rust — audio={} midi={}",
+        cfg!(feature = "audio"),
+        cfg!(feature = "midi")
+    );
 
-    println!("PulseGrid Rust scaffold — look-ahead clock demo (~8s)");
-    clock.start(&mut tr, 0.0);
-    let t0 = Instant::now();
-    let mut last_print = 999usize;
-    loop {
-        let now = t0.elapsed().as_secs_f64();
-        if now > 8.0 {
-            break;
+    if args.iter().any(|a| a == "--list-midi") {
+        for p in list_ports() {
+            println!("  · {p}");
         }
-        let before = tr.step;
-        clock.tick(&mut tr, &banks, now);
-        if tr.step != before || tr.step != last_print {
-            // After tick, step has advanced; show previous sounding step
-            let sounded = if tr.step == 0 { 15 } else { tr.step - 1 };
-            if sounded != last_print {
-                let pat = if tr.active_bank == 'B' { &banks.b } else { &banks.a };
-                for ti in 0..TRACKS {
-                    let cell = pat[ti][sounded];
-                    if cell.vel == 0 {
-                        continue;
-                    }
-                    let id = match ti {
-                        0 => TrackId::Kick,
-                        1 => TrackId::Snare,
-                        2 => TrackId::Hat,
-                        _ => TrackId::Perc,
-                    };
-                    engine.trigger(id, cell.vel, now);
-                    midi.send_drum(id, cell.vel, 10, now);
+        return;
+    }
+    if args.iter().any(|a| a == "--list-audio") {
+        println!("hosts: {:?}", list_hosts());
+        return;
+    }
+
+    let banks = Banks::default();
+    let transport = Transport::default();
+    let engine = Arc::new(Mutex::new(VoiceEngine::new(44100.0)));
+
+    if args.iter().any(|a| a == "--beep") {
+        match start_output(Arc::clone(&engine)) {
+            Ok(()) => {
+                println!("cpal stream started");
+                if let Ok(mut e) = engine.lock() {
+                    e.trigger(TrackId::Kick, 100);
+                    e.trigger(TrackId::Snare, 90);
+                    e.trigger(TrackId::Hat, 60);
                 }
-                println!("step {:2} bank {}", sounded + 1, tr.active_bank);
-                last_print = sounded;
+                thread::sleep(Duration::from_millis(900));
+            }
+            Err(err) => eprintln!("audio: {err}"),
+        }
+    }
+
+    let mut midi: Box<dyn MidiOut> = if args.iter().any(|a| a == "--midi") {
+        let mut m = MidirOut::new();
+        let name = args
+            .iter()
+            .position(|a| a == "--midi-port")
+            .and_then(|i| args.get(i + 1))
+            .map(|s| s.as_str())
+            .unwrap_or("");
+        if m.open(name) {
+            println!("MIDI out open");
+            Box::new(m)
+        } else {
+            eprintln!("MIDI open failed — NullMidiOut");
+            Box::new(NullMidiOut)
+        }
+    } else {
+        Box::new(NullMidiOut)
+    };
+
+    let pat = &banks.a;
+    let bpm = transport.bpm.max(60.0);
+    let step_ms = (60_000.0 / bpm / 4.0) as u64;
+
+    for step in 0..(STEPS * 2) {
+        let s = step % STEPS;
+        for track in [TrackId::Kick, TrackId::Snare, TrackId::Hat, TrackId::Perc] {
+            let cell: StepCell = pat[track_idx(track)][s];
+            if cell.vel > 0 {
+                let vel = match cell.vel {
+                    1 => 50,
+                    2 => 85,
+                    _ => 110,
+                };
+                let note = match track {
+                    TrackId::Kick => 36,
+                    TrackId::Snare => 38,
+                    TrackId::Hat => 42,
+                    TrackId::Perc => 39,
+                };
+                midi.note_on(10, note, vel, 0.0);
+                if let Ok(mut e) = engine.lock() {
+                    e.trigger(track, vel);
+                }
             }
         }
-        thread::sleep(Duration::from_millis(5));
+        thread::sleep(Duration::from_millis(step_ms));
     }
-    clock.stop(&mut tr);
-    println!("done.");
+    println!("done 2 bars @ {bpm} BPM");
 }

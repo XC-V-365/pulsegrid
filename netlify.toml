@@ -1,0 +1,13 @@
+[build]
+  publish = "."
+  # no build command — static site + functions
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  included_files = ["saas/access-config.js"]
+
+[[redirects]]
+  from = "/api/access/*"
+  to = "/.netlify/functions/:splat"
+  status = 200

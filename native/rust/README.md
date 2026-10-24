@@ -1,33 +1,24 @@
-# PulseGrid — Rust scaffold (v4)
-
-## Layout
-
-```
-src/
-  lib.rs       # re-exports
-  pattern.rs   # StepCell, Banks, Transport, GM helpers
-  clock.rs     # look-ahead SequencerClock + song advance
-  engine.rs    # VoiceEngine sample/synth stub
-  midi.rs      # MidiOut trait + NullMidiOut
-  main.rs      # headless demo
-Cargo.toml
-```
-
-## Run
+# PulseGrid Rust
 
 ```bash
+cargo build --release
 cargo run --release
+
+# optional (needs system ALSA on Linux: pkg-config libasound2-dev)
+cargo build --release --features audio
+cargo build --release --features midi
+cargo build --release --features full
+cargo run --release --features audio -- --beep
+cargo run --release --features midi -- --list-midi
+cargo run --release --features midi -- --midi
 ```
 
-## Next crates
+## Modules
 
-| Need | Crate |
-|------|--------|
-| Audio out | `cpal` |
-| DSP / samples | `dasp`, `symphonia` (decode) |
-| MIDI | `midir` |
-| JSON v4 | `serde` + `serde_json` |
-| UI | `egui` / `eframe` |
-| RT queue | `rtrb` |
-
-Same data model and look-ahead rules as Web + C++ (`PulseGrid-ARCHITECTURE.md`).
+| Module | Role |
+|--------|------|
+| `pattern` | StepCell, Banks, Transport |
+| `clock` | SequencerClock |
+| `engine` | VoiceEngine synth for cpal |
+| `audio_cpal` | cpal output stream (`feature = audio`) |
+| `midi` / `midi_midir` | MidiOut trait + midir (`feature = midi`) |

@@ -1,3 +1,5 @@
+# PulseGrid v16 — REA approved · Netlify · server access · native cpal/midir
+
 # PulseGrid v15 — Claude pipeline · more REAP · deploy guide
 
  — Claude Code · Opus 5.5 · Fable 5.1 · Composio
@@ -93,3 +95,11 @@ REAP MIDI + access evidence · Tone optional lab · generators Claude links
 - `saas/claude/index.html` multi-lane pipeline
 - REAP logs: matrices, claude, studio, tone
 - `docs/DEPLOY.md`
+
+
+## v16
+
+- REA setup approved (Node 22+ needed on your machine for full doctor)
+- Netlify site: `pulsegrid-xc-v365` · functions for `/api/access/*`
+- Native Rust: engine + cpal/midir features (default build OK; full needs ALSA)
+- Docs: `docs/SERVER_ACCESS.md`, `integrations/rea/SETUP_REPORT.md`

@@ -1,0 +1,8 @@
+{
+  "name": "pulsegrid",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@netlify/functions": "^3.0.0"
+  }
+}
