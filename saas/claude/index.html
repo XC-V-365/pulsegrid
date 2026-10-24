@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PulseGrid · Claude multi-lane pipeline</title>
+<style>
+:root{--navy:#060a12;--surface:#101820;--border:#1e2a3a;--text:#e8ecf4;--muted:#8b95a8;--rose:#d4a574;--midi:#7ee0a0;--blue:#7ec8d8;--purple:#a890c8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--navy);color:var(--text);padding:1.25rem;line-height:1.45}
+a{color:var(--rose)}.wrap{max-width:900px;margin:0 auto}
+h1{font-size:1.2rem}.sub{font-size:.78rem;color:var(--muted);margin:.35rem 0 1rem}
+.lane{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem;margin:.65rem 0}
+.lane h2{font-size:.85rem;color:var(--rose);margin-bottom:.35rem}
+.lane p{font-size:.75rem;color:var(--muted)}
+.chip{display:inline-block;font-size:.58rem;padding:.1rem .35rem;border-radius:4px;background:#1a2840;color:var(--blue);margin:.1rem}
+.btn{display:inline-block;margin:.35rem .25rem 0 0;border:1px solid var(--border);background:#161f2c;color:var(--text);border-radius:7px;padding:.4rem .65rem;font-size:.72rem;font-weight:600;text-decoration:none}
+.flow{font-family:ui-monospace,monospace;font-size:.68rem;background:#0a0e1a;border:1px solid var(--border);border-radius:8px;padding:.75rem;color:var(--midi);white-space:pre-wrap;margin:1rem 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Claude multi-lane pipeline</h1>
+  <p class="sub"><a href="../../index.html">Portal</a> · <a href="../../step-sequencer.html">Sequencer</a> · <a href="../../integrations/claude/README.md">Packs</a> · <a href="../../integrations/composio/README.md">Composio</a></p>
+  <div class="flow">Pattern / seed
+    → Fable 5.1 (anti-slop packs)
+    → Opus 5.5 (validate + plan)
+    → Claude Code (implement)
+    → Composio (publish gist/Notion)
+    → REAP log (evidence)</div>
+  <div class="lane">
+    <h2>1 · Fable 5.1 <span class="chip">narrative</span></h2>
+    <p>Suno/Udio/TikTok copy from live grid. Ban list enforced in pack.</p>
+    <a class="btn" href="../../integrations/claude/FABLE_5_1.md">FABLE_5_1.md</a>
+    <a class="btn" href="../../step-sequencer.html">Sequencer chip</a>
+  </div>
+  <div class="lane">
+    <h2>2 · Opus 5.5 <span class="chip">engineering</span></h2>
+    <p>Schema validation, architecture, CONFIRM vs HYPOTHESIS, minimal diffs.</p>
+    <a class="btn" href="../../integrations/claude/OPUS_5_5.md">OPUS_5_5.md</a>
+  </div>
+  <div class="lane">
+    <h2>3 · Claude Code <span class="chip">implement</span></h2>
+    <p>Root <code>CLAUDE.md</code> + project instructions for patches.</p>
+    <a class="btn" href="../../CLAUDE.md">CLAUDE.md</a>
+    <a class="btn" href="../../integrations/claude/CLAUDE_CODE.md">CLAUDE_CODE.md</a>
+  </div>
+  <div class="lane">
+    <h2>4 · Composio <span class="chip">publish</span></h2>
+    <p>No embedded API keys. Bundle → connected GitHub/Notion after dashboard link.</p>
+    <a class="btn" href="../../integrations/composio/CLAUDE_COMPOSIO.md">Operator guide</a>
+  </div>
+  <div class="lane">
+    <h2>Shared constitution</h2>
+    <a class="btn" href="../../integrations/claude/SYSTEM_RULES.md">SYSTEM_RULES.md</a>
+    <a class="btn" href="../../saas/matrices/index.html">Matrices</a>
+    <a class="btn" href="../../integrations/rea/index.html">REAP</a>
+  </div>
+</div>
+</body>
+</html>

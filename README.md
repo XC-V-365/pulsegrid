@@ -1,4 +1,6 @@
-# PulseGrid v14 — Claude Code · Opus 5.5 · Fable 5.1 · Composio
+# PulseGrid v15 — Claude pipeline · more REAP · deploy guide
+
+ — Claude Code · Opus 5.5 · Fable 5.1 · Composio
 
 # PulseGrid v13 — REAP · REA Investigation
 
@@ -85,3 +87,9 @@ Authorized reverse-engineering prompt pack for [REA](https://rea.tools/).
 
 ## v14.1 continue
 REAP MIDI + access evidence · Tone optional lab · generators Claude links
+
+
+## v15
+- `saas/claude/index.html` multi-lane pipeline
+- REAP logs: matrices, claude, studio, tone
+- `docs/DEPLOY.md`
