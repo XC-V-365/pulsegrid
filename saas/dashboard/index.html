@@ -149,6 +149,7 @@ td path, .mono { font-family:"JetBrains Mono",monospace; font-size:.68rem; }
     <button class="nav-btn" data-panel="creator">Creator dashboard</button>
     <button class="nav-btn" data-panel="admin">Admin dashboard</button>
     <button class="nav-btn" data-panel="pipelines">Pipelines</button>
+    <button class="nav-btn" data-panel="studio">Studio · EPB</button>
     <button class="nav-btn" data-panel="agents">Agents · LLMs</button>
     <button class="nav-btn" data-panel="matrices">Matrices</button>
     <button class="nav-btn" data-panel="activity">Activity / health</button>
@@ -182,6 +183,7 @@ td path, .mono { font-family:"JetBrains Mono",monospace; font-size:.68rem; }
           <h3>Quick launch</h3>
           <p>Primary product surfaces from this Grok build thread.</p>
           <div class="actions">
+            <a class="btn btn-primary btn-link" href="../studio/index.html">Studio EPB</a>
             <a class="btn btn-primary btn-link" href="../../index.html">SaaS Portal</a>
             <a class="btn btn-link" href="../../step-sequencer.html">Step sequencer</a>
             <a class="btn btn-link" href="../generators/index.html">Music generators</a>
@@ -300,6 +302,19 @@ td path, .mono { font-family:"JetBrains Mono",monospace; font-size:.68rem; }
 
     <!-- ACTIVITY -->
     
+    
+    <section class="panel" id="panel-studio">
+      <div class="grid">
+        <div class="card"><h3>Studio hub</h3><p>Explore · Plan · Build · Ship</p><div class="actions"><a class="btn btn-primary btn-link" href="../studio/index.html">Open Studio</a></div></div>
+        <div class="card"><h3>Canvas</h3><p>Node graph</p><div class="actions"><a class="btn btn-link" href="../canvas/index.html">Canvas</a></div></div>
+        <div class="card"><h3>Workflows</h3><p>Pipelines catalog</p><div class="actions"><a class="btn btn-link" href="../workflows/index.html">Workflows</a></div></div>
+        <div class="card"><h3>Plugins OSS</h3><p>Tone · RtMidi · cpal…</p><div class="actions"><a class="btn btn-link" href="../plugins/index.html">Plugins</a></div></div>
+        <div class="card"><h3>Widgets</h3><p>UI kit map</p><div class="actions"><a class="btn btn-link" href="../widgets/index.html">Widgets</a></div></div>
+        <div class="card"><h3>Modules</h3><p>Nodes & layers</p><div class="actions"><a class="btn btn-link" href="../modules/index.html">Modules</a></div></div>
+        <div class="card"><h3>Styles · Genres</h3><p>16 genres + palettes</p><div class="actions"><a class="btn btn-link" href="../styles/index.html">Styles</a></div></div>
+      </div>
+    </section>
+
     <section class="panel" id="panel-agents">
       <div class="card">
         <h3>Agents · Bots · Master Music LLM</h3>
@@ -348,6 +363,7 @@ const titles = {
   creator: ["Creator dashboard", "Beat → export → AI → social loop."],
   admin: ["Admin dashboard", "Access, licence, deploy, and policy."],
   pipelines: ["Pipelines", "End-to-end product workflows P1–P8."],
+  studio: ["Studio · EPB", "Explore · Plan · Build · Ship hub."],
   agents: ["Agents · LLMs", "Conductor, bots, Master Music LLM."],
   matrices: ["Matrices", "Appraisal · Anti-Slop · Awesome."],
   activity: ["Activity / health", "Local storage, gates, catalog integrity."]

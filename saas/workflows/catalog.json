@@ -1,0 +1,20 @@
+{
+  "version": 11,
+  "phases": ["explore","plan","build","ship","ops"],
+  "workflows": [
+    {"id":"epb-core","name":"Explore → Plan → Build","phase":"explore","steps":["pick genre/style","load refs","set BPM","sketch gate grid","plan A/B & song","build vel/prob/fx","appraise","export"],"widgets":["genre-picker","bpm","grid","matrix-score"]},
+    {"id":"p1-bounce","name":"P1 Sketch → WAV bounce","phase":"build","steps":["gate","vel","kit","fx","bounce"],"widgets":["grid","fx-strip","export"]},
+    {"id":"p2-midi","name":"P2 MIDI → DAW","phase":"ship","steps":["pattern","smf","import DAW ch10"],"widgets":["grid","export"]},
+    {"id":"p3-ai","name":"P3 AI song bed","phase":"ship","steps":["pattern","anti-slop","suno/udio pack"],"widgets":["package","antislop"]},
+    {"id":"p4-social","name":"P4 Social clip","phase":"ship","steps":["bounce/record","tiktok pack","buffer"],"widgets":["export","package"]},
+    {"id":"p5-agent","name":"P5 Agent collab","phase":"ops","steps":["copilot brief","composio","github/notion"],"widgets":["agents","export"]},
+    {"id":"p6-native","name":"P6 Native port","phase":"build","steps":["json/pgbin","cpp/rust"],"widgets":["export","modules"]},
+    {"id":"p7-live","name":"P7 Live MIDI kit","phase":"build","steps":["midi out","clock","hardware"],"widgets":["midi","grid"]},
+    {"id":"p8-backup","name":"P8 Ops backup","phase":"ops","steps":["session vault","drive","automations"],"widgets":["sessions"]},
+    {"id":"quality-gate","name":"Quality gate","phase":"plan","steps":["appraisal","anti-slop","awesome","verdict"],"widgets":["matrix-score"]},
+    {"id":"genre-lab","name":"Genre lab","phase":"explore","steps":["pick genre","apply BPM range","seed pattern","listen"],"widgets":["genre-picker","grid"]},
+    {"id":"plugin-stack","name":"Plugin stack","phase":"plan","steps":["pick plugins","map hooks","note licenses"],"widgets":["plugin-list"]},
+    {"id":"canvas-patch","name":"Canvas patch design","phase":"plan","steps":["place nodes","wire graph","export graph JSON"],"widgets":["canvas"]},
+    {"id":"studio-session","name":"Full studio session","phase":"build","steps":["explore genre","plan workflow","build in sequencer","matrices","ship packs"],"widgets":["all"]}
+  ]
+}

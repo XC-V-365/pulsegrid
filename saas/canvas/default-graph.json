@@ -1,0 +1,26 @@
+{
+  "version": 11,
+  "name": "PulseGrid default patch",
+  "nodes": [
+    {"id":"n1","type":"genre","x":40,"y":80,"label":"Genre"},
+    {"id":"n2","type":"pattern","x":220,"y":80,"label":"PatternStore"},
+    {"id":"n3","type":"clock","x":220,"y":200,"label":"Clock"},
+    {"id":"n4","type":"voice","x":400,"y":80,"label":"Voice/Sample"},
+    {"id":"n5","type":"fx","x":580,"y":80,"label":"FX Labs"},
+    {"id":"n6","type":"midi","x":400,"y":200,"label":"MIDI Out"},
+    {"id":"n7","type":"matrices","x":580,"y":200,"label":"Matrices"},
+    {"id":"n8","type":"export","x":760,"y":120,"label":"Export / Packs"},
+    {"id":"n9","type":"agents","x":760,"y":240,"label":"Agents / LLM"}
+  ],
+  "edges": [
+    {"from":"n1","to":"n2"},
+    {"from":"n2","to":"n3"},
+    {"from":"n3","to":"n4"},
+    {"from":"n3","to":"n6"},
+    {"from":"n4","to":"n5"},
+    {"from":"n5","to":"n8"},
+    {"from":"n2","to":"n7"},
+    {"from":"n7","to":"n9"},
+    {"from":"n9","to":"n8"}
+  ]
+}

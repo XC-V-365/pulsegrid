@@ -1,0 +1,23 @@
+{
+  "version": 11,
+  "widgets": [
+    {"id":"genre-picker","name":"Genre picker","surface":["studio","explore"],"desc":"Select genre → BPM hint + density"},
+    {"id":"style-picker","name":"Style / palette","surface":["studio","brand"],"desc":"Visual theme chips"},
+    {"id":"bpm","name":"BPM control","surface":["sequencer"],"desc":"Tempo fader"},
+    {"id":"grid","name":"16-step grid","surface":["sequencer"],"desc":"Core step matrix"},
+    {"id":"fx-strip","name":"FX Labs strip","surface":["sequencer"],"desc":"Bus FX knobs"},
+    {"id":"matrix-score","name":"Matrix scorecards","surface":["matrices","agents"],"desc":"Appraisal / slop / awesome"},
+    {"id":"package","name":"Package preview","surface":["generators","connections"],"desc":"Suno/Udio/TikTok text"},
+    {"id":"antislop","name":"Anti-slop meter","surface":["matrices"],"desc":"CLEAN→SLOP grade"},
+    {"id":"agents","name":"Agent launcher","surface":["agents"],"desc":"Run bot/agent modes"},
+    {"id":"midi","name":"MIDI panel","surface":["sequencer"],"desc":"Port / channel / clock"},
+    {"id":"export","name":"I/O hub","surface":["sequencer"],"desc":"JSON MIDI WAV pgbin"},
+    {"id":"sessions","name":"Session vault","surface":["saas"],"desc":"Local pull"},
+    {"id":"canvas","name":"Node canvas","surface":["canvas"],"desc":"Drag nodes + edges"},
+    {"id":"plugin-list","name":"Plugin registry","surface":["plugins"],"desc":"OSS list + licenses"},
+    {"id":"modules","name":"Module map","surface":["modules"],"desc":"Architecture modules"},
+    {"id":"pipeline","name":"Pipeline stepper","surface":["workflows"],"desc":"Step through workflow"},
+    {"id":"access","name":"Access chip","surface":["portal","dashboard"],"desc":"Role · trial · gen grant"},
+    {"id":"meter","name":"Level / density meter","surface":["studio"],"desc":"Hit density viz"}
+  ]
+}

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PulseGrid Studio · Explore · Plan · Build</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#060a12;--surface:#0f1620;--s2:#161f2c;--border:#1e2a3a;--text:#e8ecf4;--muted:#8b95a8;--rose:#d4a574;--midi:#7ee0a0;--blue:#7ec8d8;--purple:#a890c8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"DM Sans",system-ui,sans-serif;background:var(--navy);color:var(--text);min-height:100vh;
+background-image:radial-gradient(ellipse 60% 40% at 0% 0%,#152038 0%,transparent 50%),radial-gradient(ellipse 40% 30% at 100% 100%,#281820 0%,transparent 45%)}
+a{color:var(--rose);text-decoration:none}a:hover{text-decoration:underline}
+.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.75rem;padding:1rem 1.25rem;border-bottom:1px solid var(--border);background:var(--surface)}
+.brand{font-weight:700;font-size:1.1rem}.brand span{background:linear-gradient(135deg,#c0c8d4,#d4a574);-webkit-background-clip:text;color:transparent}
+.phases{display:flex;gap:.35rem;flex-wrap:wrap}
+.phase{border:1px solid var(--border);background:var(--s2);color:var(--muted);border-radius:999px;padding:.4rem .85rem;font-size:.75rem;font-weight:600;cursor:pointer}
+.phase.active{color:#0a0e1a;background:linear-gradient(135deg,#c0c8d4,#d4a574);border:none}
+.nav{display:flex;flex-wrap:wrap;gap:.35rem;padding:.65rem 1.25rem;border-bottom:1px solid var(--border)}
+.nav a,.nav button{font-size:.7rem;font-weight:600;color:var(--muted);border:1px solid var(--border);background:transparent;border-radius:7px;padding:.35rem .55rem;cursor:pointer;font-family:inherit}
+.nav a:hover,.nav button:hover{color:var(--text);border-color:var(--silver,#c0c8d4)}
+.main{padding:1.1rem 1.25rem 3rem;max-width:1200px;margin:0 auto}
+h1{font-size:1.15rem;margin-bottom:.25rem}
+.sub{font-size:.78rem;color:var(--muted);margin-bottom:1rem;line-height:1.45}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.65rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.85rem;display:flex;flex-direction:column;gap:.35rem}
+.card h3{font-size:.78rem;color:var(--rose);text-transform:uppercase;letter-spacing:.05em}
+.card p{font-size:.72rem;color:var(--muted);line-height:1.45;flex:1}
+.chip{display:inline-block;font-size:.58rem;padding:.1rem .35rem;border-radius:4px;background:#1a2840;color:var(--blue);margin:.1rem}
+.chip.genre{color:var(--midi)}.chip.style{color:var(--purple)}
+.btn{border:1px solid var(--border);background:var(--s2);color:var(--text);border-radius:7px;padding:.4rem .65rem;font-size:.7rem;font-weight:600;cursor:pointer;font-family:inherit;margin:.15rem .15rem 0 0}
+.btn-primary{background:linear-gradient(135deg,#c0c8d4,#d4a574);color:#0a0e1a;border:none}
+.panel{display:none}.panel.active{display:block}
+.steps{counter-reset:s;list-style:none}
+.steps li{position:relative;padding:.55rem .55rem .55rem 2.2rem;margin:.35rem 0;background:var(--surface);border:1px solid var(--border);border-radius:10px;font-size:.78rem}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:.55rem;top:.55rem;width:1.35rem;height:1.35rem;border-radius:50%;background:linear-gradient(135deg,#c0c8d4,#d4a574);color:#0a0e1a;font-size:.65rem;font-weight:700;display:grid;place-items:center}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+@media(max-width:800px){.two{grid-template-columns:1fr}}
+select,input{background:#0a0e1a;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.4rem .55rem;font-size:.8rem;font-family:inherit}
+label{font-size:.7rem;color:var(--muted);display:block;margin:.35rem 0 .15rem}
+.out{font-family:"JetBrains Mono",monospace;font-size:.65rem;background:#0a0e1a;border:1px solid var(--border);border-radius:8px;padding:.65rem;white-space:pre-wrap;max-height:220px;overflow:auto;color:var(--muted);margin-top:.5rem}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand">Pulse<span>Grid</span> Studio</div>
+  <div class="phases">
+    <button class="phase active" data-phase="explore">1 · Explore</button>
+    <button class="phase" data-phase="plan">2 · Plan</button>
+    <button class="phase" data-phase="build">3 · Build</button>
+    <button class="phase" data-phase="ship">4 · Ship</button>
+  </div>
+  <div style="font-size:.7rem;color:var(--muted)"><a href="../../index.html">Portal</a> · <a href="../dashboard/index.html">CC</a></div>
+</div>
+<div class="nav">
+  <a href="../workflows/index.html">Workflows</a>
+  <a href="../canvas/index.html">Canvas</a>
+  <a href="../plugins/index.html">Plugins · OSS</a>
+  <a href="../widgets/index.html">Widgets</a>
+  <a href="../modules/index.html">Modules · Nodes</a>
+  <a href="../styles/index.html">Styles · Genres</a>
+  <a href="../agents/index.html">Agents</a>
+  <a href="../matrices/index.html">Matrices</a>
+  <a href="../../step-sequencer.html">Sequencer</a>
+</div>
+<div class="main">
+  <section class="panel active" id="panel-explore">
+    <h1>Explore</h1>
+    <p class="sub">Pick genre, visual style, references, and density. Seeds BPM and kit character for Plan.</p>
+    <div class="two">
+      <div class="card">
+        <h3>Genre</h3>
+        <label>Select</label>
+        <select id="genreSel"></select>
+        <div id="genreMeta" class="sub" style="margin-top:.5rem"></div>
+      </div>
+      <div class="card">
+        <h3>Visual style</h3>
+        <div id="styleChips" class="grid" style="grid-template-columns:1fr 1fr"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:.65rem">
+      <h3>Explore actions</h3>
+      <p>Load genre defaults into a plan draft, open genre lab workflow, or jump to canvas.</p>
+      <div>
+        <button class="btn btn-primary" id="btnSeedPlan">Seed plan from genre</button>
+        <a class="btn" href="../workflows/index.html?wf=genre-lab">Genre lab workflow</a>
+        <a class="btn" href="../canvas/index.html">Open canvas</a>
+      </div>
+      <div class="out" id="exploreOut">Select a genre to begin.</div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-plan">
+    <h1>Plan</h1>
+    <p class="sub">Choose workflow, plugins, quality gates, and node graph before building.</p>
+    <div class="two">
+      <div class="card">
+        <h3>Workflow</h3>
+        <select id="wfSel"></select>
+        <ol class="steps" id="wfSteps" style="margin-top:.6rem"></ol>
+      </div>
+      <div class="card">
+        <h3>Plan checklist</h3>
+        <p>✓ Genre / style locked<br/>✓ BPM range<br/>✓ Workflow steps<br/>✓ Quality gate (appraisal + anti-slop)<br/>✓ Plugin licenses reviewed<br/>✓ Canvas patch optional</p>
+        <button class="btn btn-primary" id="btnSavePlan">Save plan draft</button>
+        <a class="btn" href="../plugins/index.html">Review plugins</a>
+        <a class="btn" href="../matrices/index.html">Quality matrices</a>
+        <div class="out" id="planOut"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-build">
+    <h1>Build</h1>
+    <p class="sub">Execute in sequencer, agents, and FX — then run matrices before ship.</p>
+    <div class="grid">
+      <div class="card"><h3>Sequencer</h3><p>16-step grid, samples, FX, MIDI, I/O.</p><a class="btn btn-primary" href="../../step-sequencer.html">Open</a></div>
+      <div class="card"><h3>Generators</h3><p>Suno / Udio / local seeds.</p><a class="btn btn-primary" href="../generators/index.html">Open</a></div>
+      <div class="card"><h3>Agents · LLM</h3><p>Master Music, AntiSlop, Appraiser.</p><a class="btn btn-primary" href="../agents/index.html">Open</a></div>
+      <div class="card"><h3>Canvas</h3><p>Wire modules as nodes.</p><a class="btn btn-primary" href="../canvas/index.html">Open</a></div>
+      <div class="card"><h3>Matrices</h3><p>Appraisal · Anti-Slop · Awesome.</p><a class="btn btn-primary" href="../matrices/index.html">Open</a></div>
+      <div class="card"><h3>Sessions</h3><p>Pull old local work.</p><a class="btn btn-primary" href="../sessions/index.html">Open</a></div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-ship">
+    <h1>Ship</h1>
+    <p class="sub">Export, packages, social, agent collab, native, deploy.</p>
+    <div class="grid">
+      <div class="card"><h3>I/O / bounce</h3><p>JSON · MIDI · WAV · pgbin</p><a class="btn" href="../../step-sequencer.html">Sequencer I/O</a></div>
+      <div class="card"><h3>AI packs</h3><p>Suno · Udio · TikTok · Copilot</p><a class="btn" href="../generators/index.html">Generators</a></div>
+      <div class="card"><h3>GitHub</h3><p>XC-V-365/pulsegrid</p><a class="btn" href="https://github.com/XC-V-365/pulsegrid" target="_blank" rel="noopener">Repo</a></div>
+      <div class="card"><h3>Grok ops</h3><p>Notion · Drive · Buffer · Vercel</p><a class="btn" href="../dashboard/index.html">Command Center</a></div>
+    </div>
+  </section>
+</div>
+<script>
+const state = { genre: null, style: null, workflow: null, plan: null };
+let genres = [], styles = [], workflows = [];
+
+document.querySelectorAll(".phase").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".phase").forEach(x => x.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  document.getElementById("panel-" + b.dataset.phase).classList.add("active");
+});
+
+async function load() {
+  genres = (await (await fetch("../styles/genres.json")).json()).genres;
+  styles = (await (await fetch("../styles/genres.json")).json()).styles;
+  workflows = (await (await fetch("../workflows/catalog.json")).json()).workflows;
+  const gs = document.getElementById("genreSel");
+  genres.forEach(g => { const o = document.createElement("option"); o.value = g.id; o.textContent = g.label + " · " + g.bpm[0] + "–" + g.bpm[1]; gs.appendChild(o); });
+  gs.onchange = () => showGenre(gs.value);
+  showGenre(gs.value);
+  const sc = document.getElementById("styleChips");
+  styles.forEach(s => {
+    const d = document.createElement("button");
+    d.className = "btn"; d.type = "button";
+    d.innerHTML = `<span class="chip style">${s.id}</span> ${s.label}`;
+    d.onclick = () => { state.style = s; document.getElementById("exploreOut").textContent = "Style: " + s.label + "\n" + s.palette.join(" · ") + "\n" + s.mood; };
+    sc.appendChild(d);
+  });
+  const ws = document.getElementById("wfSel");
+  workflows.forEach(w => { const o = document.createElement("option"); o.value = w.id; o.textContent = w.name + " [" + w.phase + "]"; ws.appendChild(o); });
+  ws.onchange = () => showWf(ws.value);
+  showWf(ws.value);
+}
+function showGenre(id) {
+  const g = genres.find(x => x.id === id); state.genre = g;
+  document.getElementById("genreMeta").innerHTML = g ? `BPM <strong>${g.bpm[0]}–${g.bpm[1]}</strong> · density <strong>${g.density}</strong> · kit <strong>${g.kit}</strong><br/>${g.tags.map(t=>'<span class="chip genre">'+t+'</span>').join(" ")}` : "";
+}
+function showWf(id) {
+  const w = workflows.find(x => x.id === id); state.workflow = w;
+  document.getElementById("wfSteps").innerHTML = (w?.steps || []).map(s => `<li>${s}</li>`).join("");
+}
+document.getElementById("btnSeedPlan").onclick = () => {
+  const g = state.genre; if (!g) return;
+  const bpm = Math.round((g.bpm[0] + g.bpm[1]) / 2);
+  const draft = { genre: g.id, bpm, density: g.density, kit: g.kit, style: state.style?.id || "navy-rose", seededAt: Date.now() };
+  localStorage.setItem("pulsegrid_studio_plan", JSON.stringify(draft));
+  document.getElementById("exploreOut").textContent = JSON.stringify(draft, null, 2) + "\n\nSaved → pulsegrid_studio_plan\nSuggested BPM: " + bpm;
+  document.querySelector('.phase[data-phase="plan"]').click();
+};
+document.getElementById("btnSavePlan").onclick = () => {
+  const plan = {
+    ...(JSON.parse(localStorage.getItem("pulsegrid_studio_plan") || "{}")),
+    workflow: state.workflow?.id,
+    steps: state.workflow?.steps,
+    widgets: state.workflow?.widgets,
+    savedAt: Date.now()
+  };
+  localStorage.setItem("pulsegrid_studio_plan", JSON.stringify(plan));
+  document.getElementById("planOut").textContent = JSON.stringify(plan, null, 2);
+};
+load();
+</script>
+</body>
+</html>

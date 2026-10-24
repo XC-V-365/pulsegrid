@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Styles · Genres · PulseGrid</title>
+<style>
+:root{--navy:#060a12;--surface:#101820;--border:#1e2a3a;--text:#e8ecf4;--muted:#8b95a8;--rose:#d4a574;--midi:#7ee0a0;--blue:#7ec8d8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--navy);color:var(--text);padding:1.25rem}
+a{color:var(--rose)}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font-size:1.15rem;margin-bottom:.25rem}
+.sub{font-size:.78rem;color:var(--muted);margin-bottom:1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.65rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.85rem}
+.card h3{font-size:.85rem;margin-bottom:.3rem}
+.card p{font-size:.72rem;color:var(--muted);line-height:1.45}
+.chip{display:inline-block;font-size:.58rem;padding:.1rem .35rem;border-radius:4px;background:#1a2840;color:var(--blue);margin:.1rem}
+.chip.ok{color:var(--midi)}
+input{width:100%;max-width:320px;background:#0a0e1a;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.4rem .55rem;margin-bottom:.75rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Styles · Genres</h1>
+  <p class="sub"><a href="../studio/index.html">Studio</a> · <a href="../../index.html">Portal</a> · <a href="../dashboard/index.html">CC</a> </p>
+  <input type="search" id="q" placeholder="Filter…"/>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+
+fetch("genres.json").then(r=>r.json()).then(data=>{
+  function render(q=""){
+    const qq=q.toLowerCase();
+    const g=data.genres.filter(x=>!qq||JSON.stringify(x).toLowerCase().includes(qq)).map(g=>
+      `<div class="card"><h3>${g.label}</h3>
+       <p>BPM ${g.bpm[0]}–${g.bpm[1]} · ${g.density} · kit ${g.kit}</p>
+       <p>${g.tags.map(t=>'<span class="chip">'+t+'</span>').join(" ")}</p>
+      </div>`).join("");
+    const s=data.styles.filter(x=>!qq||JSON.stringify(x).toLowerCase().includes(qq)).map(st=>
+      `<div class="card"><h3>${st.label}</h3>
+       <p>${st.mood}</p>
+       <p>${st.palette.map(c=>'<span class="chip" style="border-left:3px solid '+c+'">'+c+'</span>').join(" ")}</p>
+      </div>`).join("");
+    document.getElementById("grid").innerHTML="<h3 style='grid-column:1/-1;font-size:.8rem;color:var(--rose)'>Genres</h3>"+g+
+      "<h3 style='grid-column:1/-1;font-size:.8rem;color:var(--rose);margin-top:.5rem'>Styles</h3>"+s;
+  }
+  document.getElementById("q").oninput=e=>render(e.target.value);
+  render();
+});
+
+</script>
+</body>
+</html>

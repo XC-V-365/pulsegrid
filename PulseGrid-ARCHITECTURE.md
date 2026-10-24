@@ -1,28 +1,32 @@
-# PulseGrid v10 Architecture
+# PulseGrid v11 Architecture
 
-## New layer: Agents · LLMs · Matrices
+## Explore → Plan → Build → Ship
 
 ```
-Pattern / Package
-       │
-       ▼
-┌──────────────┐     ┌─────────────────────┐
-│  Matrices    │────▶│  Master Music LLM   │
-│ Appraisal    │     │  constitution+router│
-│ Anti-Slop    │     └──────────┬──────────┘
-│ Awesome      │                │
-└──────────────┘                ▼
-                     Agents / Bots (Conductor, GrooveSmith,
-                     AntiSlop, Appraiser, ExportRunner, …)
+Explore (genre/style) → Plan (workflow/plugins/canvas/matrices)
+        → Build (sequencer/agents/fx) → Ship (export/packs/ops)
 ```
 
-## Prior layers
+## Studio layer
 
-Portal/SaaS access · Sequencer · Generators · Sessions · Command Center · Grok integrations · Native C++/Rust
+Studio hub · Workflows · Canvas · Plugins · Widgets · Modules · Styles/Genres
 
-## Key paths
+## AI layer
 
-- `saas/agents/registry.js`
-- `saas/agents/master-music/`
-- `saas/matrices/engines.js`
-- `docs/AGENTS_AND_MATRICES.md`
+Agents · Bots · Master Music LLM · Appraisal / Anti-Slop / Awesome
+
+## Core
+
+Sequencer · Sample kit · FX Labs · MIDI · Matrix/binary · Connections
+
+## SaaS
+
+Access gate · Admin+12 · Trial · Donor 7-day gen · Sessions · Command Center
+
+## Native
+
+C++17 · Rust (cpal/midir hooks)
+
+## Open source
+
+`saas/plugins/registry.json` — Tone.js, WebMidi, RtMidi, cpal, midir, wavesurfer, …

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PulseGrid Node Canvas</title>
+<style>
+:root{--navy:#060a12;--surface:#101820;--border:#1e2a3a;--text:#e8ecf4;--muted:#8b95a8;--rose:#d4a574;--midi:#7ee0a0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--navy);color:var(--text);height:100vh;display:flex;flex-direction:column}
+header{padding:.75rem 1rem;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;background:#0f1620}
+h1{font-size:1rem;margin-right:auto}
+a{color:var(--rose);font-size:.75rem}
+.btn{border:1px solid var(--border);background:#161f2c;color:var(--text);border-radius:6px;padding:.35rem .55rem;font-size:.7rem;cursor:pointer;font-weight:600}
+#stage{flex:1;position:relative;overflow:hidden;background:radial-gradient(circle at 1px 1px,#1a2230 1px,transparent 0);background-size:24px 24px}
+svg.wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.node{position:absolute;width:140px;background:#121820;border:1px solid var(--border);border-radius:10px;padding:.5rem .6rem;cursor:grab;user-select:none;box-shadow:0 8px 24px #0005}
+.node:active{cursor:grabbing}
+.node h4{font-size:.72rem;color:var(--rose);margin-bottom:.15rem}
+.node .t{font-size:.6rem;color:var(--muted)}
+.node.selected{border-color:var(--rose)}
+.side{width:200px;border-left:1px solid var(--border);background:#0f1620;padding:.75rem;font-size:.72rem;overflow:auto}
+.layout{display:flex;flex:1;min-height:0}
+.out{font-family:ui-monospace,monospace;font-size:.6rem;white-space:pre-wrap;color:var(--muted);margin-top:.5rem;max-height:40vh;overflow:auto}
+</style>
+</head>
+<body>
+<header>
+  <h1>Node Canvas</h1>
+  <a href="../studio/index.html">Studio</a>
+  <a href="../../index.html">Portal</a>
+  <button class="btn" id="btnAdd">+ Node</button>
+  <button class="btn" id="btnExport">Export graph</button>
+  <button class="btn" id="btnReset">Reset default</button>
+</header>
+<div class="layout">
+  <div id="stage">
+    <svg class="wires" id="wires"></svg>
+  </div>
+  <aside class="side">
+    <strong>Modules as nodes</strong>
+    <p style="color:var(--muted);margin:.4rem 0;line-height:1.4">Drag nodes. Graph exports to JSON for workflows / agents.</p>
+    <div class="out" id="jsonOut"></div>
+  </aside>
+</div>
+<script>
+let graph = null;
+const stage = document.getElementById("stage");
+const wires = document.getElementById("wires");
+let drag = null;
+
+async function loadDefault() {
+  graph = await (await fetch("default-graph.json")).json();
+  render();
+}
+function render() {
+  stage.querySelectorAll(".node").forEach(n => n.remove());
+  graph.nodes.forEach(n => {
+    const el = document.createElement("div");
+    el.className = "node";
+    el.style.left = n.x + "px"; el.style.top = n.y + "px";
+    el.dataset.id = n.id;
+    el.innerHTML = `<h4>${n.label}</h4><div class="t">${n.type}</div>`;
+    el.onpointerdown = e => {
+      drag = { id: n.id, ox: e.clientX - n.x, oy: e.clientY - n.y };
+      el.setPointerCapture(e.pointerId);
+    };
+    el.onpointermove = e => {
+      if (!drag || drag.id !== n.id) return;
+      n.x = Math.max(0, e.clientX - drag.ox);
+      n.y = Math.max(0, e.clientY - drag.oy);
+      el.style.left = n.x + "px"; el.style.top = n.y + "px";
+      drawWires();
+    };
+    el.onpointerup = () => { drag = null; };
+    stage.appendChild(el);
+  });
+  drawWires();
+  document.getElementById("jsonOut").textContent = JSON.stringify(graph, null, 2);
+}
+function drawWires() {
+  const map = Object.fromEntries(graph.nodes.map(n => [n.id, n]));
+  let paths = "";
+  graph.edges.forEach(e => {
+    const a = map[e.from], b = map[e.to];
+    if (!a || !b) return;
+    const x1 = a.x + 140, y1 = a.y + 24, x2 = b.x, y2 = b.y + 24;
+    const mx = (x1 + x2) / 2;
+    paths += `<path d="M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}" stroke="#d4a57488" fill="none" stroke-width="2"/>`;
+  });
+  wires.innerHTML = paths;
+}
+document.getElementById("btnAdd").onclick = () => {
+  const id = "n" + (graph.nodes.length + 1) + "_" + Date.now().toString(36);
+  graph.nodes.push({ id, type: "custom", x: 80 + graph.nodes.length * 12, y: 80 + graph.nodes.length * 12, label: "Custom" });
+  if (graph.nodes.length > 1) graph.edges.push({ from: graph.nodes[graph.nodes.length - 2].id, to: id });
+  render();
+};
+document.getElementById("btnExport").onclick = () => {
+  const blob = new Blob([JSON.stringify(graph, null, 2)], { type: "application/json" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "pulsegrid-canvas.json"; a.click();
+};
+document.getElementById("btnReset").onclick = loadDefault;
+loadDefault();
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "version": 11,
+  "genres": [
+    {"id":"techno","label":"Techno","bpm":[120,140],"tags":["4onfloor","dark","warehouse"],"kit":"kick-heavy","density":"medium"},
+    {"id":"house","label":"House","bpm":[118,128],"tags":["groove","offbeat-hat","warm"],"kit":"classic","density":"medium"},
+    {"id":"dnb","label":"Drum & Bass","bpm":[160,180],"tags":["break","amen","fast"],"kit":"breakkit","density":"dense"},
+    {"id":"trap","label":"Trap","bpm":[130,160],"tags":["808","hihat-rolls","sparse-kick"],"kit":"808","density":"sparse-kick-dense-hat"},
+    {"id":"hiphop","label":"Hip-Hop","bpm":[80,100],"tags":["boom-bap","swing","pocket"],"kit":"vinyl","density":"medium"},
+    {"id":"lofi","label":"Lo-fi","bpm":[70,90],"tags":["dusty","swing","soft"],"kit":"dusty","density":"sparse"},
+    {"id":"garage","label":"UK Garage","bpm":[128,138],"tags":["shuffle","2step","skippy"],"kit":"garage","density":"medium"},
+    {"id":"breakbeat","label":"Breakbeat","bpm":[120,140],"tags":["broken","syncopation"],"kit":"breaks","density":"dense"},
+    {"id":"ambient","label":"Ambient","bpm":[60,90],"tags":["space","texture","sparse"],"kit":"soft","density":"sparse"},
+    {"id":"industrial","label":"Industrial","bpm":[100,130],"tags":["metal","noise","hard"],"kit":"metal","density":"medium"},
+    {"id":"reggaeton","label":"Reggaeton","bpm":[90,100],"tags":["dembow","syncopated"],"kit":"latin","density":"medium"},
+    {"id":"afrobeats","label":"Afrobeats","bpm":[100,115],"tags":["percussion","poly"],"kit":"perc-rich","density":"dense-perc"},
+    {"id":"jersey","label":"Jersey Club","bpm":[130,140],"tags":["bed-squeak","bounce"],"kit":"club","density":"medium"},
+    {"id":"phonk","label":"Phonk","bpm":[130,160],"tags":["cowbell","memphis","dark"],"kit":"phonk","density":"medium"},
+    {"id":"idm","label":"IDM","bpm":[100,150],"tags":["glitch","irregular","detail"],"kit":"glitch","density":"variable"},
+    {"id":"footwork","label":"Footwork","bpm":[150,165],"tags":["juke","fast-hat"],"kit":"juke","density":"dense"}
+  ],
+  "styles": [
+    {"id":"navy-rose","label":"Navy / Rose-Gold Luxury","palette":["#0a0e1a","#c0c8d4","#d4a574"],"mood":"premium brand"},
+    {"id":"warehouse","label":"Warehouse Raw","palette":["#111","#444","#f5f5f5"],"mood":"industrial club"},
+    {"id":"vapor","label":"Vapor Soft","palette":["#1a1030","#ff77aa","#66eedd"],"mood":"retro future"},
+    {"id":"mono-studio","label":"Mono Studio","palette":["#0d0d0d","#e8e8e8","#888"],"mood":"pro DAW"},
+    {"id":"neon-grid","label":"Neon Grid","palette":["#050510","#00ffc8","#ff2a6d"],"mood":"cyber sequencer"}
+  ]
+}

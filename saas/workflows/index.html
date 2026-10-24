@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Workflows & pipelines · PulseGrid</title>
+<style>
+:root{--navy:#060a12;--surface:#101820;--border:#1e2a3a;--text:#e8ecf4;--muted:#8b95a8;--rose:#d4a574;--midi:#7ee0a0;--blue:#7ec8d8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--navy);color:var(--text);padding:1.25rem}
+a{color:var(--rose)}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font-size:1.15rem;margin-bottom:.25rem}
+.sub{font-size:.78rem;color:var(--muted);margin-bottom:1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.65rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.85rem}
+.card h3{font-size:.85rem;margin-bottom:.3rem}
+.card p{font-size:.72rem;color:var(--muted);line-height:1.45}
+.chip{display:inline-block;font-size:.58rem;padding:.1rem .35rem;border-radius:4px;background:#1a2840;color:var(--blue);margin:.1rem}
+.chip.ok{color:var(--midi)}
+input{width:100%;max-width:320px;background:#0a0e1a;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.4rem .55rem;margin-bottom:.75rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Workflows & pipelines</h1>
+  <p class="sub"><a href="../studio/index.html">Studio</a> · <a href="../../index.html">Portal</a> · <a href="../dashboard/index.html">CC</a> </p>
+  <input type="search" id="q" placeholder="Filter…"/>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+
+fetch("catalog.json").then(r=>r.json()).then(data=>{
+  const all=data.workflows;
+  function render(q=""){
+    const qq=q.toLowerCase();
+    document.getElementById("grid").innerHTML=all.filter(w=>!qq||JSON.stringify(w).toLowerCase().includes(qq)).map(w=>
+      `<div class="card"><h3>${w.name}</h3>
+       <p><span class="chip">${w.phase}</span> <span class="chip">${w.id}</span></p>
+       <p>${(w.steps||[]).map((s,i)=>(i+1)+". "+s).join("<br/>")}</p>
+       <p style="margin-top:.35rem">${(w.widgets||[]).map(x=>'<span class="chip ok">'+x+'</span>').join(" ")}</p>
+      </div>`
+    ).join("");
+  }
+  document.getElementById("q").oninput=e=>render(e.target.value);
+  render();
+});
+
+</script>
+</body>
+</html>

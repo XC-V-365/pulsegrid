@@ -1,67 +1,44 @@
-# PulseGrid v10 — Agents · Master Music LLM · Matrices
+# PulseGrid v11 — Studio · EPB · Canvas · Plugins · Genres
 
- — SaaS access · generators · QOL
+**Explore → Plan → Build → Ship** creative music platform: sequencer, SaaS access, agents, matrices, node canvas, open-source plugins, genres/styles, widgets, workflows.
 
-Premium 16-step drum platform with **access control**, **music generators**, **session vault**, and full sequencer (FX, MIDI, matrix, AI paste packs).
-
-## Command Center
-
-**`saas/dashboard/index.html`** — Overview · Artifacts catalog · Grok integrations hub · Creator + Admin dashboards · Pipelines · Health.
-
-Grok-connected services map: `integrations/grok/CONNECTED_SERVICES.json`  
-Artifact catalog: `saas/artifacts/catalog.json`
-
-## Start here
-
-1. Open **`index.html`** (Portal) — OAuth/email + human check  
-2. Put **your email** first in `saas/access-config.js` → `adminEmails`  
-3. Sign in → full admin for owner + 12 emails  
-4. Everyone else: **very limited free trial**  
-5. **7-day generation** only for **donators & sponsors** (demo buttons on portal)
+## Start
 
 ```bash
 python3 -m http.server 8765
 # http://localhost:8765/index.html
+# http://localhost:8765/saas/studio/index.html
 ```
 
-## Access policy
+1. Portal sign-in (`saas/access-config.js` admin emails)  
+2. **Studio EPB** — explore genre → plan workflow → build  
+3. Sequencer / Agents / Matrices / Canvas  
 
-| Who | Access |
-|-----|--------|
-| Owner + 12 admin emails | Full (admin) |
-| Donors / sponsors | Generation grant **7 days** |
-| Everyone else | Free trial — very limited |
-| Bots | Human check required |
+## Map
 
-Licence clause covers **all licences** and can be **changed inside Admin** by admins.
-
-## App map
-
-| Path | Purpose |
-|------|---------|
-| `index.html` | Portal · OAuth · trial · donate · session scan |
-| `step-sequencer.html` | Full sequencer (gated features) |
-| `saas/admin/` | Admin list + editable licence |
-| `saas/generators/` | Suno/Udio/local music packages |
-| `saas/sessions/` | Pull old sessions from everywhere |
-| `saas/access-config.js` | **Edit emails, trial limits, licence default** |
-| `docs/SAAS_ACCESS.md` | Policy detail |
-| `docs/FUNCTION_REFERENCE.md` | Sequencer functions |
-| `docs/MODULES_AND_PIPELINES.md` | Modules & pipelines |
-
-## Production note
-
-Browser gates are UX. Enforce allowlists, trials, and Stripe/GitHub Sponsors webhooks on a **server** before real billing.
-
-
-## Agents · Master Music LLM · Matrices (v10)
-
-| Path | Role |
+| Area | Path |
 |------|------|
-| `saas/agents/` | Agent/bot registry + Master Music LLM router |
-| `saas/agents/master-music/constitution.md` | Music LLM constitution (anti-slop, matrices-first) |
-| `saas/matrices/` | Appraisal · Anti-Slop · Awesome engines + UI |
-| `docs/AGENTS_AND_MATRICES.md` | Full reference |
-| `integrations/agents/PROMPTS.md` | Paste prompts for Grok/Copilot |
+| **Studio EPB** | `saas/studio/` |
+| **Canvas (nodes)** | `saas/canvas/` |
+| **Workflows** | `saas/workflows/` |
+| **Plugins (OSS)** | `saas/plugins/` |
+| **Widgets** | `saas/widgets/` |
+| **Modules** | `saas/modules/` |
+| **Styles · Genres** | `saas/styles/` |
+| Command Center | `saas/dashboard/` |
+| Agents · Master Music | `saas/agents/` |
+| Matrices | `saas/matrices/` |
+| Sequencer | `step-sequencer.html` |
+| Native | `native/cpp` · `native/rust` |
 
-Open **`saas/agents/index.html`** and **`saas/matrices/index.html`**.
+## Docs
+
+- `docs/STUDIO_EPB.md`
+- `docs/AGENTS_AND_MATRICES.md`
+- `docs/FUNCTION_REFERENCE.md`
+- `docs/SAAS_ACCESS.md`
+- `docs/DASHBOARDS.md`
+
+## License
+
+MIT default for scaffold; admin-editable clause; review plugin upstream licenses in `saas/plugins/registry.json`.

@@ -1,0 +1,20 @@
+{
+  "version": 11,
+  "modules": [
+    {"id":"pattern-store","layer":"core","name":"PatternStore","nodes":["bankA","bankB","stepCell"],"desc":"A/B grids StepCell {v,p}"},
+    {"id":"clock","layer":"core","name":"SequencerClock","nodes":["lookahead","swing","metro"],"desc":"Look-ahead scheduler"},
+    {"id":"voice","layer":"audio","name":"VoiceEngine","nodes":["synth","sample"],"desc":"Synth + sample playback"},
+    {"id":"fx-labs","layer":"audio","name":"MasterFX","nodes":["comp","filter","sat","delay","reverb","limit"],"desc":"Bus FX chain"},
+    {"id":"midi","layer":"io","name":"MidiOut","nodes":["notes","clock"],"desc":"Web MIDI + SMF"},
+    {"id":"matrix-bin","layer":"io","name":"MatrixBinary","nodes":["mask","pgbin","csv"],"desc":"Masks & binary"},
+    {"id":"connections","layer":"creative","name":"Connections","nodes":["suno","udio","tiktok","copilot"],"desc":"Paste packages"},
+    {"id":"access","layer":"saas","name":"AccessGate","nodes":["auth","trial","donor"],"desc":"Roles & quotas"},
+    {"id":"agents","layer":"ai","name":"AgentBus","nodes":["conductor","antislop","appraiser"],"desc":"Agents & bots"},
+    {"id":"master-music","layer":"ai","name":"MasterMusicLLM","nodes":["router","constitution"],"desc":"Music LLM profile"},
+    {"id":"matrices","layer":"ai","name":"QualityMatrices","nodes":["appraisal","antislop","awesome"],"desc":"Quality gates"},
+    {"id":"canvas","layer":"studio","name":"NodeCanvas","nodes":["graph","wire"],"desc":"Visual node graph"},
+    {"id":"plugins","layer":"studio","name":"PluginHost","nodes":["registry","load"],"desc":"Open-source plugins"},
+    {"id":"widgets","layer":"studio","name":"WidgetKit","nodes":["meter","grid","knob"],"desc":"UI widgets"},
+    {"id":"workflows","layer":"studio","name":"WorkflowEngine","nodes":["explore","plan","build"],"desc":"EPB pipelines"}
+  ]
+}
