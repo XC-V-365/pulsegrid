@@ -1,18 +1,144 @@
 {
-  "version": 11,
-  "license": "Plugins listed are references / shims — check upstream licenses before bundling.",
+  "version": 14,
+  "license": "Plugins listed are references / shims \u2014 check upstream licenses before bundling.",
   "plugins": [
-    {"id":"tonejs","name":"Tone.js","license":"MIT","role":"Web Audio framework","url":"https://tonejs.github.io","status":"recommended","hooks":["voice","fx"]},
-    {"id":"tonejs-midi","name":"@tonejs/midi","license":"MIT","role":"MIDI parse/write","url":"https://github.com/Tonejs/Midi","status":"recommended","hooks":["midi"]},
-    {"id":"nexusui","name":"NexusUI","license":"MIT","role":"Music UI widgets","url":"https://nexus-js.github.io/ui/","status":"optional","hooks":["widgets"]},
-    {"id":"wavesurfer","name":"wavesurfer.js","license":"BSD-3","role":"Waveform viz","url":"https://wavesurfer.xyz","status":"optional","hooks":["viz"]},
-    {"id":"tuna","name":"TunaJS","license":"MIT","role":"FX chain helpers","url":"https://github.com/Theodeus/tuna","status":"optional","hooks":["fx"]},
-    {"id":"webmidi","name":"WebMidi.js","license":"Apache-2.0","role":"MIDI ergonomics","url":"https://webmidijs.org","status":"optional","hooks":["midi"]},
-    {"id":"rtmidi","name":"RtMidi","license":"MIT-like","role":"Native C++ MIDI","url":"https://github.com/thestk/rtmidi","status":"native","hooks":["native-cpp"]},
-    {"id":"cpal","name":"cpal","license":"Apache-2.0/MIT","role":"Rust audio I/O","url":"https://github.com/rustaudio/cpal","status":"native","hooks":["native-rust"]},
-    {"id":"midir","name":"midir","license":"MIT","role":"Rust MIDI","url":"https://github.com/Boddlnagg/midir","status":"native","hooks":["native-rust"]},
-    {"id":"pedalboard","name":"Pedalboard","license":"GPL-3.0","role":"Python FX (offline)","url":"https://github.com/spotify/pedalboard","status":"tooling","hooks":["offline-fx"]},
-    {"id":"essentia","name":"Essentia.js","license":"AGPL-3.0","role":"Audio analysis","url":"https://essentia.upf.edu","status":"optional","hooks":["analysis"]},
-    {"id":"open-source-note","name":"PulseGrid core","license":"MIT (default; admin-editable)","role":"This project","url":"https://github.com/XC-V-365/pulsegrid","status":"core","hooks":["all"]}
+    {
+      "id": "tonejs",
+      "name": "Tone.js",
+      "license": "MIT",
+      "role": "Web Audio framework",
+      "url": "https://tonejs.github.io",
+      "status": "optional-shim",
+      "hooks": [
+        "voice",
+        "fx"
+      ],
+      "pulsegrid": {
+        "shim": "saas/plugins/tone-shim.js",
+        "lab": "saas/plugins/tone-lab.html",
+        "required": false
+      }
+    },
+    {
+      "id": "tonejs-midi",
+      "name": "@tonejs/midi",
+      "license": "MIT",
+      "role": "MIDI parse/write",
+      "url": "https://github.com/Tonejs/Midi",
+      "status": "recommended",
+      "hooks": [
+        "midi"
+      ]
+    },
+    {
+      "id": "nexusui",
+      "name": "NexusUI",
+      "license": "MIT",
+      "role": "Music UI widgets",
+      "url": "https://nexus-js.github.io/ui/",
+      "status": "optional",
+      "hooks": [
+        "widgets"
+      ]
+    },
+    {
+      "id": "wavesurfer",
+      "name": "wavesurfer.js",
+      "license": "BSD-3",
+      "role": "Waveform viz",
+      "url": "https://wavesurfer.xyz",
+      "status": "optional",
+      "hooks": [
+        "viz"
+      ]
+    },
+    {
+      "id": "tuna",
+      "name": "TunaJS",
+      "license": "MIT",
+      "role": "FX chain helpers",
+      "url": "https://github.com/Theodeus/tuna",
+      "status": "optional",
+      "hooks": [
+        "fx"
+      ]
+    },
+    {
+      "id": "webmidi",
+      "name": "WebMidi.js",
+      "license": "Apache-2.0",
+      "role": "MIDI ergonomics",
+      "url": "https://webmidijs.org",
+      "status": "optional",
+      "hooks": [
+        "midi"
+      ]
+    },
+    {
+      "id": "rtmidi",
+      "name": "RtMidi",
+      "license": "MIT-like",
+      "role": "Native C++ MIDI",
+      "url": "https://github.com/thestk/rtmidi",
+      "status": "native",
+      "hooks": [
+        "native-cpp"
+      ]
+    },
+    {
+      "id": "cpal",
+      "name": "cpal",
+      "license": "Apache-2.0/MIT",
+      "role": "Rust audio I/O",
+      "url": "https://github.com/rustaudio/cpal",
+      "status": "native",
+      "hooks": [
+        "native-rust"
+      ]
+    },
+    {
+      "id": "midir",
+      "name": "midir",
+      "license": "MIT",
+      "role": "Rust MIDI",
+      "url": "https://github.com/Boddlnagg/midir",
+      "status": "native",
+      "hooks": [
+        "native-rust"
+      ]
+    },
+    {
+      "id": "pedalboard",
+      "name": "Pedalboard",
+      "license": "GPL-3.0",
+      "role": "Python FX (offline)",
+      "url": "https://github.com/spotify/pedalboard",
+      "status": "tooling",
+      "hooks": [
+        "offline-fx"
+      ]
+    },
+    {
+      "id": "essentia",
+      "name": "Essentia.js",
+      "license": "AGPL-3.0",
+      "role": "Audio analysis",
+      "url": "https://essentia.upf.edu",
+      "status": "optional",
+      "hooks": [
+        "analysis"
+      ]
+    },
+    {
+      "id": "open-source-note",
+      "name": "PulseGrid core",
+      "license": "MIT (default; admin-editable)",
+      "role": "This project",
+      "url": "https://github.com/XC-V-365/pulsegrid",
+      "status": "core",
+      "hooks": [
+        "all"
+      ]
+    }
   ]
 }

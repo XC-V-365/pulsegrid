@@ -81,3 +81,7 @@ Authorized reverse-engineering prompt pack for [REA](https://rea.tools/).
 | `integrations/claude/` | SYSTEM_RULES, CLAUDE_CODE, OPUS_5_5, FABLE_5_1 |
 | `integrations/composio/` | Tools, schema, Claude operator guide |
 | Sequencer chips | Claude Code · Opus 5.5 · Fable 5.1 · Composio |
+
+
+## v14.1 continue
+REAP MIDI + access evidence · Tone optional lab · generators Claude links
