@@ -1,0 +1,168 @@
+{
+  "version": 12,
+  "updated": "2026-10-24",
+  "skills": [
+    {
+      "id": "creative-content-saas",
+      "name": "Creative Content SaaS",
+      "kind": "grok-server-skill",
+      "lifecycle": "active",
+      "path": "/root/.grok/server-skills/creative-content-saas/SKILL.md",
+      "when": "Building interactive creative platforms, auth, dashboards, song structure, lore graphs",
+      "pulsegrid": ["saas/", "dashboard", "admin", "access-config", "studio"]
+    },
+    {
+      "id": "suno-ai-music-generator",
+      "name": "Suno AI Music Generator",
+      "kind": "grok-server-skill",
+      "lifecycle": "active",
+      "path": "/root/.grok/server-skills/suno-ai-music-generator/SKILL.md",
+      "when": "Paste-ready Suno title/style/lyrics with [Verse]/[Chorus] tags",
+      "pulsegrid": ["integrations/exports/suno-from-pattern.md", "generators", "connections"]
+    },
+    {
+      "id": "deep-research-notebook",
+      "name": "Deep Research Notebook",
+      "kind": "grok-server-skill",
+      "lifecycle": "active",
+      "path": "/root/.grok/server-skills/deep-research-notebook/SKILL.md",
+      "when": "Cache APIs, source cards, durable research notes",
+      "pulsegrid": ["integrations/sources/", "saas/resources/", "docs/"]
+    },
+    {
+      "id": "editorial-portfolio",
+      "name": "Editorial Portfolio",
+      "kind": "grok-server-skill",
+      "lifecycle": "active",
+      "path": "/root/.grok/server-skills/editorial-portfolio/SKILL.md",
+      "when": "Studio/portfolio site, project cards, editorial layout",
+      "pulsegrid": ["saas/studio/", "styles", "brand navy-rose"]
+    },
+    {
+      "id": "pg-conductor",
+      "name": "PulseGrid Conductor",
+      "kind": "project-agent",
+      "lifecycle": "active",
+      "path": "saas/agents/registry.js",
+      "when": "Orchestrate multi-step music pipelines",
+      "pulsegrid": ["workflows", "studio EPB"]
+    },
+    {
+      "id": "pg-antislop",
+      "name": "AntiSlop Bot",
+      "kind": "project-agent",
+      "lifecycle": "active",
+      "path": "saas/matrices/engines.js",
+      "when": "Reject generic AI music copy",
+      "pulsegrid": ["matrices", "generators"]
+    },
+    {
+      "id": "pg-appraiser",
+      "name": "Appraiser",
+      "kind": "project-agent",
+      "lifecycle": "active",
+      "path": "saas/matrices/",
+      "when": "Score patterns on appraisal/awesome matrices",
+      "pulsegrid": ["matrices"]
+    },
+    {
+      "id": "pg-master-music-llm",
+      "name": "Master Music LLM",
+      "kind": "project-llm",
+      "lifecycle": "active",
+      "path": "saas/agents/master-music/",
+      "when": "Music-specialist critique, compose briefs, packages",
+      "pulsegrid": ["agents", "constitution", "router"]
+    },
+    {
+      "id": "pg-export-runner",
+      "name": "ExportRunner",
+      "kind": "project-bot",
+      "lifecycle": "active",
+      "path": "saas/agents/registry.js",
+      "when": "Suno/Udio/TikTok/Copilot/Composio packages",
+      "pulsegrid": ["connections", "generators"]
+    },
+    {
+      "id": "pg-groove-smith",
+      "name": "GrooveSmith",
+      "kind": "project-agent",
+      "lifecycle": "active",
+      "path": "saas/agents/registry.js",
+      "when": "Velocity, swing, probability, fills",
+      "pulsegrid": ["sequencer"]
+    },
+    {
+      "id": "pg-session-vault",
+      "name": "SessionVaultBot",
+      "kind": "project-bot",
+      "lifecycle": "active",
+      "path": "saas/sessions/",
+      "when": "Pull localStorage sessions",
+      "pulsegrid": ["sessions"]
+    },
+    {
+      "id": "pg-native-bridge",
+      "name": "NativeBridge",
+      "kind": "project-bot",
+      "lifecycle": "active",
+      "path": "native/",
+      "when": "C++/Rust parity JSON",
+      "pulsegrid": ["native/cpp", "native/rust"]
+    },
+    {
+      "id": "imagine-music",
+      "name": "Grok Imagine Music",
+      "kind": "platform-tool",
+      "lifecycle": "active",
+      "path": "imagine_generate_music",
+      "when": "Compose audio tracks in Grok Imagine library",
+      "pulsegrid": ["video+music", "promo"]
+    },
+    {
+      "id": "imagine-video",
+      "name": "Grok Imagine Video",
+      "kind": "platform-tool",
+      "lifecycle": "active",
+      "path": "imagine_text_to_video / image_to_video",
+      "when": "Promo clips, UI animations, spectrogram motion",
+      "pulsegrid": ["brand", "tiktok"]
+    },
+    {
+      "id": "connected-github",
+      "name": "GitHub (connected)",
+      "kind": "grok-connected",
+      "lifecycle": "active",
+      "path": "integrations/grok/CONNECTED_SERVICES.json",
+      "when": "Push, tree, issues, releases",
+      "pulsegrid": ["XC-V-365/pulsegrid"]
+    },
+    {
+      "id": "connected-notion-drive",
+      "name": "Notion · Drive · Gmail · Calendar",
+      "kind": "grok-connected",
+      "lifecycle": "active",
+      "path": "integrations/grok/",
+      "when": "Docs, backup, mail, scheduling",
+      "pulsegrid": ["ops", "ship"]
+    },
+    {
+      "id": "connected-deploy-social",
+      "name": "Vercel · Netlify · Buffer · Canva · Figma",
+      "kind": "grok-connected",
+      "lifecycle": "active",
+      "path": "integrations/grok/",
+      "when": "Deploy, social, design",
+      "pulsegrid": ["ship"]
+    },
+    {
+      "id": "composio",
+      "name": "Composio agent tools",
+      "kind": "integration",
+      "lifecycle": "active",
+      "path": "integrations/composio/",
+      "when": "1000+ app agent publish",
+      "pulsegrid": ["agent collab"]
+    }
+  ]
+}

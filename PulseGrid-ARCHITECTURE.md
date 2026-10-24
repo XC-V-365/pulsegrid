@@ -1,4 +1,4 @@
-# PulseGrid v11 Architecture
+# PulseGrid v12 Architecture
 
 ## Explore → Plan → Build → Ship
 
@@ -30,3 +30,9 @@ C++17 · Rust (cpal/midir hooks)
 ## Open source
 
 `saas/plugins/registry.json` — Tone.js, WebMidi, RtMidi, cpal, midir, wavesurfer, …
+
+
+## Resources · Skills (v12)
+
+`saas/resources/` — skills.json · sources.json · hub UI
+`integrations/sources/` — research notebook cards

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PulseGrid Resources · Skills · Sources</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#060a12;--surface:#101820;--border:#1e2a3a;--text:#e8ecf4;--muted:#8b95a8;--rose:#d4a574;--midi:#7ee0a0;--blue:#7ec8d8;--purple:#a890c8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"DM Sans",system-ui,sans-serif;background:var(--navy);color:var(--text);padding:1.25rem;min-height:100vh}
+a{color:var(--rose)}
+.wrap{max-width:1100px;margin:0 auto}
+h1{font-size:1.25rem}
+.sub{font-size:.78rem;color:var(--muted);margin:.25rem 0 1rem;line-height:1.45}
+.tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1rem}
+.tab{border:1px solid var(--border);background:#121820;color:var(--muted);border-radius:8px;padding:.4rem .7rem;font-size:.75rem;font-weight:600;cursor:pointer}
+.tab.active{color:#0a0e1a;background:linear-gradient(135deg,#c0c8d4,#d4a574);border:none}
+input{width:100%;max-width:360px;background:#0a0e1a;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.45rem .6rem;margin-bottom:.75rem;font-size:.8rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.65rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.85rem}
+.card h3{font-size:.85rem;margin-bottom:.3rem}
+.card p{font-size:.72rem;color:var(--muted);line-height:1.45}
+.chip{display:inline-block;font-size:.58rem;padding:.1rem .35rem;border-radius:4px;background:#1a2840;color:var(--blue);margin:.1rem}
+.chip.skill{color:var(--midi)}.chip.agent{color:var(--purple)}.chip.llm{color:var(--rose)}.chip.tool{color:var(--blue)}
+.cat{font-size:.7rem;color:var(--rose);text-transform:uppercase;letter-spacing:.06em;margin:1rem 0 .5rem;grid-column:1/-1}
+.panel{display:none}.panel.active{display:block}
+.metrics{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.5rem .75rem;font-size:.75rem}
+.metric strong{display:block;font-size:1.2rem;color:var(--midi)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Resources · Skills · Sources</h1>
+  <p class="sub"><a href="../../index.html">Portal</a> · <a href="../studio/index.html">Studio</a> · <a href="../dashboard/index.html">Command Center</a> · All skills, docs, OSS, standards, templates</p>
+  <div class="metrics" id="metrics"></div>
+  <div class="tabs">
+    <button class="tab active" data-p="skills">Skills</button>
+    <button class="tab" data-p="sources">Sources & resources</button>
+    <button class="tab" data-p="more">More surfaces</button>
+  </div>
+  <input type="search" id="q" placeholder="Filter skills / sources…"/>
+  <div class="panel active" id="p-skills"><div class="grid" id="skillsGrid"></div></div>
+  <div class="panel" id="p-sources"><div class="grid" id="sourcesGrid"></div></div>
+  <div class="panel" id="p-more">
+    <div class="grid">
+      <div class="card"><h3>Studio EPB</h3><p>Explore · Plan · Build · Ship</p><p><a href="../studio/index.html">Open</a></p></div>
+      <div class="card"><h3>Canvas</h3><p>Node graph</p><p><a href="../canvas/index.html">Open</a></p></div>
+      <div class="card"><h3>Workflows</h3><p>Pipelines catalog</p><p><a href="../workflows/index.html">Open</a></p></div>
+      <div class="card"><h3>Plugins OSS</h3><p>Library registry</p><p><a href="../plugins/index.html">Open</a></p></div>
+      <div class="card"><h3>Widgets</h3><p>UI widget map</p><p><a href="../widgets/index.html">Open</a></p></div>
+      <div class="card"><h3>Modules</h3><p>Architecture nodes</p><p><a href="../modules/index.html">Open</a></p></div>
+      <div class="card"><h3>Styles · Genres</h3><p>16 genres + palettes</p><p><a href="../styles/index.html">Open</a></p></div>
+      <div class="card"><h3>Agents · LLM</h3><p>Master Music + bots</p><p><a href="../agents/index.html">Open</a></p></div>
+      <div class="card"><h3>Matrices</h3><p>Appraisal · Anti-Slop · Awesome</p><p><a href="../matrices/index.html">Open</a></p></div>
+      <div class="card"><h3>Generators</h3><p>Suno/Udio seeds</p><p><a href="../generators/index.html">Open</a></p></div>
+      <div class="card"><h3>Sessions</h3><p>Vault</p><p><a href="../sessions/index.html">Open</a></p></div>
+      <div class="card"><h3>Admin</h3><p>Emails + licence</p><p><a href="../admin/index.html">Open</a></p></div>
+      <div class="card"><h3>Sequencer</h3><p>Full engine</p><p><a href="../../step-sequencer.html">Open</a></p></div>
+      <div class="card"><h3>GitHub</h3><p>XC-V-365/pulsegrid</p><p><a href="https://github.com/XC-V-365/pulsegrid" target="_blank" rel="noopener">Repo</a></p></div>
+      <div class="card"><h3>Research notebook</h3><p>Source cards</p><p><a href="../../integrations/sources/index.md">index.md</a></p></div>
+      <div class="card"><h3>Artifact catalog</h3><p>JSON inventory</p><p><a href="../artifacts/catalog.json">catalog.json</a></p></div>
+    </div>
+  </div>
+</div>
+<script>
+let skills=[], sources={categories:[]};
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
+  document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(x => x.classList.remove("active"));
+  t.classList.add("active");
+  document.getElementById("p-" + t.dataset.p).classList.add("active");
+});
+function kindChip(k) {
+  if (/agent|bot/.test(k)) return "agent";
+  if (/llm/.test(k)) return "llm";
+  if (/tool|connected|platform/.test(k)) return "tool";
+  return "skill";
+}
+function renderSkills(q="") {
+  const qq = q.toLowerCase();
+  document.getElementById("skillsGrid").innerHTML = skills.filter(s => !qq || JSON.stringify(s).toLowerCase().includes(qq)).map(s =>
+    `<div class="card"><h3>${s.name}</h3>
+     <p><span class="chip ${kindChip(s.kind)}">${s.kind}</span> <span class="chip">${s.lifecycle||""}</span></p>
+     <p>${s.when||""}</p>
+     <p style="margin-top:.35rem;font-size:.65rem">path: ${s.path||"—"}</p>
+     <p>${(s.pulsegrid||[]).map(x=>'<span class="chip">'+x+'</span>').join(" ")}</p>
+    </div>`
+  ).join("");
+}
+function renderSources(q="") {
+  const qq = q.toLowerCase();
+  let html = "";
+  (sources.categories||[]).forEach(cat => {
+    const items = (cat.items||[]).filter(i => !qq || JSON.stringify(i).toLowerCase().includes(qq) || cat.label.toLowerCase().includes(qq));
+    if (!items.length) return;
+    html += `<div class="cat">${cat.label}</div>`;
+    html += items.map(i => {
+      const link = i.url ? `<a href="${i.url}" target="_blank" rel="noopener">${i.title}</a>` :
+        (i.path ? `<span>${i.title}</span><br/><code style="font-size:.65rem;color:#8b95a8">${i.path}</code>` : i.title);
+      return `<div class="card"><h3>${link}</h3>
+        ${i.license?`<p><span class="chip">${i.license}</span></p>`:""}
+        ${i.path&&i.url?`<p style="font-size:.65rem">${i.path}</p>`:""}
+      </div>`;
+    }).join("");
+  });
+  document.getElementById("sourcesGrid").innerHTML = html || "<p class='sub'>No matches</p>";
+}
+Promise.all([
+  fetch("skills.json").then(r=>r.json()),
+  fetch("sources.json").then(r=>r.json())
+]).then(([sk, so]) => {
+  skills = sk.skills || [];
+  sources = so;
+  const nSrc = (so.categories||[]).reduce((a,c)=>a+(c.items||[]).length,0);
+  document.getElementById("metrics").innerHTML =
+    `<div class="metric"><strong>${skills.length}</strong>skills</div>
+     <div class="metric"><strong>${nSrc}</strong>sources</div>
+     <div class="metric"><strong>${(so.categories||[]).length}</strong>categories</div>`;
+  renderSkills(); renderSources();
+});
+document.getElementById("q").oninput = e => { renderSkills(e.target.value); renderSources(e.target.value); };
+</script>
+</body>
+</html>

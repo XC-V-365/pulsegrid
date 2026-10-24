@@ -1,4 +1,6 @@
-# PulseGrid v11 — Studio · EPB · Canvas · Plugins · Genres
+# PulseGrid v12 — Resources · Skills · Sources
+
+ — Studio · EPB · Canvas · Plugins · Genres
 
 **Explore → Plan → Build → Ship** creative music platform: sequencer, SaaS access, agents, matrices, node canvas, open-source plugins, genres/styles, widgets, workflows.
 
@@ -42,3 +44,14 @@ python3 -m http.server 8765
 ## License
 
 MIT default for scaffold; admin-editable clause; review plugin upstream licenses in `saas/plugins/registry.json`.
+
+
+## Resources · Skills (v12)
+
+| Path | Role |
+|------|------|
+| `saas/resources/index.html` | Hub UI |
+| `saas/resources/skills.json` | All skills (Grok + project + tools) |
+| `saas/resources/sources.json` | Docs, OSS, standards, templates |
+| `integrations/sources/` | Research source cards |
+| `docs/RESOURCES_AND_SKILLS.md` | Guide |

@@ -149,6 +149,7 @@ td path, .mono { font-family:"JetBrains Mono",monospace; font-size:.68rem; }
     <button class="nav-btn" data-panel="creator">Creator dashboard</button>
     <button class="nav-btn" data-panel="admin">Admin dashboard</button>
     <button class="nav-btn" data-panel="pipelines">Pipelines</button>
+    <button class="nav-btn" data-panel="resources">Resources · Skills</button>
     <button class="nav-btn" data-panel="studio">Studio · EPB</button>
     <button class="nav-btn" data-panel="agents">Agents · LLMs</button>
     <button class="nav-btn" data-panel="matrices">Matrices</button>
@@ -189,6 +190,7 @@ td path, .mono { font-family:"JetBrains Mono",monospace; font-size:.68rem; }
             <a class="btn btn-link" href="../generators/index.html">Music generators</a>
             <a class="btn btn-link" href="../sessions/index.html">Session vault</a>
             <a class="btn btn-link" href="../admin/index.html">Admin console</a>
+            <a class="btn btn-link" href="../resources/index.html">Resources · Skills</a>
             <a class="btn btn-link" href="../agents/index.html">Agents · LLMs</a>
             <a class="btn btn-link" href="../matrices/index.html">Matrices</a>
             <a class="btn btn-link" href="https://github.com/XC-V-365/pulsegrid" target="_blank" rel="noopener">GitHub</a>
@@ -303,6 +305,20 @@ td path, .mono { font-family:"JetBrains Mono",monospace; font-size:.68rem; }
     <!-- ACTIVITY -->
     
     
+    
+    <section class="panel" id="panel-resources">
+      <div class="card">
+        <h3>Resources · Skills · Sources</h3>
+        <p>Grok skills, project agents, OSS, docs, standards, export templates, research notebook.</p>
+        <div class="actions">
+          <a class="btn btn-primary btn-link" href="../resources/index.html">Open hub</a>
+          <a class="btn btn-link" href="../resources/skills.json">skills.json</a>
+          <a class="btn btn-link" href="../resources/sources.json">sources.json</a>
+          <a class="btn btn-link" href="../../docs/RESOURCES_AND_SKILLS.md">Docs</a>
+        </div>
+      </div>
+    </section>
+
     <section class="panel" id="panel-studio">
       <div class="grid">
         <div class="card"><h3>Studio hub</h3><p>Explore · Plan · Build · Ship</p><div class="actions"><a class="btn btn-primary btn-link" href="../studio/index.html">Open Studio</a></div></div>
@@ -363,6 +379,7 @@ const titles = {
   creator: ["Creator dashboard", "Beat → export → AI → social loop."],
   admin: ["Admin dashboard", "Access, licence, deploy, and policy."],
   pipelines: ["Pipelines", "End-to-end product workflows P1–P8."],
+  resources: ["Resources · Skills", "Skills registry, sources, OSS, standards."],
   studio: ["Studio · EPB", "Explore · Plan · Build · Ship hub."],
   agents: ["Agents · LLMs", "Conductor, bots, Master Music LLM."],
   matrices: ["Matrices", "Appraisal · Anti-Slop · Awesome."],
