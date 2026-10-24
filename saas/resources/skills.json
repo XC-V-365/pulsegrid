@@ -1,5 +1,5 @@
 {
-  "version": 13,
+  "version": 14,
   "updated": "2026-10-24",
   "skills": [
     {
@@ -254,6 +254,53 @@
       "when": "Trace export, MIDI, access, matrices, native parity in this repo",
       "pulsegrid": [
         "all"
+      ]
+    },
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "kind": "agent-lane",
+      "lifecycle": "active",
+      "path": "integrations/claude/CLAUDE_CODE.md",
+      "when": "Implementation in Claude Code / CLAUDE.md",
+      "pulsegrid": [
+        "integrations/claude",
+        "sequencer chips"
+      ]
+    },
+    {
+      "id": "claude-opus-5.5",
+      "name": "Claude Opus 5.5",
+      "kind": "agent-lane",
+      "lifecycle": "active",
+      "path": "integrations/claude/OPUS_5_5.md",
+      "when": "Deep architecture & multi-file engineering",
+      "pulsegrid": [
+        "integrations/claude"
+      ]
+    },
+    {
+      "id": "claude-fable-5.1",
+      "name": "Claude Fable 5.1",
+      "kind": "agent-lane",
+      "lifecycle": "active",
+      "path": "integrations/claude/FABLE_5_1.md",
+      "when": "Narrative music packs anti-slop",
+      "pulsegrid": [
+        "integrations/claude",
+        "generators"
+      ]
+    },
+    {
+      "id": "composio-claude",
+      "name": "Composio \u00d7 Claude",
+      "kind": "integration",
+      "lifecycle": "active",
+      "path": "integrations/composio/CLAUDE_COMPOSIO.md",
+      "when": "Multi-app publish via Composio + Claude lanes",
+      "pulsegrid": [
+        "composio",
+        "claude"
       ]
     }
   ]

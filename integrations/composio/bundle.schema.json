@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PulseGridComposioBundle",
+  "type": "object",
+  "required": ["app", "version", "bpm", "banks"],
+  "properties": {
+    "app": { "const": "PulseGrid" },
+    "version": { "type": "number" },
+    "bpm": { "type": "number" },
+    "swing": { "type": "number" },
+    "seedId": { "type": ["string", "null"] },
+    "activeBank": { "type": "string" },
+    "banks": { "type": "object" },
+    "matrices": { "type": "object" },
+    "packages": { "type": "object" },
+    "tool_slugs": { "type": "array", "items": { "type": "string" } },
+    "claude": {
+      "type": "object",
+      "properties": {
+        "lanes": { "type": "array", "items": { "type": "string" } },
+        "system_rules": { "type": "string" }
+      }
+    }
+  }
+}

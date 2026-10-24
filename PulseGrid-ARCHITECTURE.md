@@ -42,3 +42,9 @@ C++17 · Rust (cpal/midir hooks)
 
 `integrations/rea/` — investigation prompts, workflows, first-party traces.
 Ethics: authorized software only.
+
+
+## Claude × Composio (v14)
+
+Lanes: Claude Code · Opus 5.5 · Fable 5.1. Publish: Composio bundles.
+`integrations/claude/` · `integrations/composio/`

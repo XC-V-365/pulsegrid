@@ -1,7 +1,49 @@
 {
-  "version": 13,
+  "version": 14,
   "updated": "2026-10-24",
   "categories": [
+    {
+      "id": "claude",
+      "label": "Claude Code \u00b7 Opus 5.5 \u00b7 Fable 5.1 \u00b7 Composio",
+      "items": [
+        {
+          "title": "Claude pack README",
+          "path": "integrations/claude/README.md"
+        },
+        {
+          "title": "SYSTEM_RULES",
+          "path": "integrations/claude/SYSTEM_RULES.md"
+        },
+        {
+          "title": "Claude Code CLAUDE.md",
+          "path": "integrations/claude/CLAUDE_CODE.md"
+        },
+        {
+          "title": "Opus 5.5",
+          "path": "integrations/claude/OPUS_5_5.md"
+        },
+        {
+          "title": "Fable 5.1",
+          "path": "integrations/claude/FABLE_5_1.md"
+        },
+        {
+          "title": "Composio README",
+          "path": "integrations/composio/README.md"
+        },
+        {
+          "title": "Composio \u00d7 Claude",
+          "path": "integrations/composio/CLAUDE_COMPOSIO.md"
+        },
+        {
+          "title": "Bundle schema",
+          "path": "integrations/composio/bundle.schema.json"
+        },
+        {
+          "title": "Composio home",
+          "url": "https://composio.dev"
+        }
+      ]
+    },
     {
       "id": "rea",
       "label": "REA / REAP reverse engineering",

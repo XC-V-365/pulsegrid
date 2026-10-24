@@ -1,3 +1,5 @@
+# PulseGrid v14 — Claude Code · Opus 5.5 · Fable 5.1 · Composio
+
 # PulseGrid v13 — REAP · REA Investigation
 
  — Resources · Skills · Sources
@@ -70,3 +72,12 @@ Authorized reverse-engineering prompt pack for [REA](https://rea.tools/).
 
 ## v13.2
 - Full Export + `seedId` · expanded genre seeds · REA `SETUP_PLAN.md` (awaiting approval)
+
+
+## Claude × Composio (v14)
+
+| Path | Role |
+|------|------|
+| `integrations/claude/` | SYSTEM_RULES, CLAUDE_CODE, OPUS_5_5, FABLE_5_1 |
+| `integrations/composio/` | Tools, schema, Claude operator guide |
+| Sequencer chips | Claude Code · Opus 5.5 · Fable 5.1 · Composio |

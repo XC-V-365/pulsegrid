@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 13,
   "toolkit": "pulsegrid",
   "description": "PulseGrid 16-step drum sequencer tools for Composio / MCP agents",
   "tools": [
@@ -10,8 +10,19 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "include_song": { "type": "boolean", "default": true },
-          "bank": { "type": "string", "enum": ["A", "B", "both"], "default": "both" }
+          "include_song": {
+            "type": "boolean",
+            "default": true
+          },
+          "bank": {
+            "type": "string",
+            "enum": [
+              "A",
+              "B",
+              "both"
+            ],
+            "default": "both"
+          }
         }
       }
     },
@@ -22,9 +33,17 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "genre": { "type": "string", "default": "electronic drum machine" },
-          "mood": { "type": "string", "default": "dark luxury, rose-gold neon" },
-          "title": { "type": "string" }
+          "genre": {
+            "type": "string",
+            "default": "electronic drum machine"
+          },
+          "mood": {
+            "type": "string",
+            "default": "dark luxury, rose-gold neon"
+          },
+          "title": {
+            "type": "string"
+          }
         }
       }
     },
@@ -35,7 +54,10 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "with_video": { "type": "boolean", "default": false }
+          "with_video": {
+            "type": "boolean",
+            "default": false
+          }
         }
       }
     },
@@ -46,7 +68,10 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "note": { "type": "string", "description": "Personal note for friends" }
+          "note": {
+            "type": "string",
+            "description": "Personal note for friends"
+          }
         }
       }
     },
@@ -57,8 +82,14 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "public": { "type": "boolean", "default": false },
-          "description": { "type": "string", "default": "PulseGrid pattern export" }
+          "public": {
+            "type": "boolean",
+            "default": false
+          },
+          "description": {
+            "type": "string",
+            "default": "PulseGrid pattern export"
+          }
         },
         "required": []
       },
@@ -71,8 +102,12 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "parent_page_id": { "type": "string" },
-          "title": { "type": "string" }
+          "parent_page_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
         }
       },
       "composio_delegate": "NOTION_CREATE_PAGE"
@@ -81,7 +116,34 @@
       "slug": "PULSEGRID_MIDI_MAP",
       "name": "Get GM MIDI Map",
       "description": "Return General MIDI drum note map used by PulseGrid (ch 10 default).",
-      "parameters": { "type": "object", "properties": {} }
+      "parameters": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "slug": "PULSEGRID_EXPORT_GIST",
+      "app": "github",
+      "action": "create_gist",
+      "desc": "Publish pattern JSON gist"
+    },
+    {
+      "slug": "PULSEGRID_EXPORT_NOTION",
+      "app": "notion",
+      "action": "create_page",
+      "desc": "Notion page from Fable copy + JSON"
+    },
+    {
+      "slug": "PULSEGRID_EXPORT_DRIVE",
+      "app": "google_drive",
+      "action": "upload",
+      "desc": "Upload export JSON"
+    },
+    {
+      "slug": "PULSEGRID_CLAUDE_BRIEF",
+      "app": "local",
+      "action": "format_brief",
+      "desc": "Format Claude Code/Opus/Fable brief"
     }
   ],
   "agent_workflow": [
@@ -91,6 +153,25 @@
     "4. For music gen: hand Suno/Shoom text to user (no direct API) or BeatAPI via Composio if connected"
   ],
   "connected_services_recommended": [
-    "github", "notion", "google_drive", "gmail", "slack", "buffer", "beatapi"
-  ]
+    "github",
+    "notion",
+    "google_drive",
+    "gmail",
+    "slack",
+    "buffer",
+    "beatapi"
+  ],
+  "claude": {
+    "lanes": [
+      "claude-code",
+      "opus-5.5",
+      "fable-5.1"
+    ],
+    "docs": [
+      "integrations/claude/CLAUDE_CODE.md",
+      "integrations/claude/OPUS_5_5.md",
+      "integrations/claude/FABLE_5_1.md",
+      "integrations/composio/CLAUDE_COMPOSIO.md"
+    ]
+  }
 }

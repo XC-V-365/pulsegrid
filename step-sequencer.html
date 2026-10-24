@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>PulseGrid v13 — Seeds · SaaS · Access · Generators · Settings · Pipelines · Suno · Shoom · Faves · Composio</title>
+<title>PulseGrid v14 — Claude · Composio · Seeds · SaaS · Access · Generators · Settings · Pipelines · Suno · Shoom · Faves · Composio</title>
 <style>
   :root {
     --bg: #05080f; --navy: #0a0e1a; --surface: #0c1018; --surface-2: #121820;
@@ -431,6 +431,9 @@
       <button type="button" class="conn-chip" id="connKitZip" title="Download kit manifest + pattern pack">Kit ZIP</button>
       <button type="button" class="conn-chip udio" id="connUdio" title="Udio AI prompt package">Udio</button>
       <button type="button" class="conn-chip copilot" id="connCopilot" title="GitHub Copilot / agent prompt">Copilot</button>
+      <button type="button" class="conn-chip copilot" id="connClaudeCode" title="Claude Code project brief">Claude Code</button>
+      <button type="button" class="conn-chip composio" id="connOpus" title="Claude Opus 5.5 engineering brief">Opus 5.5</button>
+      <button type="button" class="conn-chip" id="connFable" title="Claude Fable 5.1 narrative pack" style="border-color:#c4a882">Fable 5.1</button>
       <button type="button" class="conn-chip tiktok" id="connTikTok" title="TikTok hook + caption package">TikTok</button>
       <button type="button" class="conn-chip fxlab" id="btnFxLab" title="Effects Labs master FX">FX Labs</button>
       <button type="button" class="conn-chip matrix" id="btnMatrix" title="Step matrices & binary">Matrix</button>
@@ -1451,6 +1454,15 @@ Tags: ${tags} #producer #drums
       shoom: buildShoomPackage(),
       faves: buildFavesCard(),
       tools: ["PULSEGRID_EXPORT_PATTERN","PULSEGRID_EXPORT_SUNO","PULSEGRID_EXPORT_SHOOM","PULSEGRID_EXPORT_FAVES","PULSEGRID_PUSH_GITHUB_GIST","PULSEGRID_PUSH_NOTION"],
+      claude: {
+        lanes: ["claude-code", "opus-5.5", "fable-5.1"],
+        system: "integrations/claude/SYSTEM_RULES.md",
+        code: "integrations/claude/CLAUDE_CODE.md",
+        opus: "integrations/claude/OPUS_5_5.md",
+        fable: "integrations/claude/FABLE_5_1.md",
+        composio: "integrations/composio/CLAUDE_COMPOSIO.md"
+      },
+      seedId: (typeof lastSeedId !== "undefined" ? lastSeedId : null),
       composio_note: "Execute via Composio GitHub/Notion after connecting accounts. See integrations/composio/",
       grok_connected: ["github","notion","google_drive","gmail","vercel","buffer","canva","figma"]
     }, null, 2);
@@ -2084,7 +2096,7 @@ CTA: "Duet with your melody 🎹"
         reverb: { on: $("fxRevOn")?.checked, room: +$("fxRevR")?.value, mix: +$("fxRevM")?.value },
         limiter: { on: $("fxLimOn")?.checked, ceiling: +$("fxLim")?.value }
       },
-      connections: ["suno","udio","shoom","faves","composio","copilot","tiktok","fxlabs","webmidi"]
+      connections: ["suno","udio","shoom","faves","composio","copilot","claude-code","opus-5.5","fable-5.1","tiktok","fxlabs","webmidi"]
     };
     return base;
   }
@@ -2440,6 +2452,112 @@ CTA: "Duet with your melody 🎹"
     console.info("PulseGrid v6 modules loaded: FX · Matrix · Binary · WAV · MIDI · Udio · Copilot · TikTok");
 
   
+  
+  // ── Claude Code · Opus 5.5 · Fable 5.1 ──
+  function pgStats() {
+    const exp = (typeof window.__pgExport === "function") ? window.__pgExport() : (typeof exportPayload === "function" ? exportPayload() : {});
+    return {
+      bpm: exp.bpm || +tempoIn.value,
+      swing: exp.swing != null ? exp.swing : +swingIn.value,
+      seedId: exp.seedId || (typeof lastSeedId !== "undefined" ? lastSeedId : null),
+      activeBank: exp.activeBank || activeBank,
+      json: JSON.stringify(exp, null, 2)
+    };
+  }
+  function buildClaudeCodePackage() {
+    const s = pgStats();
+    return `# PulseGrid → Claude Code
+# Paste into Claude Code chat or CLAUDE.md context
+
+## Model lane
+Claude Code (implementation)
+
+## Live pattern
+- BPM: ${s.bpm}
+- Swing: ${s.swing}
+- seedId: ${s.seedId || "none"}
+- bank: ${s.activeBank}
+
+## Repo rules
+Read integrations/claude/SYSTEM_RULES.md and integrations/claude/CLAUDE_CODE.md
+
+## Export JSON
+\`\`\`json
+${s.json}
+\`\`\`
+
+## Task
+Implement or fix ONE feature against XC-V-365/pulsegrid. Keep StepCell schema. Cite file paths. Suggest verification (http.server + seed load + Export).
+`;
+  }
+  function buildOpus55Package() {
+    const s = pgStats();
+    return `# PulseGrid → Claude Opus 5.5
+# Deep engineering / architecture
+
+## System
+SYSTEM_RULES.md + OPUS_5_5.md + CLAUDE_CODE.md
+
+## Pattern context
+BPM ${s.bpm} · swing ${s.swing} · seed ${s.seedId || "—"} · bank ${s.activeBank}
+
+## Export JSON
+\`\`\`json
+${s.json}
+\`\`\`
+
+## Opus directives
+1. Validate StepCell / banks
+2. Appraisal axes (structure, dynamics, groove, density, identity, export_ready) — honest scores
+3. List CONFIRM vs HYPOTHESIS if reverse-tracing
+4. Minimal diff plan for requested code change
+5. Composio: only tool_slugs from integrations/composio/ — no invented tokens
+
+## Ask
+(architecture review OR multi-file refactor OR native parity gap analysis)
+`;
+  }
+  function buildFable51Package() {
+    const s = pgStats();
+    return `# PulseGrid → Claude Fable 5.1
+# Narrative / brand / music packaging (anti-slop)
+
+## System
+SYSTEM_RULES.md + FABLE_5_1.md
+
+## Grid facts (do not invent BPM)
+BPM: ${s.bpm}
+Swing: ${s.swing}%
+Seed: ${s.seedId || "custom"}
+Bank: ${s.activeBank}
+
+## Pattern JSON (for pocket/density awareness)
+\`\`\`json
+${s.json.slice(0, 6000)}
+\`\`\`
+
+## Deliver
+1. Suno TITLE + STYLE + [Instrumental] structure tags
+2. One Fable card (120–200 words) matching this grid
+3. Optional TikTok on-screen line (no hype spam)
+
+## Ban list
+epic, banger, fire, lit, ethereal vibes, emotional rollercoaster, masterpiece, as an AI
+`;
+  }
+  function wireClaudeChips() {
+    const show = (title, body, url) => {
+      if (typeof showExport === "function") showExport(title, body, url);
+      else { try { navigator.clipboard.writeText(body); } catch(_){} alert(title + " copied"); }
+      try { navigator.clipboard?.writeText(body); showToast(title + " copied"); } catch(_){}
+    };
+    $("connClaudeCode") && ($("connClaudeCode").onclick = () => show("Claude Code brief", buildClaudeCodePackage(), "https://github.com/XC-V-365/pulsegrid"));
+    $("connOpus") && ($("connOpus").onclick = () => show("Claude Opus 5.5 brief", buildOpus55Package(), "https://github.com/XC-V-365/pulsegrid"));
+    $("connFable") && ($("connFable").onclick = () => show("Claude Fable 5.1 pack", buildFable51Package(), "https://github.com/XC-V-365/pulsegrid"));
+  }
+  wireClaudeChips();
+
+
   // ═══════════════ v13 — Genre seeds → sequencer ═══════════════
   const SEED_URL = "saas/styles/seeds/patterns.json";
   let seedCache = null;
