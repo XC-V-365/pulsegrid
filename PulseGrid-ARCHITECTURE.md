@@ -1,66 +1,45 @@
-# PulseGrid — v6 Architecture
+# PulseGrid — v7 Architecture
 
-**Full audio · FX Labs · Matrices · Binary · Universal I/O · AI/social connections**
+**QOL · Settings · History · Modules · Pipelines · Full audio · Universal I/O · Connections**
 
-## Deliverables
+## Docs map
 
-| Path | Role |
-|------|------|
-| `step-sequencer.html` | **v6** complete web app |
-| `integrations/` | Suno · Udio · Shoom · Faves · Composio · Copilot · TikTok · FX |
-| `native/cpp` · `native/rust` | Port scaffolds (+ cpal/midir/RtMidi hooks) |
-| `PulseGrid-ARCHITECTURE.md` | This map |
+| Doc | Contents |
+|-----|----------|
+| **This file** | System overview & status |
+| `docs/FUNCTION_REFERENCE.md` | In-depth function/functionality descriptions |
+| `docs/MODULES_AND_PIPELINES.md` | Module graph, pipelines P1–P7, settings |
+| `integrations/` | Per-service paste workflows |
+| `native/` | C++ / Rust scaffolds |
 
-## Full audio support
+## v7 QOL feature list
 
-- Synth + sample kit (drop WAV/MP3/OGG)
-- Master bus: compressor · filter · saturation · delay · reverb · limiter
-- Offline **WAV bounce** (2 bars default)
-- Live Web Audio analyser (waveform + spectrogram)
-- Web MIDI notes + clock
+- Undo / redo (Ctrl+Z / Ctrl+Shift+Z) with depth setting  
+- Autosave + restore (`pulsegrid_v7`)  
+- Settings panel (transport, editing, display, audio/MIDI)  
+- Help panel (shortcuts + module map)  
+- Pipelines panel (8-step creative workflows)  
+- Metronome (M)  
+- Shift pattern « » (`[` `]`)  
+- Thicken pattern  
+- Confirm clear  
+- Compact + high-contrast modes  
+- Autosave indicator badge  
 
-## Matrices & binary
+## Still included from v4–v6
 
-| Form | Description |
-|------|-------------|
-| Velocity matrix | 4×16 cells 0–3 |
-| Probability matrix | 4×16 cells 0–100 |
-| Binary masks | 16-bit per track (MSB = step 1) |
-| `.pgbin` | Magic `PG06` + bpm/swing + masks + vel/prob bytes |
-| CSV / ASCII grid | Spreadsheet / text interchange |
-| SysEx-style hex | Educational dump (F0…F7) |
+Sample kit · Web MIDI + clock · FX Labs · Matrix/binary · WAV bounce · MIDI SMF ·  
+JSON/CSV/.pgbin import-export · Suno · Udio · Shoom · Faves · Composio · Copilot · TikTok  
 
-## Import / export matrix
+## App entry
 
-| Format | Export | Import |
-|--------|--------|--------|
-| JSON v6 | ✅ | ✅ |
-| MIDI SMF (.mid) | ✅ | light |
-| WAV bounce | ✅ | as sample kit |
-| .pgbin | ✅ | ✅ |
-| CSV matrix | ✅ | ✅ |
-| ASCII / TXT | ✅ | manual |
-| Ableton note list | ✅ copy | — |
-| SysEx hex | ✅ copy | — |
-| Sample audio | kit | ✅ drop |
-
-## Connections
-
-Suno · **Udio** · Shoom · Faves · Composio · **Copilot** · **TikTok** · FX Labs · Web MIDI · Kit pack
-
-## JSON v6 shape
-
-```json
-{
-  "version": 6,
-  "bpm": 120,
-  "banks": { "A": {}, "B": {} },
-  "matrices": { "velocity": [], "probability": [], "binaryMasks": {} },
-  "fx": { "compressor": {}, "filter": {}, "saturation": {}, "delay": {}, "reverb": {}, "limiter": {} },
-  "connections": ["suno","udio","copilot","tiktok","fxlabs", "..."]
-}
-```
+Open **`step-sequencer.html`** (Chrome/Edge recommended for Web MIDI).
 
 ## Native
 
-Same `StepCell { vel, prob }` model. Rust: `--features full` for cpal+midir. C++: `rtmidi_out.hpp` skeleton.
+```bash
+cd native/rust && cargo build --release --features full
+cd native/cpp && cmake . && cmake --build .
+```
+
+Shared model: `StepCell { vel, prob }`, banks A/B, song chain, GM drum map.

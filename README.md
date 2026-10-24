@@ -1,43 +1,42 @@
-# PulseGrid v5
+# PulseGrid v7
 
-**16-step drum sequencer** — velocity, probability, A/B banks, song chain, sample kit drop-in, Web MIDI (+ clock), premium navy / rose-gold UI.
+Premium **16-step drum sequencer** with full audio FX, universal I/O, AI/social connections, and deep QOL.
 
-## Connections
+## Open the app
 
-| Service | Integration |
-|---------|-------------|
-| [Suno](https://suno.com) | Paste Custom Mode package from the app |
-| [Shoom AI](https://apps.apple.com/app/id6499126850) | Genre/mood/title prompt package |
-| [Faves.fm](https://faves.fm) | Human share card for friends |
-| [Composio](https://composio.dev) | Agent tools → GitHub, Notion, 1000+ apps |
-| Web MIDI | Notes + optional MIDI clock |
+```bash
+# static server recommended (Web MIDI)
+python3 -m http.server 8765
+# → http://localhost:8765/step-sequencer.html
+```
 
-## Quick start (web)
+## Highlights
 
-Open `step-sequencer.html` in Chrome/Edge/Firefox → **Play** → **Connect → Suno**.
+- **Transport** — BPM, swing, A/B banks, song chain, metronome  
+- **Editor** — Gate / Vel / Prob, paint, mute, shift, thicken, undo/redo  
+- **Audio** — Synth + sample kit, **FX Labs** bus, WAV bounce  
+- **MIDI** — Web MIDI out, clock, SMF export  
+- **Matrix / binary** — masks, CSV, `.pgbin`  
+- **I/O Hub** — JSON · MIDI · WAV · binary · CSV · TXT · Ableton notes  
+- **Connections** — Suno · Udio · Shoom · Faves · Composio · Copilot · TikTok  
+- **QOL** — Settings, autosave, shortcuts, pipelines panel  
+
+## Docs
+
+| File | Description |
+|------|-------------|
+| [docs/FUNCTION_REFERENCE.md](docs/FUNCTION_REFERENCE.md) | In-depth function & functionality reference |
+| [docs/MODULES_AND_PIPELINES.md](docs/MODULES_AND_PIPELINES.md) | Module graph + pipelines P1–P7 |
+| [PulseGrid-ARCHITECTURE.md](PulseGrid-ARCHITECTURE.md) | System overview |
+| [integrations/](integrations/) | Per-service workflows |
 
 ## Native
 
 ```bash
-# C++
-cd native/cpp && g++ -std=c++17 -I include -O2 -o pulsegrid src/*.cpp -pthread
-
-# Rust
 cd native/rust && cargo build --release
-# Optional: cargo build --features full   # cpal + midir
+cd native/cpp && make   # or cmake
 ```
-
-## Layout
-
-- `step-sequencer.html` — full web app
-- `integrations/` — Suno / Shoom / Faves / Composio
-- `native/cpp` · `native/rust` — port scaffolds
-- `PulseGrid-ARCHITECTURE.md` — data model & 1D→12D map
-
-## Default pattern JSON
-
-See `pulsegrid-default-pattern.json` (import via app **Import**).
 
 ## License
 
-MIT — build-ready concept for C++ / Rust / any language.
+MIT — build-ready concept for web / C++ / Rust.

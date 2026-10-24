@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>PulseGrid v6 — Connections · Suno · Shoom · Faves · Composio</title>
+<title>PulseGrid v7 — QOL · Settings · Pipelines · Suno · Shoom · Faves · Composio</title>
 <style>
   :root {
     --bg: #05080f; --navy: #0a0e1a; --surface: #0c1018; --surface-2: #121820;
@@ -295,6 +295,50 @@
   .conn-chip.matrix:hover { border-color:#7ee0a0; color:#7ee0a0; }
   .conn-chip.io:hover { border-color:#e8d4a0; color:#e8d4a0; }
 
+
+  /* v7 QOL · Settings · Help */
+  .settings-panel,.help-panel,.pipeline-panel {
+    display:none; margin-top:.5rem; padding:.85rem; background:#080c14;
+    border:1px solid var(--border); border-radius:10px; max-height:420px; overflow:auto;
+  }
+  .settings-panel.show,.help-panel.show,.pipeline-panel.show { display:block; }
+  .settings-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:.55rem; }
+  .set-card {
+    background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:.6rem;
+  }
+  .set-card h4 { font-size:.65rem; color:var(--rose-gold); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.4rem; }
+  .set-card label {
+    display:flex; align-items:center; justify-content:space-between; gap:.4rem;
+    font-size:.68rem; color:var(--text); margin:.28rem 0; cursor:pointer;
+  }
+  .set-card input[type=checkbox] { accent-color:var(--rose-gold); }
+  .set-card select {
+    background:var(--surface); color:var(--text); border:1px solid var(--border);
+    border-radius:6px; padding:.25rem .4rem; font-size:.68rem; max-width:120px;
+  }
+  .help-table { width:100%; border-collapse:collapse; font-size:.68rem; }
+  .help-table th,.help-table td { border-bottom:1px solid var(--border); padding:.35rem .4rem; text-align:left; }
+  .help-table th { color:var(--rose-gold); font-size:.6rem; text-transform:uppercase; }
+  .help-table kbd {
+    font-family:var(--mono); font-size:.62rem; background:#121820; border:1px solid var(--border);
+    border-radius:4px; padding:.1rem .35rem; color:var(--silver);
+  }
+  .pipeline-step {
+    display:flex; gap:.5rem; align-items:flex-start; margin:.4rem 0; font-size:.72rem; line-height:1.4;
+  }
+  .pipeline-step .num {
+    flex-shrink:0; width:22px; height:22px; border-radius:50%; background:linear-gradient(135deg,var(--silver),var(--rose-gold));
+    color:#0a0e1a; font-weight:700; font-size:.65rem; display:grid; place-items:center;
+  }
+  .qol-bar { display:flex; flex-wrap:wrap; gap:.35rem; align-items:center; }
+  .toast-stack { position:fixed; bottom:1rem; right:1rem; z-index:200; display:flex; flex-direction:column; gap:.35rem; }
+  body.compact .cell { min-height:clamp(20px,4vw,36px); }
+  body.compact .track-label { font-size:.58rem; }
+  body.high-contrast { --border:#3a4860; --muted:#9aa4b8; }
+  body.high-contrast .cell { border-color:#2a3848; }
+  .status-dot { width:6px; height:6px; border-radius:50%; background:#2a3040; display:inline-block; margin-right:.25rem; }
+  .status-dot.on { background:var(--midi); box-shadow:0 0 6px #7ee0a066; }
+
 </style>
 </head>
 <body>
@@ -317,7 +361,7 @@
       <div class="led" id="led"></div>
       <span class="badge dim" id="engineBadge">SYNTH</span>
       <span class="badge" id="midiBadge">MIDI OFF</span>
-      <span class="badge">v6</span>
+      <span class="badge">v7</span>
     </div>
   </header>
 
@@ -378,6 +422,15 @@
       <button type="button" class="conn-chip io" id="btnFullIO" title="All import/export formats">I/O Hub</button>
       <button type="button" class="conn-chip" id="btnBounceWav" title="Render loop to WAV">Bounce WAV</button>
       <button type="button" class="conn-chip" id="btnMidiFile" title="Export Standard MIDI File">MIDI File</button>
+      <button type="button" class="conn-chip" id="btnSettings" title="Settings · preferences · autosave">Settings</button>
+      <button type="button" class="conn-chip" id="btnHelp" title="Keyboard shortcuts & module map">Help</button>
+      <button type="button" class="conn-chip" id="btnPipelines" title="Creative pipelines walkthrough">Pipelines</button>
+      <button type="button" class="conn-chip" id="btnUndo" title="Undo (Ctrl+Z)">Undo</button>
+      <button type="button" class="conn-chip" id="btnRedo" title="Redo (Ctrl+Shift+Z)">Redo</button>
+      <button type="button" class="conn-chip" id="btnShiftL" title="Shift pattern left">« Shift</button>
+      <button type="button" class="conn-chip" id="btnShiftR" title="Shift pattern right">Shift »</button>
+      <button type="button" class="conn-chip" id="btnDouble" title="Double pattern density hints">Thicken</button>
+      <button type="button" class="conn-chip" id="btnMetro" title="Metronome click">Metro</button>
       <button type="button" class="conn-chip" id="btnMidiClock" title="Send MIDI clock while playing">MIDI Clock</button>
       <span class="hint" style="display:inline;margin-left:0.25rem">Paste Suno/Shoom · share Faves · agents via Composio</span>
     </div>
@@ -472,6 +525,108 @@
       <div class="export-actions"><button type="button" class="btn btn-ghost" id="btnIoClose">Close</button></div>
     </div>
 
+    
+    <div class="settings-panel" id="settingsPanel" role="dialog" aria-label="Settings">
+      <h3 style="font-size:.75rem;color:var(--rose-gold);margin-bottom:.55rem;text-transform:uppercase;letter-spacing:.06em">Settings · Preferences · Persistence</h3>
+      <div class="settings-grid">
+        <div class="set-card">
+          <h4>Persistence</h4>
+          <label>Autosave localStorage <input type="checkbox" id="setAutosave" checked/></label>
+          <label>Restore on load <input type="checkbox" id="setRestore" checked/></label>
+          <label>Undo history depth
+            <select id="setUndoDepth"><option>30</option><option selected>50</option><option>100</option></select>
+          </label>
+          <button type="button" class="btn btn-ghost" id="btnClearStorage" style="margin-top:.35rem;font-size:.62rem">Clear saved state</button>
+        </div>
+        <div class="set-card">
+          <h4>Transport & clock</h4>
+          <label>Metronome default <input type="checkbox" id="setMetro"/></label>
+          <label>Count-in (1 bar) <input type="checkbox" id="setCountIn"/></label>
+          <label>Look-ahead (ms)
+            <select id="setLookahead"><option>15</option><option selected>25</option><option>40</option><option>60</option></select>
+          </label>
+          <label>Schedule ahead (s)
+            <select id="setSched"><option>0.05</option><option selected>0.1</option><option>0.15</option></select>
+          </label>
+        </div>
+        <div class="set-card">
+          <h4>Editing QOL</h4>
+          <label>Confirm Clear <input type="checkbox" id="setConfirmClear" checked/></label>
+          <label>Paint drag always <input type="checkbox" id="setPaintDrag" checked/></label>
+          <label>Click spark FX <input type="checkbox" id="setSpark" checked/></label>
+          <label>Default edit mode
+            <select id="setDefaultMode"><option value="gate">Gate</option><option value="vel">Vel</option><option value="prob">Prob</option></select>
+          </label>
+        </div>
+        <div class="set-card">
+          <h4>Display</h4>
+          <label>Compact grid <input type="checkbox" id="setCompact"/></label>
+          <label>High contrast <input type="checkbox" id="setContrast"/></label>
+          <label>Show step numbers <input type="checkbox" id="setStepNums" checked/></label>
+          <label>Viz while stopped <input type="checkbox" id="setVizIdle" checked/></label>
+        </div>
+        <div class="set-card">
+          <h4>Audio / MIDI defaults</h4>
+          <label>Prefer samples <input type="checkbox" id="setPreferSamples" checked/></label>
+          <label>Default MIDI ch
+            <select id="setMidiChDef"><option>9</option><option selected>10</option><option>1</option></select>
+          </label>
+          <label>Master volume recall <input type="checkbox" id="setVolRecall" checked/></label>
+        </div>
+        <div class="set-card">
+          <h4>About this build</h4>
+          <p style="font-size:.65rem;color:var(--muted);line-height:1.45">
+            PulseGrid v7 · modular sequencer core with FX Labs, matrix/binary I/O,
+            creative connections (Suno/Udio/TikTok/Copilot/Composio), and native C++/Rust ports.
+            Settings persist in <code style="color:var(--silver)">localStorage.pulsegrid_v7</code>.
+          </p>
+        </div>
+      </div>
+      <div class="export-actions" style="margin-top:.65rem">
+        <button type="button" class="btn btn-ghost" id="btnSettingsSave">Save settings</button>
+        <button type="button" class="btn btn-ghost" id="btnSettingsClose">Close</button>
+      </div>
+    </div>
+    <div class="help-panel" id="helpPanel">
+      <h3 style="font-size:.75rem;color:var(--rose-gold);margin-bottom:.55rem;text-transform:uppercase;letter-spacing:.06em">Help · Shortcuts · Module map</h3>
+      <table class="help-table">
+        <thead><tr><th>Key</th><th>Action</th><th>Module</th></tr></thead>
+        <tbody>
+          <tr><td><kbd>Space</kbd></td><td>Play / Stop transport</td><td>Clock</td></tr>
+          <tr><td><kbd>A</kbd> / <kbd>B</kbd></td><td>Select pattern bank</td><td>PatternStore</td></tr>
+          <tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td><td>Undo last edit</td><td>History</td></tr>
+          <tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></td><td>Redo</td><td>History</td></tr>
+          <tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>Export JSON (download)</td><td>I/O</td></tr>
+          <tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd></td><td>Open Settings</td><td>Settings</td></tr>
+          <tr><td><kbd>?</kbd></td><td>Toggle this help</td><td>Help</td></tr>
+          <tr><td><kbd>G</kbd> <kbd>V</kbd> <kbd>P</kbd></td><td>Gate / Vel / Prob edit mode</td><td>Editor</td></tr>
+          <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>Shift pattern left / right</td><td>Transform</td></tr>
+          <tr><td><kbd>M</kbd></td><td>Toggle metronome</td><td>Clock</td></tr>
+          <tr><td>Shift+click track</td><td>Mute / unmute track</td><td>Mixer</td></tr>
+          <tr><td>Drag on grid</td><td>Paint steps (same value)</td><td>Editor</td></tr>
+          <tr><td>Drop audio files</td><td>Load sample kit slots</td><td>SampleKit</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:.68rem;color:var(--muted);margin-top:.75rem;line-height:1.5">
+        <strong style="color:var(--text)">Modules:</strong> PatternStore · SequencerClock · SampleKit · VoiceEngine · MidiOut ·
+        MasterFX (FX Labs) · Matrix/Binary · I/O Hub · Connections (Suno/Udio/Shoom/Faves/Composio/Copilot/TikTok) ·
+        History · Settings · SongDirector · Visualizers
+      </p>
+      <div class="export-actions"><button type="button" class="btn btn-ghost" id="btnHelpClose">Close</button></div>
+    </div>
+    <div class="pipeline-panel" id="pipelinePanel">
+      <h3 style="font-size:.75rem;color:var(--rose-gold);margin-bottom:.55rem;text-transform:uppercase;letter-spacing:.06em">Creative pipelines</h3>
+      <div class="pipeline-step"><span class="num">1</span><div><strong>Sketch beat</strong> — Gate-mode paint kick/snare skeleton; switch Vel for dynamics; Prob for humanize.</div></div>
+      <div class="pipeline-step"><span class="num">2</span><div><strong>Sound design</strong> — Drop kit WAVs or keep synth; open FX Labs for bus glue (comp → sat → delay → reverb → limit).</div></div>
+      <div class="pipeline-step"><span class="num">3</span><div><strong>Structure</strong> — Fill bank B as fill/variation; enable Song chain A/A/B/A… for arrangement.</div></div>
+      <div class="pipeline-step"><span class="num">4</span><div><strong>Export audio</strong> — Bounce WAV for DAW/TikTok; MIDI File for piano-roll edit; JSON for ports.</div></div>
+      <div class="pipeline-step"><span class="num">5</span><div><strong>AI cover / song</strong> — Suno or Udio package from Connections; instrumental style at current BPM/density.</div></div>
+      <div class="pipeline-step"><span class="num">6</span><div><strong>Social</strong> — TikTok pack (hook+caption); Faves share card; screen-record grid with playhead.</div></div>
+      <div class="pipeline-step"><span class="num">7</span><div><strong>Agent / collab</strong> — Copilot brief or Composio bundle → GitHub/Notion via connected tools.</div></div>
+      <div class="pipeline-step"><span class="num">8</span><div><strong>Native port</strong> — Export JSON/.pgbin → C++/Rust scaffolds in <code>native/</code> with same StepCell model.</div></div>
+      <div class="export-actions"><button type="button" class="btn btn-ghost" id="btnPipeClose">Close</button></div>
+    </div>
+
     <div class="frame-wrap">
       <div class="frame-ornament">✦ PulseGrid Audio Digest ✦</div>
       <div class="frame-corner tl"></div><div class="frame-corner tr"></div>
@@ -509,7 +664,7 @@
       </section>
     </div>
   </main>
-  <footer>PulseGrid v6 · Full audio FX · Matrix/binary · Udio · Copilot · TikTok · Universal I/O · native</footer>
+  <footer>PulseGrid v7 · QOL · Settings · Undo · Autosave · Metronome · Pipelines · Full docs</footer>
   <div class="toast" id="toast"></div>
 
 <script>
@@ -954,6 +1109,7 @@
       if (!silent) voices[t.id](time, cell.v);
       sendMidi(t, cell.v, time);
     });
+    if (typeof metroOn !== "undefined" && metroOn && typeof playMetroClick === "function") playMetroClick(time);
   }
 
   function advanceSongIfNeeded() {
@@ -1909,10 +2065,260 @@ CTA: "Duet with your melody 🎹"
   const _setStep = setStep;
   // setStep is function - we can't easily patch; call refresh on matrix open
 
-  console.info("PulseGrid v6 modules loaded: FX · Matrix · Binary · WAV · MIDI · Udio · Copilot · TikTok");
+
+  // ═══════════════ PulseGrid v7 — QOL · History · Settings · Shortcuts ═══════════════
+  const PG_STORAGE = "pulsegrid_v7";
+  const historyStack = [];
+  let historyIndex = -1;
+  let metroOn = false;
+  let settings = {
+    autosave: true, restore: true, undoDepth: 50,
+    metro: false, countIn: false, lookahead: 25, scheduleAhead: 0.1,
+    confirmClear: true, paintDrag: true, spark: true, defaultMode: "gate",
+    compact: false, contrast: false, stepNums: true, vizIdle: true,
+    preferSamples: true, midiChDef: 10, volRecall: true
+  };
+
+  function snapshotPattern() {
+    return JSON.stringify({ bank: activeBank, banks: banks, bpm: +tempoIn.value, swing: +swingIn.value, vol: +volIn.value });
+  }
+  function pushHistory(label) {
+    const snap = snapshotPattern();
+    if (historyIndex < historyStack.length - 1) historyStack.length = historyIndex + 1;
+    historyStack.push({ snap, label: label || "edit", t: Date.now() });
+    const max = settings.undoDepth || 50;
+    while (historyStack.length > max) historyStack.shift();
+    historyIndex = historyStack.length - 1;
+    if (settings.autosave) saveLocal();
+  }
+  function applySnapshot(snapStr) {
+    try {
+      const s = JSON.parse(snapStr);
+      if (s.banks) { banks.A = normalizePattern(s.banks.A); banks.B = normalizePattern(s.banks.B); }
+      if (s.bank) selectBank(s.bank, true); else syncGrid();
+      if (s.bpm) { tempoIn.value = s.bpm; tempoVal.textContent = s.bpm; }
+      if (s.swing != null) { swingIn.value = s.swing; swingVal.textContent = s.swing + "%"; }
+      if (s.vol != null) { volIn.value = s.vol; volVal.textContent = s.vol; }
+      if (typeof refreshMatrix === "function" && $("matrixPanel") && $("matrixPanel").classList.contains("show")) refreshMatrix();
+    } catch (e) { console.warn(e); }
+  }
+  function undo() {
+    if (historyIndex <= 0) { showToast("Nothing to undo"); return; }
+    historyIndex--;
+    applySnapshot(historyStack[historyIndex].snap);
+    showToast("Undo");
+  }
+  function redo() {
+    if (historyIndex >= historyStack.length - 1) { showToast("Nothing to redo"); return; }
+    historyIndex++;
+    applySnapshot(historyStack[historyIndex].snap);
+    showToast("Redo");
+  }
+
+  let histPaintLock = false;
+  const gridElHist = document.getElementById("grid");
+  if (gridElHist) {
+    gridElHist.addEventListener("pointerdown", function() {
+      if (!histPaintLock) { pushHistory("step"); histPaintLock = true; }
+    }, true);
+  }
+  window.addEventListener("pointerup", function() { histPaintLock = false; });
+  window.addEventListener("pointercancel", function() { histPaintLock = false; });
+
+  function saveLocal() {
+    try {
+      let project = null;
+      if (typeof exportPayloadV6 === "function") project = exportPayloadV6();
+      else if (window.__pgExport) project = window.__pgExport();
+      else if (typeof exportPayload === "function") project = exportPayload();
+      if (project) project.vol = +volIn.value;
+      localStorage.setItem(PG_STORAGE, JSON.stringify({ settings: settings, project: project, savedAt: Date.now() }));
+      const dot = $("autoSaveDot"); if (dot) dot.classList.add("on");
+    } catch (e) { console.warn("autosave", e); }
+  }
+  function loadLocal() {
+    try {
+      const raw = localStorage.getItem(PG_STORAGE);
+      if (!raw) return false;
+      const data = JSON.parse(raw);
+      if (data.settings) Object.assign(settings, data.settings);
+      applySettingsToUi();
+      applySettingsToDom();
+      if (settings.restore && data.project && data.project.banks) {
+        banks.A = normalizePattern(data.project.banks.A);
+        banks.B = normalizePattern(data.project.banks.B);
+        if (data.project.bpm) { tempoIn.value = data.project.bpm; tempoVal.textContent = data.project.bpm; }
+        if (data.project.swing != null) { swingIn.value = data.project.swing; swingVal.textContent = data.project.swing + "%"; }
+        if (data.project.activeBank) selectBank(data.project.activeBank, true); else syncGrid();
+        if (settings.volRecall && data.project.vol != null) {
+          volIn.value = data.project.vol; volVal.textContent = data.project.vol;
+        }
+        showToast("Session restored");
+        return true;
+      }
+    } catch (e) { console.warn("restore", e); }
+    return false;
+  }
+  function applySettingsToUi() {
+    const pairs = [
+      ["setAutosave","autosave"],["setRestore","restore"],["setMetro","metro"],["setCountIn","countIn"],
+      ["setConfirmClear","confirmClear"],["setPaintDrag","paintDrag"],["setSpark","spark"],
+      ["setCompact","compact"],["setContrast","contrast"],["setStepNums","stepNums"],["setVizIdle","vizIdle"],
+      ["setPreferSamples","preferSamples"],["setVolRecall","volRecall"]
+    ];
+    pairs.forEach(function(pair) {
+      const el = $(pair[0]); if (el) el.checked = !!settings[pair[1]];
+    });
+    if ($("setUndoDepth")) $("setUndoDepth").value = String(settings.undoDepth);
+    if ($("setLookahead")) $("setLookahead").value = String(settings.lookahead);
+    if ($("setSched")) $("setSched").value = String(settings.scheduleAhead);
+    if ($("setDefaultMode")) $("setDefaultMode").value = settings.defaultMode;
+    if ($("setMidiChDef")) $("setMidiChDef").value = String(settings.midiChDef);
+  }
+  function readSettingsFromUi() {
+    if ($("setAutosave")) settings.autosave = $("setAutosave").checked;
+    if ($("setRestore")) settings.restore = $("setRestore").checked;
+    if ($("setUndoDepth")) settings.undoDepth = +$("setUndoDepth").value;
+    if ($("setMetro")) settings.metro = $("setMetro").checked;
+    if ($("setCountIn")) settings.countIn = $("setCountIn").checked;
+    if ($("setLookahead")) settings.lookahead = +$("setLookahead").value;
+    if ($("setSched")) settings.scheduleAhead = +$("setSched").value;
+    if ($("setConfirmClear")) settings.confirmClear = $("setConfirmClear").checked;
+    if ($("setPaintDrag")) settings.paintDrag = $("setPaintDrag").checked;
+    if ($("setSpark")) settings.spark = $("setSpark").checked;
+    if ($("setDefaultMode")) settings.defaultMode = $("setDefaultMode").value;
+    if ($("setCompact")) settings.compact = $("setCompact").checked;
+    if ($("setContrast")) settings.contrast = $("setContrast").checked;
+    if ($("setStepNums")) settings.stepNums = $("setStepNums").checked;
+    if ($("setVizIdle")) settings.vizIdle = $("setVizIdle").checked;
+    if ($("setPreferSamples")) settings.preferSamples = $("setPreferSamples").checked;
+    if ($("setMidiChDef")) settings.midiChDef = +$("setMidiChDef").value;
+    if ($("setVolRecall")) settings.volRecall = $("setVolRecall").checked;
+  }
+  function applySettingsToDom() {
+    document.body.classList.toggle("compact", !!settings.compact);
+    document.body.classList.toggle("high-contrast", !!settings.contrast);
+    if ($("stepNums")) $("stepNums").style.display = settings.stepNums ? "" : "none";
+    preferSamples = settings.preferSamples;
+    metroOn = settings.metro;
+    if ($("btnMetro")) $("btnMetro").classList.toggle("active", metroOn);
+  }
+
+  if ($("btnSettings")) $("btnSettings").onclick = function() { applySettingsToUi(); $("settingsPanel").classList.toggle("show"); };
+  if ($("btnSettingsClose")) $("btnSettingsClose").onclick = function() { $("settingsPanel").classList.remove("show"); };
+  if ($("btnSettingsSave")) $("btnSettingsSave").onclick = function() { readSettingsFromUi(); applySettingsToDom(); saveLocal(); showToast("Settings saved"); };
+  if ($("btnClearStorage")) $("btnClearStorage").onclick = function() { localStorage.removeItem(PG_STORAGE); showToast("Saved state cleared"); };
+  if ($("btnHelp")) $("btnHelp").onclick = function() { $("helpPanel").classList.toggle("show"); };
+  if ($("btnHelpClose")) $("btnHelpClose").onclick = function() { $("helpPanel").classList.remove("show"); };
+  if ($("btnPipelines")) $("btnPipelines").onclick = function() { $("pipelinePanel").classList.toggle("show"); };
+  if ($("btnPipeClose")) $("btnPipeClose").onclick = function() { $("pipelinePanel").classList.remove("show"); };
+  if ($("btnUndo")) $("btnUndo").onclick = undo;
+  if ($("btnRedo")) $("btnRedo").onclick = redo;
+
+  function shiftPattern(dir) {
+    pushHistory(dir < 0 ? "shift-left" : "shift-right");
+    TRACKS.forEach(function(t) {
+      const row = pattern()[t.id];
+      if (dir < 0) row.push(row.shift());
+      else row.unshift(row.pop());
+    });
+    syncGrid();
+    showToast(dir < 0 ? "Shifted left" : "Shifted right");
+  }
+  if ($("btnShiftL")) $("btnShiftL").onclick = function() { shiftPattern(-1); };
+  if ($("btnShiftR")) $("btnShiftR").onclick = function() { shiftPattern(1); };
+  if ($("btnDouble")) $("btnDouble").onclick = function() {
+    pushHistory("thicken");
+    TRACKS.forEach(function(t) {
+      for (let i = 0; i < 16; i++) {
+        if (pattern()[t.id][i].v === 0 && i % 2 === 1 && pattern()[t.id][i - 1] && pattern()[t.id][i - 1].v) {
+          if (Math.random() > 0.45) pattern()[t.id][i] = { v: 1, p: 80 };
+        }
+      }
+    });
+    syncGrid(); showToast("Pattern thickened");
+  };
+
+  function playMetroClick(time) {
+    if (!metroOn || !audioCtx) return;
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+    o.frequency.value = (typeof currentStep !== "undefined" && currentStep % 4 === 0) ? 1200 : 800;
+    g.gain.setValueAtTime(0.08, time);
+    g.gain.exponentialRampToValueAtTime(0.001, time + 0.03);
+    o.connect(g); g.connect(masterGain || audioCtx.destination);
+    o.start(time); o.stop(time + 0.04);
+  }
+  if ($("btnMetro")) $("btnMetro").onclick = function() {
+    metroOn = !metroOn; settings.metro = metroOn;
+    $("btnMetro").classList.toggle("active", metroOn);
+    showToast(metroOn ? "Metronome on" : "Metronome off");
+    if (settings.autosave) saveLocal();
+  };
+
+  // Confirm clear
+  (function() {
+    const clearBtn = $("btnClear");
+    if (!clearBtn) return;
+    const prev = clearBtn.onclick;
+    clearBtn.onclick = function(e) {
+      if (settings.confirmClear && !confirm("Clear pattern " + activeBank + "?")) return;
+      pushHistory("clear");
+      if (typeof prev === "function") prev.call(clearBtn, e);
+    };
+  })();
+
+  // Random / copy history
+  (function() {
+    const rnd = $("btnRandom");
+    if (rnd) { const p = rnd.onclick; rnd.onclick = function(e) { pushHistory("random"); if (typeof p === "function") p.call(rnd, e); }; }
+    const cpy = $("btnCopy");
+    if (cpy) { const p = cpy.onclick; cpy.onclick = function(e) { pushHistory("copy-bank"); if (typeof p === "function") p.call(cpy, e); }; }
+  })();
+
+  window.addEventListener("keydown", function(e) {
+    const tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea" || tag === "select") return;
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
+      e.preventDefault(); if (e.shiftKey) redo(); else undo();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
+      e.preventDefault();
+      if (e.shiftKey) { if ($("settingsPanel")) { $("settingsPanel").classList.add("show"); applySettingsToUi(); } }
+      else if ($("btnExport")) $("btnExport").click();
+    }
+    if (e.key === "?" || (e.shiftKey && e.key === "/")) {
+      e.preventDefault(); if ($("helpPanel")) $("helpPanel").classList.toggle("show");
+    }
+    if (e.key === "g" || e.key === "G") setMode("gate");
+    if (e.key === "v" || e.key === "V") setMode("vel");
+    if (e.key === "p" || e.key === "P") setMode("prob");
+    if (e.key === "[") shiftPattern(-1);
+    if (e.key === "]") shiftPattern(1);
+    if (e.key === "m" || e.key === "M") { if ($("btnMetro")) $("btnMetro").click(); }
+  });
+
+  // Autosave badge
+  const hr = document.querySelector(".header-right");
+  if (hr && !$("autoSaveDot")) {
+    const span = document.createElement("span");
+    span.className = "badge dim";
+    span.innerHTML = '<span class="status-dot" id="autoSaveDot"></span>SAVE';
+    span.title = "Autosave indicator";
+    hr.insertBefore(span, hr.firstChild);
+  }
+
+  pushHistory("init");
+  loadLocal();
+  setInterval(function() { if (settings.autosave) saveLocal(); }, 30000);
+
+  console.info("PulseGrid v7 QOL: History · Settings · Shortcuts · Metro · Pipelines · Autosave");
+
+    console.info("PulseGrid v6 modules loaded: FX · Matrix · Binary · WAV · MIDI · Udio · Copilot · TikTok");
 
   window.PulseGrid = {
     exportAll: () => (window.__pgExport ? window.__pgExport() : null),
+    undo, redo, saveLocal, loadLocal, shiftPattern, settings,
+    
     bounceWav, downloadMidi, encodePgbin, buildFxChain,
     
     getPattern: exportPayload,
