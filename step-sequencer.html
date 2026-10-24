@@ -450,13 +450,24 @@
       <span class="hint" style="display:inline;margin-left:0.25rem">Paste Suno/Shoom · share Faves · agents via Composio</span>
     </div>
     
-    <div class="conn-row" id="seedBar" style="margin-top:.35rem">
+        <div class="conn-row" id="seedBar" style="margin-top:.35rem;flex-wrap:wrap">
       <span class="conn-label">Seeds</span>
-      <button type="button" class="conn-chip" data-seed="techno" title="Load techno seed">Techno</button>
+      <button type="button" class="conn-chip" data-seed="afrobeats" title="Load afrobeats seed">Afrobeats</button>
+      <button type="button" class="conn-chip" data-seed="ambient" title="Load ambient seed">Ambient</button>
+      <button type="button" class="conn-chip" data-seed="breakbeat" title="Load breakbeat seed">Breakbeat</button>
+      <button type="button" class="conn-chip" data-seed="dnb" title="Load dnb seed">Dnb</button>
+      <button type="button" class="conn-chip" data-seed="footwork" title="Load footwork seed">Footwork</button>
+      <button type="button" class="conn-chip" data-seed="garage" title="Load garage seed">Garage</button>
+      <button type="button" class="conn-chip" data-seed="hiphop" title="Load hiphop seed">Hiphop</button>
       <button type="button" class="conn-chip" data-seed="house" title="Load house seed">House</button>
+      <button type="button" class="conn-chip" data-seed="idm" title="Load idm seed">Idm</button>
+      <button type="button" class="conn-chip" data-seed="industrial" title="Load industrial seed">Industrial</button>
+      <button type="button" class="conn-chip" data-seed="jersey" title="Load jersey seed">Jersey</button>
+      <button type="button" class="conn-chip" data-seed="lofi" title="Load lofi seed">Lofi</button>
+      <button type="button" class="conn-chip" data-seed="phonk" title="Load phonk seed">Phonk</button>
+      <button type="button" class="conn-chip" data-seed="reggaeton" title="Load reggaeton seed">Reggaeton</button>
+      <button type="button" class="conn-chip" data-seed="techno" title="Load techno seed">Techno</button>
       <button type="button" class="conn-chip" data-seed="trap" title="Load trap seed">Trap</button>
-      <button type="button" class="conn-chip" data-seed="dnb" title="Load DnB seed">DnB</button>
-      <button type="button" class="conn-chip" data-seed="lofi" title="Load lo-fi seed">Lo-fi</button>
       <button type="button" class="conn-chip io" id="btnSeedFromStudio" title="Load pulsegrid_studio_plan + matching seed">From Studio plan</button>
       <span class="hint" id="seedHint" style="display:inline;margin-left:.35rem">genre → grid</span>
     </div>
@@ -731,6 +742,7 @@
   }
 
   const banks = { A: defaultPattern(), B: emptyPattern() };
+  let lastSeedId = null;
   let activeBank = "A", editMode = "gate";
   const muted = Object.fromEntries(TRACKS.map(t => [t.id, false]));
   let songMode = false, songChain = ["A","A","B","A","A","A","B","B"], songIndex = 0, loopsInSlot = 0;
@@ -1239,12 +1251,17 @@
     };
   }
   $("btnExport").onclick = () => {
-    const json = JSON.stringify(exportPayload(), null, 2);
+    const payload = (typeof window.__pgExport === "function" ? window.__pgExport()
+      : (typeof exportPayloadV6 === "function" ? exportPayloadV6()
+      : exportPayload()));
+    if (payload && typeof lastSeedId !== "undefined" && lastSeedId && !payload.seedId) payload.seedId = lastSeedId;
+    if (payload && !payload.version) payload.version = 13;
+    const json = JSON.stringify(payload, null, 2);
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([json], { type: "application/json" }));
-    a.download = `pulsegrid-v4-${Date.now()}.json`; a.click();
-    try { navigator.clipboard?.writeText(json); showToast("Exported + copied"); }
-    catch { showToast("Exported"); }
+    a.download = `pulsegrid-v13-${payload.seedId || "pattern"}-${Date.now()}.json`; a.click();
+    try { navigator.clipboard?.writeText(json); showToast("Exported full v13" + (payload.seedId ? " · seed " + payload.seedId : "")); }
+    catch { showToast("Exported full v13"); }
   };
   $("btnImport").onclick = () => $("fileImport").click();
   $("fileImport").onchange = async () => {
@@ -2043,14 +2060,15 @@ CTA: "Duet with your melody 🎹"
   // monkey-patch by wrapping later via reassignment if needed - override window
   function exportPayloadV6() {
     const base = {
-      version: 6,
+      version: 13,
       app: "PulseGrid",
       bpm: +tempoIn.value,
       swing: +swingIn.value,
       activeBank,
       songMode,
       songChain: songChain.slice(),
-      midiChannel: midiChannel + 1,
+      midiChannel: (typeof midiChannel === "number" ? midiChannel + 1 : +midiCh.value),
+      seedId: (typeof lastSeedId !== "undefined" ? lastSeedId : null),
       banks: JSON.parse(JSON.stringify(banks)),
       sampleNames: Object.fromEntries(TRACKS.map(t => [t.id, samples[t.id] ? samples[t.id].name : null])),
       matrices: {
@@ -2425,7 +2443,7 @@ CTA: "Duet with your melody 🎹"
   // ═══════════════ v13 — Genre seeds → sequencer ═══════════════
   const SEED_URL = "saas/styles/seeds/patterns.json";
   let seedCache = null;
-  async function fetchSeeds() {
+    async function fetchSeeds() {
     if (seedCache) return seedCache;
     const r = await fetch(SEED_URL);
     if (!r.ok) throw new Error("seeds " + r.status);
@@ -2444,6 +2462,7 @@ CTA: "Duet with your melody 🎹"
     selectBank("A", true);
     syncGrid();
     if (typeof pushHistory === "function") pushHistory("seed:" + (name || "custom"));
+    lastSeedId = name || lastSeedId;
     showToast("Seed: " + (name || "loaded") + (seed.bpm ? " @ " + seed.bpm + " BPM" : ""));
     const h = $("seedHint"); if (h) h.textContent = (name || "seed") + " loaded";
     return true;

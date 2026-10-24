@@ -61,3 +61,15 @@
 
 - Sample kit drop-in · Web MIDI · Access gate · Matrices  
   (prompts in `integrations/rea/REAP_PROMPTS.md` §17)
+
+
+## Checkpoint v13.2 — Unify Export
+
+| Claim | Evidence | Status |
+|-------|----------|--------|
+| `#btnExport` uses `__pgExport` / `exportPayloadV6` first | `step-sequencer.html` btnExport onclick | CONFIRM |
+| Payload `version: 13` | `exportPayloadV6` | CONFIRM |
+| Optional `seedId` when genre seed loaded | `lastSeedId` + export fields | CONFIRM |
+| Download name includes seed | `pulsegrid-v13-${seedId}-…json` | CONFIRM |
+
+Open question #1 (unify) → **closed**.

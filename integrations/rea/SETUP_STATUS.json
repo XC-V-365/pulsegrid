@@ -1,0 +1,13 @@
+{
+  "version": 13,
+  "plan": "integrations/rea/SETUP_PLAN.md",
+  "status": "awaiting_approval",
+  "install_executed": false,
+  "approval_phrases": [
+    "APPROVE REA SETUP",
+    "APPROVE REA SETUP LOCAL ONLY",
+    "REJECT"
+  ],
+  "command": "npx rea-agents@latest setup",
+  "note": "Plan only until user approves. No install run in this ship."
+}

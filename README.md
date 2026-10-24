@@ -67,7 +67,6 @@ Authorized reverse-engineering prompt pack for [REA](https://rea.tools/).
 - Prompts: `integrations/rea/REAP_PROMPTS.md`
 - Docs: `docs/REAP.md` · `docs/SESSION_REVISION_v13.md`
 
-## v13.1 seed → sequencer
-Open `step-sequencer.html?seed=techno` or use Seeds chips / From Studio plan.
-Export evidence: `integrations/rea/logs/export-json.evidence.md`
 
+## v13.2
+- Full Export + `seedId` · expanded genre seeds · REA `SETUP_PLAN.md` (awaiting approval)
