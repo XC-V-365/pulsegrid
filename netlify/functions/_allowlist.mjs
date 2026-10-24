@@ -1,8 +1,13 @@
-/** Server allowlist — env first, then saas/access-config.js fallback (included_files). */
-import { createRequire } from "node:module";
+/** Server allowlist — env → access-config.js → bundled defaults */
 import { readFileSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  DEFAULT_ADMIN_EMAILS,
+  DEFAULT_DONOR_EMAILS,
+  DEFAULT_SPONSOR_EMAILS,
+  DEFAULT_TRIAL,
+} from "./_defaults.mjs";
 
 function splitEmails(s) {
   return String(s || "")
@@ -20,63 +25,86 @@ function env(key) {
   return process.env[key] || "";
 }
 
-/** Parse window.PulseGridAccess.adminEmails from access-config.js text */
 function parseAccessConfig() {
   const candidates = [
     join(process.cwd(), "saas", "access-config.js"),
     join(dirname(fileURLToPath(import.meta.url)), "..", "..", "saas", "access-config.js"),
+    join(dirname(fileURLToPath(import.meta.url)), "saas", "access-config.js"),
   ];
   for (const p of candidates) {
     try {
       if (!existsSync(p)) continue;
       const raw = readFileSync(p, "utf8");
-      // strip line comments so // "email" placeholders are ignored
       const src = raw.replace(/\/\/.*$/gm, "");
       const pull = (key) => {
-        const re = new RegExp(key + "\s*:\s*\[([\s\S]*?)\]", "m");
+        const re = new RegExp(key + "\\s*:\\s*\\[([\\s\\S]*?)\\]", "m");
         const m = src.match(re);
         if (!m) return [];
         return [...m[1].matchAll(/["']([^"']+@[^"']+)["']/g)].map((x) =>
           x[1].trim().toLowerCase()
         );
       };
+      const admin = pull("adminEmails");
+      if (!admin.length) continue;
       return {
-        admin: pull("adminEmails"),
+        admin,
         donor: pull("donorEmails"),
         sponsor: pull("sponsorEmails"),
       };
     } catch (_) {}
   }
-  return { admin: [], donor: [], sponsor: [] };
+  return null;
 }
 
-let _fileCfg = null;
+let _fileCfg = undefined;
 function fileCfg() {
-  if (!_fileCfg) _fileCfg = parseAccessConfig();
+  if (_fileCfg === undefined) _fileCfg = parseAccessConfig();
   return _fileCfg;
 }
 
 export function getPolicy() {
   const file = fileCfg();
-  const admin = splitEmails(env("PULSEGRID_ADMIN_EMAILS"));
-  const donor = splitEmails(env("PULSEGRID_DONOR_EMAILS"));
-  const sponsor = splitEmails(env("PULSEGRID_SPONSOR_EMAILS"));
-  const trialEdits = parseInt(env("PULSEGRID_TRIAL_EDITS") || "25", 10);
-  const trialExports = parseInt(env("PULSEGRID_TRIAL_EXPORTS") || "5", 10);
-  const donorGenDays = parseInt(env("PULSEGRID_DONOR_GEN_DAYS") || "7", 10);
+  const adminEnv = splitEmails(env("PULSEGRID_ADMIN_EMAILS"));
+  const donorEnv = splitEmails(env("PULSEGRID_DONOR_EMAILS"));
+  const sponsorEnv = splitEmails(env("PULSEGRID_SPONSOR_EMAILS"));
+  const trialEdits = parseInt(env("PULSEGRID_TRIAL_EDITS") || String(DEFAULT_TRIAL.edits), 10);
+  const trialExports = parseInt(env("PULSEGRID_TRIAL_EXPORTS") || String(DEFAULT_TRIAL.exports), 10);
+  const donorGenDays = parseInt(
+    env("PULSEGRID_DONOR_GEN_DAYS") || String(DEFAULT_TRIAL.donorGenDays),
+    10
+  );
   const sessionSecret = env("PULSEGRID_SESSION_SECRET") || "";
   const requireSecret = env("PULSEGRID_REQUIRE_SECRET") === "1";
+
+  let admin, donor, sponsor, adminSource;
+  if (adminEnv.length) {
+    admin = adminEnv;
+    adminSource = "env";
+  } else if (file?.admin?.length) {
+    admin = file.admin;
+    adminSource = "access-config.js";
+  } else {
+    admin = DEFAULT_ADMIN_EMAILS.map((e) => e.toLowerCase());
+    adminSource = "bundled-defaults";
+  }
+  if (donorEnv.length) donor = donorEnv;
+  else if (file?.donor) donor = file.donor;
+  else donor = DEFAULT_DONOR_EMAILS.map((e) => e.toLowerCase());
+  if (sponsorEnv.length) sponsor = sponsorEnv;
+  else if (file?.sponsor) sponsor = file.sponsor;
+  else sponsor = DEFAULT_SPONSOR_EMAILS.map((e) => e.toLowerCase());
+
   return {
-    admin: admin.length ? admin : file.admin,
-    donor: donor.length ? donor : file.donor,
-    sponsor: sponsor.length ? sponsor : file.sponsor,
+    admin,
+    donor,
+    sponsor,
     trialEdits,
     trialExports,
     donorGenDays,
     sessionSecret,
     requireSecret,
     sources: {
-      admin: admin.length ? "env" : "access-config.js",
+      admin: adminSource,
       secret: sessionSecret ? "env" : "unsigned",
     },
   };
@@ -145,8 +173,10 @@ export async function verifySession(token, secret) {
   }
 }
 
+/** Base limits by role (Infinity for unlimited) */
 export function baseLimits(role, policy) {
-  if (role === "admin") return { edits: null, exports: null, genDays: 3650, genQuota: null };
+  if (role === "admin")
+    return { edits: Infinity, exports: Infinity, genDays: 3650, genQuota: Infinity };
   if (role === "sponsor" || role === "donor")
     return { edits: 500, exports: 100, genDays: policy.donorGenDays, genQuota: 50 };
   if (role === "trial")
@@ -160,38 +190,44 @@ export function baseLimits(role, policy) {
 }
 
 export function limitsFor(role, policy) {
-  const b = baseLimits(role, policy);
-  return {
-    edits: b.edits === null ? Infinity : b.edits,
-    exports: b.exports === null ? Infinity : b.exports,
-    genDays: b.genDays,
-  };
+  return baseLimits(role, policy);
 }
 
+/** Remaining after used counters in payload */
 export function remainingFromPayload(payload, policy) {
-  const role = payload.role || "anonymous";
+  const role = payload?.role || "anonymous";
   const base = baseLimits(role, policy);
-  const used = payload.used || { edits: 0, exports: 0, gens: 0 };
-  const rem = (max, usedN) => (max === null ? null : Math.max(0, max - (usedN || 0)));
+  const used = payload?.used || { edits: 0, exports: 0, gens: 0 };
+  const genExpired = payload?.genExpiresAt && payload.genExpiresAt < Date.now();
+  let genQuota = base.genQuota;
+  if (role === "admin") genQuota = Infinity;
+  else if (role === "trial" || role === "anonymous") genQuota = 0;
+  else if (genExpired) genQuota = 0;
+  else genQuota = Math.max(0, (base.genQuota === Infinity ? 0 : base.genQuota) - (used.gens || 0));
+
   return {
-    edits: rem(base.edits, used.edits),
-    exports: rem(base.exports, used.exports),
+    edits:
+      base.edits === Infinity ? null : Math.max(0, base.edits - (used.edits || 0)),
+    exports:
+      base.exports === Infinity ? null : Math.max(0, base.exports - (used.exports || 0)),
     genDays: base.genDays,
-    genQuota: rem(base.genQuota, used.gens),
+    genQuota: base.genQuota === Infinity ? null : genQuota,
     used,
     role,
   };
 }
 
+/** JSON-safe limits (Infinity → null) */
 export function publicLimits(limits) {
   return {
-    edits: limits.edits === Infinity || limits.edits === null ? null : limits.edits,
-    exports: limits.exports === Infinity || limits.exports === null ? null : limits.exports,
+    edits: limits.edits === Infinity ? null : limits.edits,
+    exports: limits.exports === Infinity ? null : limits.exports,
     genDays: limits.genDays,
-    genQuota: limits.genQuota === undefined ? undefined : limits.genQuota,
+    genQuota: limits.genQuota === Infinity ? null : limits.genQuota,
   };
 }
 
+/** Map client actions → used counter keys */
 export const ACTIONS = {
   edit: "edits",
   export: "exports",

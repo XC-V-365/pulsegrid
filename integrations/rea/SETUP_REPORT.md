@@ -1,46 +1,41 @@
-# REA setup report (v17 — plan only)
+# REA setup report (approved + installed)
 
-**User request:** item 1 — APPROVE REA SETUP — **npx install plan only until you approve**  
-**Date:** 2026-10-24  
-**Action this turn:** **No `npx` install.** Plan remains on disk; wait for explicit approve phrase.
+**Approval:** user **All** (2026-10-24) — executed as `APPROVE REA SETUP`  
+**Package:** `rea-agents@6.7.0`  
+**Node:** 22.23.4 via nvm (was 20.20.2)
 
-## Gate
+## What ran
 
-| Phrase | Meaning |
-|--------|---------|
-| `APPROVE REA SETUP` | Agent may run `npx rea-agents@latest setup` where Node 22+ works |
-| `APPROVE REA SETUP LOCAL ONLY` | Agent only prints commands for you |
-| `REJECT` | Leave plan; never install |
+| Step | Result |
+|------|--------|
+| `nvm install 22 && nvm use 22` | OK — v22.23.4 |
+| `npx rea-agents@latest doctor` | node healthy |
+| `npx rea-agents@latest setup --yes --all-detected` | **status: ready** |
+| appliedActions | `configured_grok_build`, `installed_skill` |
+| doctor after setup | **healthy: true** · environment_healthy: false (no binary engines) |
 
-## Preconditions (from SETUP_PLAN.md)
+## Configured
 
-1. Node.js **^22.19 / ^24.11 / ≥26** (REA 6.7+)
-2. npm registry network
-3. Authorized targets only (see `README.md` ethics)
-4. You accept REA vendor license/telemetry
+- **Grok Build MCP:** `/root/.grok/config.toml` → `[mcp_servers.rea]` · `npx -y rea-agents@6.7.0 mcp`
+- **Skill:** `/root/.agents/skills/reverse-engineer-anything` · version **42** · **207** tools · state aligned
 
-## Agent host status
+## Optional engines (not installed — by design)
 
-| Check | Result |
-|-------|--------|
-| Node | **20.20.2** — below REA engine requirement |
-| `npm view rea-agents` | Available when network works (was 6.7.0) |
-| Full agent integration | Needs local Node 22+ |
-
-## Commands (copy after approve)
+Ghidra, IDA MCP, JADX, Kuna, Hopper require you to own/license them and set paths. REA does not download them.
 
 ```bash
-node -v   # must be 22.19+
-npm -v
-npm view rea-agents version
-npx rea-agents@latest setup --yes --all-detected
+# only if you already own these tools:
+export GHIDRA_INSTALL_DIR=/path/to/ghidra_12.1
+export REA_IDA_MCP_CONFIG=/path/to/ida-mcp.json
+export REA_JADX_MCP_JAR=/path/to/jadx-headless-mcp.jar
+export REA_KUNA_COMMAND=/path/to/kuna
 npx rea-agents@latest doctor
 ```
 
-## PulseGrid without REA engines
+## PulseGrid first-party (no engines required)
 
-Static REAP pack + evidence logs still work:
+Use `integrations/rea/REAP_PROMPTS.md` + `integrations/rea/logs/*.evidence.md` for authorized static RE of PulseGrid itself.
 
-- `integrations/rea/REAP_PROMPTS.md`
-- `integrations/rea/logs/*.evidence.md`
-- Hub: `integrations/rea/index.html`
+## Restart note
+
+Restart the Grok agent client if MCP tools do not appear after this setup.

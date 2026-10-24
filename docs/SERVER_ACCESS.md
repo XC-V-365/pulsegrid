@@ -50,3 +50,11 @@ Falls back gracefully when offline / pure static hosting without functions.
 ## Note on replay
 
 Token-embedded counters are fine for SaaS demo / soft limits. For hard production quotas, pair with Netlify Blobs or a DB keyed by email.
+
+## v18 allowlist resolution order
+
+1. `PULSEGRID_*_EMAILS` env (Netlify Functions scope)
+2. `saas/access-config.js` (if present on disk via `included_files`)
+3. **bundled** `netlify/functions/_defaults.mjs` (always ships with functions)
+
+Replace placeholder emails in both `saas/access-config.js` and `_defaults.mjs` for production, or set env.
