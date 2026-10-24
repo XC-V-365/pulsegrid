@@ -21,6 +21,7 @@ export default async (req: Request, _context: Context) => {
       exports: policy.trialExports,
     },
     donorGenDays: policy.donorGenDays,
+    sources: policy.sources || null,
     endpoints: [
       "POST /api/access/session",
       "GET  /api/access/verify",

@@ -1,4 +1,9 @@
-/** Server allowlist — override via env (Functions scope). Client access-config is demos only. */
+/** Server allowlist — env first, then saas/access-config.js fallback (included_files). */
+import { createRequire } from "node:module";
+import { readFileSync, existsSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
 function splitEmails(s) {
   return String(s || "")
     .split(/[,;\s]+/)
@@ -6,24 +11,72 @@ function splitEmails(s) {
     .filter(Boolean);
 }
 
+function env(key) {
+  try {
+    if (typeof Netlify !== "undefined" && Netlify.env?.get) {
+      return Netlify.env.get(key) || "";
+    }
+  } catch (_) {}
+  return process.env[key] || "";
+}
+
+/** Parse window.PulseGridAccess.adminEmails from access-config.js text */
+function parseAccessConfig() {
+  const candidates = [
+    join(process.cwd(), "saas", "access-config.js"),
+    join(dirname(fileURLToPath(import.meta.url)), "..", "..", "saas", "access-config.js"),
+  ];
+  for (const p of candidates) {
+    try {
+      if (!existsSync(p)) continue;
+      const src = readFileSync(p, "utf8");
+      const pull = (key) => {
+        const re = new RegExp(key + "\\s*:\\s*\\[([\\s\\S]*?)\\]", "m");
+        const m = src.match(re);
+        if (!m) return [];
+        return [...m[1].matchAll(/["']([^"']+@[^"']+)["']/g)].map((x) =>
+          x[1].trim().toLowerCase()
+        );
+      };
+      return {
+        admin: pull("adminEmails"),
+        donor: pull("donorEmails"),
+        sponsor: pull("sponsorEmails"),
+      };
+    } catch (_) {}
+  }
+  return { admin: [], donor: [], sponsor: [] };
+}
+
+let _fileCfg = null;
+function fileCfg() {
+  if (!_fileCfg) _fileCfg = parseAccessConfig();
+  return _fileCfg;
+}
+
 export function getPolicy() {
-  const admin = splitEmails(Netlify.env.get("PULSEGRID_ADMIN_EMAILS"));
-  const donor = splitEmails(Netlify.env.get("PULSEGRID_DONOR_EMAILS"));
-  const sponsor = splitEmails(Netlify.env.get("PULSEGRID_SPONSOR_EMAILS"));
-  const trialEdits = parseInt(Netlify.env.get("PULSEGRID_TRIAL_EDITS") || "25", 10);
-  const trialExports = parseInt(Netlify.env.get("PULSEGRID_TRIAL_EXPORTS") || "5", 10);
-  const donorGenDays = parseInt(Netlify.env.get("PULSEGRID_DONOR_GEN_DAYS") || "7", 10);
-  const sessionSecret = Netlify.env.get("PULSEGRID_SESSION_SECRET") || "";
-  const requireSecret = Netlify.env.get("PULSEGRID_REQUIRE_SECRET") === "1";
+  const file = fileCfg();
+  const admin = splitEmails(env("PULSEGRID_ADMIN_EMAILS"));
+  const donor = splitEmails(env("PULSEGRID_DONOR_EMAILS"));
+  const sponsor = splitEmails(env("PULSEGRID_SPONSOR_EMAILS"));
+  const trialEdits = parseInt(env("PULSEGRID_TRIAL_EDITS") || "25", 10);
+  const trialExports = parseInt(env("PULSEGRID_TRIAL_EXPORTS") || "5", 10);
+  const donorGenDays = parseInt(env("PULSEGRID_DONOR_GEN_DAYS") || "7", 10);
+  const sessionSecret = env("PULSEGRID_SESSION_SECRET") || "";
+  const requireSecret = env("PULSEGRID_REQUIRE_SECRET") === "1";
   return {
-    admin,
-    donor,
-    sponsor,
+    admin: admin.length ? admin : file.admin,
+    donor: donor.length ? donor : file.donor,
+    sponsor: sponsor.length ? sponsor : file.sponsor,
     trialEdits,
     trialExports,
     donorGenDays,
     sessionSecret,
     requireSecret,
+    sources: {
+      admin: admin.length ? "env" : "access-config.js",
+      secret: sessionSecret ? "env" : "unsigned",
+    },
   };
 }
 
@@ -36,7 +89,6 @@ export function roleFor(email, policy) {
   return "trial";
 }
 
-/** HMAC session token via Web Crypto */
 export async function signSession(payload, secret) {
   if (!secret) {
     return "pg." + btoa(JSON.stringify({ ...payload, u: true }));
@@ -94,12 +146,7 @@ export async function verifySession(token, secret) {
 export function baseLimits(role, policy) {
   if (role === "admin") return { edits: null, exports: null, genDays: 3650, genQuota: null };
   if (role === "sponsor" || role === "donor")
-    return {
-      edits: 500,
-      exports: 100,
-      genDays: policy.donorGenDays,
-      genQuota: 50,
-    };
+    return { edits: 500, exports: 100, genDays: policy.donorGenDays, genQuota: 50 };
   if (role === "trial")
     return {
       edits: policy.trialEdits,
@@ -110,7 +157,6 @@ export function baseLimits(role, policy) {
   return { edits: 0, exports: 0, genDays: 0, genQuota: 0 };
 }
 
-/** Alias used by older handlers */
 export function limitsFor(role, policy) {
   const b = baseLimits(role, policy);
   return {
