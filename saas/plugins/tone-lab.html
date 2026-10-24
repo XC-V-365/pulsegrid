@@ -1,39 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PulseGrid · Tone.js optional lab</title>
-<style>
-body{font-family:system-ui;background:#060a12;color:#e8ecf4;padding:1.5rem}
-a{color:#d4a574}.card{background:#101820;border:1px solid #1e2a3a;border-radius:12px;padding:1rem;max-width:520px}
-button{margin:.35rem .25rem 0 0;padding:.45rem .7rem;border-radius:8px;border:1px solid #1e2a3a;background:#161f2c;color:#e8ecf4;font-weight:600;cursor:pointer}
-.ok{color:#7ee0a0}.err{color:#e8a0b0}code{font-size:.75rem;color:#8b95a8}
-</style>
-</head>
-<body>
-  <h1>Tone.js plugin lab</h1>
-  <p><a href="../../index.html">Portal</a> · <a href="index.html">Plugins registry</a> · <a href="../../step-sequencer.html">Sequencer</a></p>
-  <div class="card">
-    <p>Optional CDN load — core sequencer does <strong>not</strong> depend on Tone.</p>
-    <p><code id="cdn"></code></p>
-    <button id="load">Load Tone</button>
-    <button id="beep">Demo beep</button>
-    <p id="out"></p>
-  </div>
-  <script src="tone-shim.js"></script>
-  <script>
-    document.getElementById("cdn").textContent = PulseGridPlugins.toneCdn;
-    document.getElementById("load").onclick = async () => {
-      const o = document.getElementById("out");
-      try { await PulseGridPlugins.loadTone(); o.className = "ok"; o.textContent = "Tone loaded " + (Tone.version || ""); }
-      catch (e) { o.className = "err"; o.textContent = String(e); }
-    };
-    document.getElementById("beep").onclick = async () => {
-      const o = document.getElementById("out");
-      try { o.textContent = await PulseGridPlugins.demoBeep(); o.className = "ok"; }
-      catch (e) { o.className = "err"; o.textContent = String(e.message || e); }
-    };
-  </script>
-</body>
-</html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Tone lab</title>
+<style>body{font-family:system-ui;background:#060a12;color:#e8ecf4;padding:1.5rem}a{color:#d4a574}button{margin:.3rem;padding:.4rem .7rem;cursor:pointer}</style></head>
+<body><h1>Tone.js optional lab</h1>
+<p><a href="index.html">Plugins</a> · <a href="../../step-sequencer.html">Sequencer</a></p>
+<button id="l">Load Tone</button><button id="b">Demo beep</button><pre id="o"></pre>
+<script src="tone-shim.js"></script>
+<script>
+l.onclick=async()=>{try{await PulseGridPlugins.loadTone();o.textContent="Tone "+(Tone.version||"ok")}catch(e){o.textContent=String(e)}};
+b.onclick=async()=>{try{o.textContent=await PulseGridPlugins.demoBeep()}catch(e){o.textContent=e.message||e}};
+</script></body></html>
