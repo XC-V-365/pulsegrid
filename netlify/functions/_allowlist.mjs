@@ -29,9 +29,11 @@ function parseAccessConfig() {
   for (const p of candidates) {
     try {
       if (!existsSync(p)) continue;
-      const src = readFileSync(p, "utf8");
+      const raw = readFileSync(p, "utf8");
+      // strip line comments so // "email" placeholders are ignored
+      const src = raw.replace(/\/\/.*$/gm, "");
       const pull = (key) => {
-        const re = new RegExp(key + "\\s*:\\s*\\[([\\s\\S]*?)\\]", "m");
+        const re = new RegExp(key + "\s*:\s*\[([\s\S]*?)\]", "m");
         const m = src.match(re);
         if (!m) return [];
         return [...m[1].matchAll(/["']([^"']+@[^"']+)["']/g)].map((x) =>
