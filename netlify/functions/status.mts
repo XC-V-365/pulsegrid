@@ -9,7 +9,7 @@ export default async (req: Request, _context: Context) => {
   return json({
     ok: true,
     product: "PulseGrid",
-    version: 17,
+    version: 18,
     serverEnforced: true,
     hmacConfigured: !!policy.sessionSecret,
     requireSecret: policy.requireSecret,
