@@ -1,4 +1,6 @@
-# PulseGrid v8 — SaaS access · generators · QOL
+# PulseGrid v10 — Agents · Master Music LLM · Matrices
+
+ — SaaS access · generators · QOL
 
 Premium 16-step drum platform with **access control**, **music generators**, **session vault**, and full sequencer (FX, MIDI, matrix, AI paste packs).
 
@@ -50,3 +52,16 @@ Licence clause covers **all licences** and can be **changed inside Admin** by ad
 ## Production note
 
 Browser gates are UX. Enforce allowlists, trials, and Stripe/GitHub Sponsors webhooks on a **server** before real billing.
+
+
+## Agents · Master Music LLM · Matrices (v10)
+
+| Path | Role |
+|------|------|
+| `saas/agents/` | Agent/bot registry + Master Music LLM router |
+| `saas/agents/master-music/constitution.md` | Music LLM constitution (anti-slop, matrices-first) |
+| `saas/matrices/` | Appraisal · Anti-Slop · Awesome engines + UI |
+| `docs/AGENTS_AND_MATRICES.md` | Full reference |
+| `integrations/agents/PROMPTS.md` | Paste prompts for Grok/Copilot |
+
+Open **`saas/agents/index.html`** and **`saas/matrices/index.html`**.

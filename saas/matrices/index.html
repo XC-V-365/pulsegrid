@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PulseGrid Matrices · Appraisal · Anti-Slop · Awesome</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#070b14;--surface:#101820;--border:#1e2a3a;--text:#e8ecf4;--muted:#8b95a8;--rose:#d4a574;--midi:#7ee0a0;--warn:#e8a0b0;--blue:#7ec8d8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"DM Sans",system-ui,sans-serif;background:var(--navy);color:var(--text);padding:1.25rem}
+a{color:var(--rose)}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font-size:1.2rem}
+.sub{font-size:.78rem;color:var(--muted);margin:.25rem 0 1rem}
+.tabs{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1rem}
+.tab{border:1px solid var(--border);background:#121820;color:var(--muted);border-radius:8px;padding:.4rem .7rem;font-size:.75rem;font-weight:600;cursor:pointer}
+.tab.active{color:var(--text);border-color:var(--rose);box-shadow:inset 0 -2px 0 var(--rose)}
+.panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem}
+.panel.active{display:block}
+table{width:100%;border-collapse:collapse;font-size:.75rem;margin:.5rem 0}
+th,td{border-bottom:1px solid var(--border);padding:.4rem .5rem;text-align:left}
+th{color:var(--rose);font-size:.62rem;text-transform:uppercase}
+input[type=range]{width:100%}
+textarea{width:100%;min-height:120px;background:#0a0e1a;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.5rem;font-family:"JetBrains Mono",monospace;font-size:.72rem}
+.btn{border:1px solid var(--border);background:#1a2230;color:var(--text);border-radius:8px;padding:.45rem .7rem;font-weight:600;cursor:pointer;font-size:.75rem;margin:.35rem .25rem 0 0}
+.btn-primary{background:linear-gradient(135deg,#c0c8d4,#d4a574);color:#0a0e1a;border:none}
+.metric{display:inline-block;padding:.35rem .6rem;border-radius:8px;background:#0a0e1a;border:1px solid var(--border);margin:.2rem;font-size:.8rem}
+.metric strong{color:var(--midi)}
+.metric.bad strong{color:var(--warn)}
+.metric.awesome strong{color:var(--rose)}
+.desc{font-size:.72rem;color:var(--muted);line-height:1.45;margin:.4rem 0}
+.out{font-family:"JetBrains Mono",monospace;font-size:.68rem;white-space:pre-wrap;background:#0a0e1a;border:1px solid var(--border);border-radius:8px;padding:.65rem;margin-top:.5rem;max-height:280px;overflow:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Matrices</h1>
+  <p class="sub"><a href="../../index.html">Portal</a> · <a href="../agents/index.html">Agents</a> · <a href="../dashboard/index.html">Dashboard</a> · Appraisal · Anti-Slop · Awesome</p>
+  <div class="tabs">
+    <button class="tab active" data-p="appraisal">Appraisal</button>
+    <button class="tab" data-p="antislop">Anti-Slop</button>
+    <button class="tab" data-p="awesome">Awesome</button>
+    <button class="tab" data-p="combined">Combined report</button>
+  </div>
+
+  <div class="panel active" id="p-appraisal">
+    <p class="desc">Craft quality of a 16-step pattern across structure, dynamics, groove, density, identity, export-ready (0–5 each).</p>
+    <label class="desc">BPM <input type="number" id="bpm" value="120" style="width:80px;margin-left:.5rem;background:#0a0e1a;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:.25rem"/></label>
+    <p class="desc">Pattern JSON</p>
+    <textarea id="pat">{"kick":[{"v":3,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":2,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":3,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":2,"p":100},{"v":0,"p":100},{"v":1,"p":80},{"v":0,"p":100}],"snare":[{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":3,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":3,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":1,"p":70}],"hat":[{"v":1,"p":100},{"v":1,"p":80},{"v":2,"p":100},{"v":1,"p":80},{"v":1,"p":100},{"v":1,"p":80},{"v":2,"p":100},{"v":1,"p":80},{"v":1,"p":100},{"v":1,"p":80},{"v":2,"p":100},{"v":1,"p":80},{"v":1,"p":100},{"v":1,"p":80},{"v":2,"p":100},{"v":1,"p":80}],"perc":[{"v":0,"p":100},{"v":0,"p":100},{"v":1,"p":60},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":2,"p":90},{"v":0,"p":100},{"v":0,"p":100},{"v":1,"p":60},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100}]}</textarea>
+    <button class="btn btn-primary" id="runApp">Run appraisal</button>
+    <div id="appMetrics"></div>
+    <table><thead><tr><th>Axis</th><th>Score</th><th>Description</th></tr></thead><tbody id="appBody"></tbody></table>
+    <div class="out" id="appOut"></div>
+  </div>
+
+  <div class="panel" id="p-antislop">
+    <p class="desc">Detects generic AI music copy, missing BPM, hype-without-instruments, placeholders, emoji spam, etc. Lower score = cleaner.</p>
+    <textarea id="slopText">epic cinematic fire banger ethereal vibes emotional rollercoaster masterpiece as an AI</textarea>
+    <button class="btn btn-primary" id="runSlop">Score anti-slop</button>
+    <button class="btn" id="runRewrite">Rewrite (de-slop)</button>
+    <div id="slopMetrics"></div>
+    <div class="out" id="slopOut"></div>
+  </div>
+
+  <div class="panel" id="p-awesome">
+    <p class="desc">Excellence bar for featured / sponsor showcase. Weighted cells; threshold marks AWESOME.</p>
+    <div id="awesomeSliders"></div>
+    <button class="btn btn-primary" id="runAwesome">Score awesome matrix</button>
+    <div id="awMetrics"></div>
+    <div class="out" id="awOut"></div>
+  </div>
+
+  <div class="panel" id="p-combined">
+    <p class="desc">One report: appraisal + anti-slop + awesome for agents / Master Music LLM.</p>
+    <button class="btn btn-primary" id="runAll">Generate combined report</button>
+    <div class="out" id="allOut"></div>
+  </div>
+</div>
+<script src="engines.js"></script>
+<script>
+const M = PulseGridMatrices;
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
+  document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(x => x.classList.remove("active"));
+  t.classList.add("active");
+  document.getElementById("p-" + t.dataset.p).classList.add("active");
+});
+
+// awesome sliders
+const box = document.getElementById("awesomeSliders");
+M.AWESOME.cells.forEach(c => {
+  const d = document.createElement("div");
+  d.style.margin = ".4rem 0";
+  d.innerHTML = `<div style="display:flex;justify-content:space-between;font-size:.72rem"><span>${c.label}</span><span id="av_${c.id}">3</span></div>
+    <input type="range" min="0" max="5" value="3" id="sl_${c.id}" data-id="${c.id}"/>`;
+  box.appendChild(d);
+  d.querySelector("input").oninput = e => { document.getElementById("av_" + c.id).textContent = e.target.value; };
+});
+
+document.getElementById("runApp").onclick = () => {
+  const p = JSON.parse(document.getElementById("pat").value);
+  const a = M.autoAppraisePattern(p, +document.getElementById("bpm").value);
+  document.getElementById("appMetrics").innerHTML =
+    `<span class="metric">Total <strong>${a.total}/${a.max}</strong></span>
+     <span class="metric">Pct <strong>${a.pct}%</strong></span>`;
+  document.getElementById("appBody").innerHTML = M.APPRAISAL.axes.map(ax =>
+    `<tr><td>${ax.label}</td><td><strong>${a.scores[ax.id]}</strong>/5</td><td style="color:var(--muted)">${ax.desc}</td></tr>`
+  ).join("");
+  document.getElementById("appOut").textContent = JSON.stringify(a, null, 2);
+};
+
+document.getElementById("runSlop").onclick = () => {
+  const s = M.scoreAntiSlop(document.getElementById("slopText").value);
+  document.getElementById("slopMetrics").innerHTML =
+    `<span class="metric ${s.clean?"":"bad"}">Grade <strong>${s.grade}</strong></span>
+     <span class="metric ${s.clean?"":"bad"}">Slop score <strong>${s.score}</strong> / ${s.max}</span>`;
+  document.getElementById("slopOut").textContent = JSON.stringify(s, null, 2);
+};
+document.getElementById("runRewrite").onclick = () => {
+  const r = M.rewriteAntiSlop(document.getElementById("slopText").value, +document.getElementById("bpm").value);
+  document.getElementById("slopText").value = r.text;
+  document.getElementById("slopOut").textContent = r.note + "\n\n" + JSON.stringify(r.before, null, 2);
+};
+
+document.getElementById("runAwesome").onclick = () => {
+  const scores = {};
+  M.AWESOME.cells.forEach(c => { scores[c.id] = +document.getElementById("sl_" + c.id).value; });
+  const a = M.scoreAwesome(scores);
+  document.getElementById("awMetrics").innerHTML =
+    `<span class="metric ${a.isAwesome?"awesome":""}">Weighted <strong>${a.total}</strong> / ${a.max}</span>
+     <span class="metric">Pct <strong>${a.pct}%</strong></span>
+     <span class="metric ${a.isAwesome?"awesome":""}">AWESOME <strong>${a.isAwesome}</strong></span>
+     <span class="metric">Threshold ${a.threshold}</span>`;
+  document.getElementById("awOut").textContent = JSON.stringify(a, null, 2);
+};
+
+document.getElementById("runAll").onclick = () => {
+  const p = JSON.parse(document.getElementById("pat").value);
+  const app = M.autoAppraisePattern(p, +document.getElementById("bpm").value);
+  const slop = M.scoreAntiSlop(document.getElementById("slopText").value);
+  const scores = {};
+  M.AWESOME.cells.forEach(c => { scores[c.id] = +document.getElementById("sl_" + c.id).value; });
+  const aw = M.scoreAwesome(scores);
+  const report = {
+    version: 10,
+    appraisal: app,
+    antiSlop: slop,
+    awesome: aw,
+    verdict: slop.clean && app.pct >= 60 ? (aw.isAwesome ? "FEATURE" : "SHIP") : "REVISE"
+  };
+  document.getElementById("allOut").textContent = JSON.stringify(report, null, 2);
+};
+</script>
+</body>
+</html>

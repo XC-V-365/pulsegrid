@@ -1,35 +1,28 @@
-# PulseGrid v9 Architecture
+# PulseGrid v10 Architecture
 
-## Command Center
+## New layer: Agents · LLMs · Matrices
 
-`saas/dashboard/index.html` unifies:
+```
+Pattern / Package
+       │
+       ▼
+┌──────────────┐     ┌─────────────────────┐
+│  Matrices    │────▶│  Master Music LLM   │
+│ Appraisal    │     │  constitution+router│
+│ Anti-Slop    │     └──────────┬──────────┘
+│ Awesome      │                │
+└──────────────┘                ▼
+                     Agents / Bots (Conductor, GrooveSmith,
+                     AntiSlop, Appraiser, ExportRunner, …)
+```
 
-| Dashboard | Content |
-|-----------|---------|
-| Overview | Metrics, quick launch, coverage |
-| Artifacts | Full file catalog + GitHub links |
-| Grok integrations | All connected services → PulseGrid hooks |
-| Creator | Loop, sessions, publish paths |
-| Admin | Access, licence, deploy |
-| Pipelines | P1–P8 |
-| Activity | Local health + catalog summary |
+## Prior layers
 
-## Layers
+Portal/SaaS access · Sequencer · Generators · Sessions · Command Center · Grok integrations · Native C++/Rust
 
-1. Portal / SaaS access  
-2. Sequencer engine  
-3. Generators + sessions  
-4. **Command Center dashboards**  
-5. Integrations (creative + Grok + Composio)  
-6. Native C++/Rust  
-7. Docs  
+## Key paths
 
-## Grok publish (from chat)
-
-Ask Grok to push GitHub, Notion pages, Drive uploads, Buffer posts, Gmail, Vercel deploys — tools are connected on the operator account.
-
-## Config
-
-- `saas/access-config.js` — emails, trial, gen, licence  
-- `integrations/grok/CONNECTED_SERVICES.json` — service map  
-- `saas/artifacts/catalog.json` — artifact inventory  
+- `saas/agents/registry.js`
+- `saas/agents/master-music/`
+- `saas/matrices/engines.js`
+- `docs/AGENTS_AND_MATRICES.md`

@@ -149,6 +149,8 @@ td path, .mono { font-family:"JetBrains Mono",monospace; font-size:.68rem; }
     <button class="nav-btn" data-panel="creator">Creator dashboard</button>
     <button class="nav-btn" data-panel="admin">Admin dashboard</button>
     <button class="nav-btn" data-panel="pipelines">Pipelines</button>
+    <button class="nav-btn" data-panel="agents">Agents · LLMs</button>
+    <button class="nav-btn" data-panel="matrices">Matrices</button>
     <button class="nav-btn" data-panel="activity">Activity / health</button>
     <div class="nav-foot">
       v9 Command Center<br/>
@@ -185,6 +187,8 @@ td path, .mono { font-family:"JetBrains Mono",monospace; font-size:.68rem; }
             <a class="btn btn-link" href="../generators/index.html">Music generators</a>
             <a class="btn btn-link" href="../sessions/index.html">Session vault</a>
             <a class="btn btn-link" href="../admin/index.html">Admin console</a>
+            <a class="btn btn-link" href="../agents/index.html">Agents · LLMs</a>
+            <a class="btn btn-link" href="../matrices/index.html">Matrices</a>
             <a class="btn btn-link" href="https://github.com/XC-V-365/pulsegrid" target="_blank" rel="noopener">GitHub</a>
           </div>
         </div>
@@ -295,6 +299,29 @@ td path, .mono { font-family:"JetBrains Mono",monospace; font-size:.68rem; }
     </section>
 
     <!-- ACTIVITY -->
+    
+    <section class="panel" id="panel-agents">
+      <div class="card">
+        <h3>Agents · Bots · Master Music LLM</h3>
+        <p>Full console for agent registry, local Master Music router, anti-slop and appraisal hooks.</p>
+        <div class="actions">
+          <a class="btn btn-primary btn-link" href="../agents/index.html">Open Agents console</a>
+          <a class="btn btn-link" href="../agents/master-music/constitution.md">Constitution</a>
+          <a class="btn btn-link" href="../../integrations/agents/PROMPTS.md">Prompts</a>
+        </div>
+      </div>
+    </section>
+    <section class="panel" id="panel-matrices">
+      <div class="card">
+        <h3>Appraisal · Anti-Slop · Awesome</h3>
+        <p>Interactive matrices for craft scoring, slop detection, and excellence threshold.</p>
+        <div class="actions">
+          <a class="btn btn-primary btn-link" href="../matrices/index.html">Open Matrices</a>
+          <a class="btn btn-link" href="../../docs/AGENTS_AND_MATRICES.md">Docs</a>
+        </div>
+      </div>
+    </section>
+
     <section class="panel" id="panel-activity">
       <div class="two">
         <div>
@@ -321,6 +348,8 @@ const titles = {
   creator: ["Creator dashboard", "Beat → export → AI → social loop."],
   admin: ["Admin dashboard", "Access, licence, deploy, and policy."],
   pipelines: ["Pipelines", "End-to-end product workflows P1–P8."],
+  agents: ["Agents · LLMs", "Conductor, bots, Master Music LLM."],
+  matrices: ["Matrices", "Appraisal · Anti-Slop · Awesome."],
   activity: ["Activity / health", "Local storage, gates, catalog integrity."]
 };
 

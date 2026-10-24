@@ -1,21 +1,32 @@
 {
-  "version": 9,
+  "version": 10,
   "generated": "2026-10-24",
   "repo": "https://github.com/XC-V-365/pulsegrid",
-  "commit": "e65b360",
-  "count": 53,
+  "count": 63,
   "items": [
     {
       "path": "PulseGrid-ARCHITECTURE.md",
-      "size": 663,
-      "category": "docs",
+      "size": 951,
+      "category": "other",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/PulseGrid-ARCHITECTURE.md"
     },
     {
       "path": "README.md",
-      "size": 1652,
-      "category": "docs",
+      "size": 2498,
+      "category": "other",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/README.md"
+    },
+    {
+      "path": "docs/AGENTS_AND_MATRICES.md",
+      "size": 1263,
+      "category": "docs",
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/AGENTS_AND_MATRICES.md"
+    },
+    {
+      "path": "docs/DASHBOARDS.md",
+      "size": 1053,
+      "category": "docs",
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/docs/DASHBOARDS.md"
     },
     {
       "path": "docs/FUNCTION_REFERENCE.md",
@@ -37,7 +48,7 @@
     },
     {
       "path": "index.html",
-      "size": 13408,
+      "size": 13635,
       "category": "app",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/index.html"
     },
@@ -46,6 +57,12 @@
       "size": 715,
       "category": "integrations",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/README.md"
+    },
+    {
+      "path": "integrations/agents/PROMPTS.md",
+      "size": 783,
+      "category": "integrations",
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/integrations/agents/PROMPTS.md"
     },
     {
       "path": "integrations/composio/README.md",
@@ -288,10 +305,46 @@
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/admin/index.html"
     },
     {
+      "path": "saas/agents/index.html",
+      "size": 7869,
+      "category": "agents",
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/agents/index.html"
+    },
+    {
+      "path": "saas/agents/master-music/constitution.md",
+      "size": 1818,
+      "category": "agents",
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/agents/master-music/constitution.md"
+    },
+    {
+      "path": "saas/agents/master-music/router.js",
+      "size": 3247,
+      "category": "agents",
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/agents/master-music/router.js"
+    },
+    {
+      "path": "saas/agents/registry.js",
+      "size": 2975,
+      "category": "agents",
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/agents/registry.js"
+    },
+    {
+      "path": "saas/artifacts/catalog.json",
+      "size": 11080,
+      "category": "saas",
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/artifacts/catalog.json"
+    },
+    {
       "path": "saas/auth/access-engine.js",
       "size": 8797,
       "category": "saas",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/auth/access-engine.js"
+    },
+    {
+      "path": "saas/dashboard/index.html",
+      "size": 24577,
+      "category": "saas",
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/dashboard/index.html"
     },
     {
       "path": "saas/generators/index.html",
@@ -306,6 +359,18 @@
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/legal/LICENSE.md"
     },
     {
+      "path": "saas/matrices/engines.js",
+      "size": 7766,
+      "category": "matrices",
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/matrices/engines.js"
+    },
+    {
+      "path": "saas/matrices/index.html",
+      "size": 9863,
+      "category": "matrices",
+      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/saas/matrices/index.html"
+    },
+    {
       "path": "saas/sessions/index.html",
       "size": 2002,
       "category": "saas",
@@ -316,12 +381,6 @@
       "size": 120094,
       "category": "app",
       "github": "https://github.com/XC-V-365/pulsegrid/blob/main/step-sequencer.html"
-    },
-    {
-      "path": "pulsegrid-default-pattern.json",
-      "size": 0,
-      "category": "exports",
-      "github": "https://github.com/XC-V-365/pulsegrid/blob/main/pulsegrid-default-pattern.json"
     }
   ]
 }

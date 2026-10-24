@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PulseGrid Agents · Bots · LLMs</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#070b14;--surface:#101820;--border:#1e2a3a;--text:#e8ecf4;--muted:#8b95a8;--rose:#d4a574;--midi:#7ee0a0;--blue:#7ec8d8;--warn:#e8a0b0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"DM Sans",system-ui,sans-serif;background:var(--navy);color:var(--text);padding:1.25rem;min-height:100vh}
+a{color:var(--rose)}
+.wrap{max-width:1100px;margin:0 auto}
+h1{font-size:1.25rem;margin-bottom:.25rem}
+.sub{font-size:.78rem;color:var(--muted);margin-bottom:1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.65rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:.85rem}
+.card h3{font-size:.85rem;display:flex;justify-content:space-between;align-items:center}
+.badge{font-size:.58rem;padding:.12rem .35rem;border-radius:4px;background:#1a2840;color:var(--blue)}
+.badge.bot{color:var(--midi)}.badge.llm{color:var(--rose)}.badge.agent{color:var(--blue)}
+.card p{font-size:.72rem;color:var(--muted);line-height:1.45;margin:.35rem 0}
+.tools{display:flex;flex-wrap:wrap;gap:.25rem}
+.chip{font-size:.58rem;border:1px solid var(--border);border-radius:999px;padding:.1rem .4rem;color:var(--muted)}
+.panel{margin-top:1rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem}
+label{font-size:.72rem;color:var(--muted);display:block;margin:.4rem 0 .2rem}
+textarea,select,input{width:100%;background:#0a0e1a;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.5rem;font-size:.8rem;font-family:"JetBrains Mono",monospace}
+textarea{min-height:100px}
+.btn{border:1px solid var(--border);background:#1a2230;color:var(--text);border-radius:8px;padding:.45rem .75rem;font-weight:600;cursor:pointer;font-size:.75rem;margin:.3rem .25rem 0 0}
+.btn-primary{background:linear-gradient(135deg,#c0c8d4,#d4a574);color:#0a0e1a;border:none}
+.out{margin-top:.75rem;font-family:"JetBrains Mono",monospace;font-size:.68rem;line-height:1.5;white-space:pre-wrap;background:#0a0e1a;border:1px solid var(--border);border-radius:8px;padding:.75rem;max-height:360px;overflow:auto}
+.row{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Agents · Bots · LLMs</h1>
+  <p class="sub"><a href="../../index.html">Portal</a> · <a href="../dashboard/index.html">Command Center</a> · <a href="../matrices/index.html">Matrices</a> · <a href="master-music/constitution.md">Master Music constitution</a></p>
+
+  <div class="grid" id="agentGrid"></div>
+
+  <div class="panel">
+    <h3 style="font-size:.8rem;color:var(--rose);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">Master Music LLM · local router</h3>
+    <p class="sub" style="margin:0 0 .5rem">Builds messages for a hosted LLM, or runs the local deterministic scaffold (offline).</p>
+    <label>Mode</label>
+    <select id="mode">
+      <option value="critique">critique</option>
+      <option value="compose">compose</option>
+      <option value="package">package</option>
+      <option value="pipeline">pipeline</option>
+      <option value="rewrite">rewrite</option>
+      <option value="native">native</option>
+    </select>
+    <label>BPM</label>
+    <input type="number" id="bpm" value="120"/>
+    <label>User ask</label>
+    <input type="text" id="ask" value="Critique this pattern and harden any package against slop."/>
+    <label>Pattern JSON (banks or track map)</label>
+    <textarea id="pattern">{"kick":[{"v":3,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":2,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":3,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":2,"p":100},{"v":0,"p":100},{"v":1,"p":80},{"v":0,"p":100}],"snare":[{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":3,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":3,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":1,"p":70}],"hat":[{"v":1,"p":100},{"v":1,"p":80},{"v":2,"p":100},{"v":1,"p":80},{"v":1,"p":100},{"v":1,"p":80},{"v":2,"p":100},{"v":1,"p":80},{"v":1,"p":100},{"v":1,"p":80},{"v":2,"p":100},{"v":1,"p":80},{"v":1,"p":100},{"v":1,"p":80},{"v":2,"p":100},{"v":1,"p":80}],"perc":[{"v":0,"p":100},{"v":0,"p":100},{"v":1,"p":60},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":2,"p":90},{"v":0,"p":100},{"v":0,"p":100},{"v":1,"p":60},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100},{"v":0,"p":100}]}</textarea>
+    <label>Package text (optional)</label>
+    <textarea id="pkg">epic cinematic fire banger ethereal vibes emotional rollercoaster masterpiece</textarea>
+    <div class="row">
+      <button class="btn btn-primary" id="runLocal">Run local Master Music</button>
+      <button class="btn" id="copyPayload">Copy API payload</button>
+      <button class="btn" id="runAnti">Anti-Slop only</button>
+      <button class="btn" id="runAppraise">Appraise pattern</button>
+    </div>
+    <div class="out" id="out">Ready.</div>
+  </div>
+</div>
+<script src="registry.js"></script>
+<script src="../matrices/engines.js"></script>
+<script src="master-music/router.js"></script>
+<script>
+const R = window.PulseGridAgents;
+document.getElementById("agentGrid").innerHTML = (R.agents||[]).map(a =>
+  `<div class="card"><h3>${a.name} <span class="badge ${a.kind}">${a.kind}</span></h3>
+   <p>${a.role}</p>
+   <div class="tools">${(a.tools||[]).map(t=>`<span class="chip">${t}</span>`).join("")}</div>
+   <p style="margin-top:.4rem;font-size:.65rem;color:#6a7388">${(a.system||"").slice(0,120)}…</p></div>`
+).join("") + (R.llms||[]).map(l =>
+  `<div class="card"><h3>${l.name} <span class="badge llm">llm</span></h3>
+   <p>type: ${l.type}${l.path?" · "+l.path:""}${l.note?" · "+l.note:""}</p></div>`
+).join("");
+
+function getCtx() {
+  let pattern = null;
+  try { pattern = JSON.parse(document.getElementById("pattern").value); } catch(e) { alert("Invalid pattern JSON"); throw e; }
+  return {
+    mode: document.getElementById("mode").value,
+    bpm: +document.getElementById("bpm").value,
+    swing: 8,
+    pattern,
+    packageText: document.getElementById("pkg").value,
+    userAsk: document.getElementById("ask").value
+  };
+}
+document.getElementById("runLocal").onclick = () => {
+  const ctx = getCtx();
+  const payload = PulseGridMasterMusic.buildMessages(ctx);
+  const res = PulseGridMasterMusic.localInfer(payload);
+  document.getElementById("out").textContent = res.content + "\n\n---\npayload model: " + payload.model;
+};
+document.getElementById("copyPayload").onclick = () => {
+  const payload = PulseGridMasterMusic.buildMessages(getCtx());
+  navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+  document.getElementById("out").textContent = "API payload copied.\n\n" + JSON.stringify(payload, null, 2);
+};
+document.getElementById("runAnti").onclick = () => {
+  const s = PulseGridMatrices.scoreAntiSlop(document.getElementById("pkg").value);
+  const r = PulseGridMatrices.rewriteAntiSlop(document.getElementById("pkg").value, +document.getElementById("bpm").value);
+  document.getElementById("out").textContent = JSON.stringify(s, null, 2) + "\n\n## Rewrite\n" + r.text + "\n\n" + r.note;
+};
+document.getElementById("runAppraise").onclick = () => {
+  const p = JSON.parse(document.getElementById("pattern").value);
+  const a = PulseGridMatrices.autoAppraisePattern(p, +document.getElementById("bpm").value);
+  document.getElementById("out").textContent = JSON.stringify(a, null, 2);
+};
+</script>
+</body>
+</html>
