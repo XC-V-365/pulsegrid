@@ -34,9 +34,9 @@ python3 -m http.server 8765
 1. `/` portal loads  
 2. `/step-sequencer.html?seed=phonk` loads seeds  
 3. `/saas/studio/index.html` Explore works  
-4. `GET /api/access/status` → `{ ok: true, version: 17, ... }`  
-5. `POST /api/access/session` with humanOk + email returns token  
+4. `GET /api/access/status` → `{ ok: true, version: 19, ... }`  
+5. `POST /api/access/session` with humanOk + email returns a trial token; add `code` (from `PULSEGRID_ADMIN_CODE`) for admin  
 
 ## Secrets
 
-OAuth / Composio / `PULSEGRID_SESSION_SECRET` stay **out** of static files.
+OAuth / Composio / `PULSEGRID_SESSION_SECRET` / `PULSEGRID_*_CODE` stay **out** of static files.

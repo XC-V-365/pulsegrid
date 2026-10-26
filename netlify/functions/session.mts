@@ -1,7 +1,7 @@
 import type { Config, Context } from "@netlify/functions"
 import {
   getPolicy,
-  roleFor,
+  sessionRoleFor,
   signSession,
   remainingFromPayload,
   publicLimits,
@@ -13,7 +13,7 @@ export default async (req: Request, _context: Context) => {
   if (req.method === "OPTIONS") return noContent()
   if (req.method !== "POST") return json({ error: "POST only" }, 405)
 
-  let body: { email?: string; humanOk?: boolean } = {}
+  let body: { email?: string; humanOk?: boolean; code?: string } = {}
   try {
     body = await req.json()
   } catch {
@@ -29,7 +29,7 @@ export default async (req: Request, _context: Context) => {
     return json({ error: "server misconfigured: PULSEGRID_SESSION_SECRET required" }, 503)
   }
 
-  const role = roleFor(email, policy)
+  const role = sessionRoleFor(email, String(body.code || ""), policy)
   const base = baseLimits(role, policy)
   const exp = Date.now() + 7 * 24 * 3600 * 1000
   const genExpiresAt =
@@ -42,7 +42,7 @@ export default async (req: Request, _context: Context) => {
     iat: Date.now(),
     used: { edits: 0, exports: 0, gens: 0 },
     genExpiresAt,
-    v: 17,
+    v: 19,
   }
   const token = await signSession(payload, policy.sessionSecret)
   const remaining = remainingFromPayload(payload, policy)
@@ -57,8 +57,8 @@ export default async (req: Request, _context: Context) => {
     genExpiresAt: genExpiresAt || null,
     serverEnforced: true,
     note: policy.sessionSecret
-      ? "HMAC session v17 — quotas tracked in signed token; use /api/access/consume"
-      : "Set PULSEGRID_SESSION_SECRET for signed tokens; PULSEGRID_ADMIN_EMAILS for allowlist",
+      ? "HMAC session v19 — quotas tracked in signed token; admin, sponsor and donor need their access code"
+      : "Trial only: set PULSEGRID_SESSION_SECRET and the PULSEGRID_*_CODE access codes for elevated roles",
   })
 }
 

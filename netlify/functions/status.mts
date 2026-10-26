@@ -9,13 +9,18 @@ export default async (req: Request, _context: Context) => {
   return json({
     ok: true,
     product: "PulseGrid",
-    version: 18,
+    version: 19,
     serverEnforced: true,
     hmacConfigured: !!policy.sessionSecret,
     requireSecret: policy.requireSecret,
     adminSlotsConfigured: policy.admin.length,
     donorSlotsConfigured: policy.donor.length,
     sponsorSlotsConfigured: policy.sponsor.length,
+    accessCodesConfigured: {
+      admin: !!policy.codes.admin,
+      sponsor: !!policy.codes.sponsor,
+      donor: !!policy.codes.donor,
+    },
     trialDefaults: {
       edits: policy.trialEdits,
       exports: policy.trialExports,
