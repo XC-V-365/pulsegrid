@@ -1,0 +1,31 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Server access tests
+        run: npm test
+      - name: Syntax-check scripts
+        run: git ls-files '*.js' '*.mjs' | xargs -n1 node --check
+      - name: Validate JSON
+        run: git ls-files '*.json' | xargs -I{} node -e 'JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))' {}
+  native:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rust build and tests
+        working-directory: native/rust
+        run: cargo test --locked
+      - name: C++ build
+        working-directory: native/cpp
+        run: g++ -std=c++17 -I include -O2 -o "$RUNNER_TEMP/pulsegrid" src/*.cpp -pthread
