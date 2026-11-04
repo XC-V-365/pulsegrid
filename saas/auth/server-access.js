@@ -23,11 +23,12 @@
     localStorage.removeItem(LEGACY);
   }
 
-  async function createSession(email, humanOk) {
+  /** code: the access code for admin/sponsor/donor; without it the server grants trial */
+  async function createSession(email, humanOk, code) {
     const r = await fetch("/api/access/session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, humanOk: !!humanOk }),
+      body: JSON.stringify({ email, humanOk: !!humanOk, code: code || undefined }),
     });
     const data = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(data.error || "session failed");

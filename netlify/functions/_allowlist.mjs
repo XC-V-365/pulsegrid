@@ -1,5 +1,6 @@
 /** Server allowlist — env → access-config.js → bundled defaults */
 import { readFileSync, existsSync } from "node:fs";
+import { createHash, timingSafeEqual } from "node:crypto";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -75,6 +76,11 @@ export function getPolicy() {
   );
   const sessionSecret = env("PULSEGRID_SESSION_SECRET") || "";
   const requireSecret = env("PULSEGRID_REQUIRE_SECRET") === "1";
+  const codes = {
+    admin: env("PULSEGRID_ADMIN_CODE") || "",
+    sponsor: env("PULSEGRID_SPONSOR_CODE") || "",
+    donor: env("PULSEGRID_DONOR_CODE") || "",
+  };
 
   let admin, donor, sponsor, adminSource;
   if (adminEnv.length) {
@@ -103,6 +109,7 @@ export function getPolicy() {
     donorGenDays,
     sessionSecret,
     requireSecret,
+    codes,
     sources: {
       admin: adminSource,
       secret: sessionSecret ? "env" : "unsigned",
@@ -117,6 +124,27 @@ export function roleFor(email, policy) {
   if (policy.sponsor.includes(e)) return "sponsor";
   if (policy.donor.includes(e)) return "donor";
   return "trial";
+}
+
+export const ELEVATED_ROLES = ["admin", "sponsor", "donor"];
+
+function sameSecret(a, b) {
+  const ha = createHash("sha256").update(String(a)).digest();
+  const hb = createHash("sha256").update(String(b)).digest();
+  return timingSafeEqual(ha, hb);
+}
+
+/**
+ * Role for a new session. A typed email alone only ever gets "trial":
+ * admin/sponsor/donor also need that role's access code (env) and a session
+ * secret, because unsigned tokens can be forged by anyone.
+ */
+export function sessionRoleFor(email, code, policy) {
+  const role = roleFor(email, policy);
+  if (!ELEVATED_ROLES.includes(role)) return role;
+  const expected = policy.codes?.[role] || "";
+  if (!policy.sessionSecret || !expected || !code) return "trial";
+  return sameSecret(code, expected) ? role : "trial";
 }
 
 export async function signSession(payload, secret) {
@@ -142,7 +170,8 @@ export async function verifySession(token, secret) {
   if (parts.length === 1) {
     try {
       const p = JSON.parse(atob(parts[0]));
-      if (p.u && !secret) return p;
+      // Unsigned tokens are forgeable, so they never carry an elevated role.
+      if (p.u && !secret && !ELEVATED_ROLES.includes(p.role)) return p;
       return null;
     } catch {
       return null;

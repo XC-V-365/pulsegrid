@@ -2,6 +2,9 @@
   "name": "pulsegrid",
   "private": true,
   "type": "module",
+  "scripts": {
+    "test": "node --test tests/access.test.mjs"
+  },
   "devDependencies": {
     "@netlify/functions": "^3.0.0"
   }
